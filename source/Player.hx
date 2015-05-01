@@ -3,6 +3,7 @@ package ;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxColorUtil;
+import flixel.util.FlxPoint;
 
 /**
  * ...
@@ -13,9 +14,12 @@ class Player extends FlxSprite
 
 	private var _targetAngle: Float;
 	private var _lastAngleIncrement : Float;
-	public function new() 
+	private var _tankManager : TankManager;
+	
+	public function new(tm: TankManager) 
 	{
 		super();
+		_tankManager = tm;
 		this.makeGraphic(16, 16, FlxColorUtil.makeFromARGB(1.0, 20, 200, 20));
 		this.origin.set(8, 16);
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
@@ -64,7 +68,11 @@ class Player extends FlxSprite
 	
 	private function shoot(): Void 
 	{
-		
+		var t : Tank  = new Tank();
+		t.setPosition (this.x, this.y);
+		var power : Float = 50;
+		t.velocity = new FlxPoint(Math.cos(_targetAngle*Math.PI/180) * power, - Math.sin(_targetAngle*Math.PI/180) * power);
+		_tankManager.AddTank(t);
 	}
 	
 }

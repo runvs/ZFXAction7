@@ -10,6 +10,6 @@ class GameProperties
 
 	
 	public static function GetScaleFactor() : Float { return 2; };
-	public static function GetPlayerTurnAngle():Float { return 25; };
+	public static function GetPlayerTurnAngle():Float { return 10; };
 	
 }
