@@ -36,7 +36,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_background.origin.set();
 		_background.setPosition(0, 0);
 		
-		_city = new City();
+		_city = new City(this);
 		_player = new Player(this);
 		
 		_enemyList  = new FlxTypedGroup<EnemyShip>();
@@ -70,8 +70,9 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		super.update();
 		_city.update();
 		_enemyList.update();
-		_enemyShotList.update()		_tankList.update();
-		
+		_enemyShotList.update();
+		_tankList.update();
+		_playerShotList.update();
 		_tankList.forEachAlive(checkTankEnemyOverlap);
 		
 		_player.update();
@@ -85,6 +86,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_player.draw();
 		_tankList.draw();
 		_enemyShotList.draw();
+		_playerShotList.draw();
 	}
 	
 	/* INTERFACE TankManager */
