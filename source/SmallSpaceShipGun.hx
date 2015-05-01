@@ -23,8 +23,8 @@ class SmallSpaceShipGun extends Gun
 		this.makeGraphic(5, 5, FlxColorUtil.makeFromARGB(1, 255, 0, 0));
 		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
-		_gunTimer = new flixel.util.FlxTimer(5, onTimer, 2);
-		_gunTimer.start();
+		_gunTimer = new flixel.util.FlxTimer(5, onTimer, 0);
+		//_gunTimer.start();
 		_gunIsReady = true;
 		//FlxTween.tween(this.offset, { y:10 }, 1, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );		
 	}
@@ -33,7 +33,7 @@ class SmallSpaceShipGun extends Gun
 	{
 		super.update();	
 		_gunTimer.update();
-		trace("gun update");
+		//trace("gun update");
 	}
 	
 	

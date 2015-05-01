@@ -16,6 +16,8 @@ class Tank extends FlxSprite
 	private var _bound:Bool;
 	
 	private var _ship : EnemyShip = null;
+
+	private var _dir : FlxVector;
 	
 	public function new() 
 	{
@@ -40,12 +42,11 @@ class Tank extends FlxSprite
 			{
 				_bound = false;
 			}
-			var _dir : FlxVector = new FlxVector(_ship.x - this.x, _ship.y - this.y);
-			var l : Float = _dir.length/125;
-			_dir.normalize();
-			this.acceleration = new FlxPoint(_dir.x * 150 *l*l, _dir.y * 150 * l*l);
-			this.velocity = new FlxPoint(velocity.x * 0.9975, velocity.y * 0.9975);
+			_dir.rotateByDegrees(45 * FlxG.elapsed);
+		
+			this.setPosition(_ship.x + _dir.x, _ship.y + _dir.y);
 		}
+		
 	}
 	
 	public function Bind ( e: EnemyShip): Void
@@ -55,8 +56,10 @@ class Tank extends FlxSprite
 			trace("bind");
 			_ship = e;
 			_bound = true;
+			this.velocity.set();
+			_dir = new FlxVector(-_ship.x  + this.x, -_ship.y  + this.y);
 		}
-		//this.velocity = new FlxPoint(0, 0);
+		
 	}
 	
 }
