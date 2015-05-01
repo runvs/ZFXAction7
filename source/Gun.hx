@@ -9,10 +9,21 @@ import flixel.FlxSprite;
 class Gun extends FlxSprite
 {
 
-	public function new(X:Float=0, Y:Float=0, ?SimpleGraphic:Dynamic) 
+	public function new() 
 	{
-		super(X, Y, ?SimpleGraphic);
+		super();
+	}
+	
+	public override function update() : Void 
+	{
+		super.update();
+		
 		
 	}
 	
+	
+	public override function draw() : Void 
+	{
+		super.draw();
+	}
 }

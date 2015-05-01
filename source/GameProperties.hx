@@ -8,11 +8,8 @@ import flixel.util.FlxVector;
 class GameProperties
 {
 
-	public function new() 
-	{
-		
-	}
 	
 	public static function GetScaleFactor() : Float { return 2; };
+	public static function GetPlayerTurnAngle():Float { return 25; };
 	
 }
