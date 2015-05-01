@@ -17,9 +17,9 @@ class SmallSpaceShipGun extends Gun
 	private var _gunTimer : flixel.util.FlxTimer;
 	private var _gunIsReady : Bool;
 
-	public function new() 
+	public function new(owner : FlxSprite) 
 	{
-		super();
+		super(owner);
 		this.makeGraphic(5, 5, FlxColorUtil.makeFromARGB(1, 255, 0, 0));
 		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
@@ -40,7 +40,7 @@ class SmallSpaceShipGun extends Gun
 		super.draw();
 	}
 
-	public override function shoot() : Shot
+	public override function shoot(target : FlxVector) : Shot
 	{
 		_gunIsReady = false;
 		return new SmallShot(this.x, this.y);
