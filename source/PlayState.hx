@@ -70,7 +70,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		super.update();
 		_city.update();
 		_enemyList.update();
-		_tankList.update();
+		_enemyShotList.update()		_tankList.update();
 		
 		_tankList.forEachAlive(checkTankEnemyOverlap);
 		

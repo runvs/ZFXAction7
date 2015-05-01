@@ -24,7 +24,6 @@ class SmallSpaceShipGun extends Gun
 		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		_gunTimer = new flixel.util.FlxTimer(5, onTimer, 0);
-		//_gunTimer.start();
 		_gunIsReady = true;
 		//FlxTween.tween(this.offset, { y:10 }, 1, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );		
 	}
@@ -33,7 +32,6 @@ class SmallSpaceShipGun extends Gun
 	{
 		super.update();	
 		_gunTimer.update();
-		//trace("gun update");
 	}
 	
 	
@@ -51,7 +49,6 @@ class SmallSpaceShipGun extends Gun
 	private function onTimer(timer:flixel.util.FlxTimer) : Void
 	{
 		//unlimited ammo!
-		trace("onTimer");
 		reload();
 	}
 
