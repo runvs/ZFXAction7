@@ -3,6 +3,7 @@ package ;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxColorUtil;
+import openfl.display.BitmapData;
 
 /**
  * ...
@@ -20,7 +21,8 @@ class City extends FlxSprite
 		this.makeGraphic(320, 16, FlxColorUtil.makeFromARGB(1, 20, 20, 200));
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		this.origin.set(0,0);
-		this.setPosition(0, 480-32);
+		this.setPosition(0, 480 - 32);
+		this.updateHitbox();
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
 		_guns.add(new FlakGun(this, 3, 45, 50));
@@ -58,6 +60,31 @@ class City extends FlxSprite
 	
 	public function ShotImpact(s:Shot)
 	{
-		s.
+		var source:FlxSprite = new FlxSprite();
+		source.makeGraphic(10, 10, FlxColorUtil.makeFromARGB(0.0, 255, 0, 0));
+		
+		//////// copy from stamp
+		source.drawFrame();
+		var bitmapData:BitmapData = source.framePixels;
+		
+
+		_flashPoint.x = Std.int(s.x/2) + region.startX;
+		_flashPoint.y = Std.int(s.y - this.y) + region.startY;
+		_flashRect2.width = bitmapData.width;
+		_flashRect2.height = bitmapData.height;
+		cachedGraphics.bitmap.copyPixels(bitmapData, _flashRect2, _flashPoint, null, null, false);
+		_flashRect2.width = cachedGraphics.bitmap.width;
+		_flashRect2.height = cachedGraphics.bitmap.height;
+		
+		resetFrameBitmapDatas();
+		
+		#if FLX_RENDER_BLIT
+		dirty = true;
+		calcFrame();
+		#end
+		//////// end copy from stamp
+		//trace (Std.int(s.x));
+		//this.pixels.
+		s.kill();
 	}
 }
