@@ -55,4 +55,9 @@ class City extends FlxSprite
 	{
 		return new flixel.util.FlxVector(320, 75);
 	}
+	
+	public function ShotImpact(s:Shot)
+	{
+		s.
+	}
 }

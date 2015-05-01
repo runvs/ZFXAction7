@@ -74,9 +74,12 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_tankList.update();
 		_playerShotList.update();
 		_tankList.forEachAlive(checkTankEnemyOverlap);
-		
+		_enemyShotList.forEachAlive(checkShotCityOverlap);
 		_player.update();
 	}	
+	
+	
+	
 	
 	override public function draw () : Void 
 	{
@@ -111,7 +114,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 
 
 
-private function checkTankEnemyOverlap(t: Tank)
+	private function checkTankEnemyOverlap(t: Tank)
 	{
 		_enemyList.forEachAlive(
 		function(e:EnemyShip) 
@@ -124,4 +127,14 @@ private function checkTankEnemyOverlap(t: Tank)
 				}
 		}
 		);
-	}}
+	}
+
+	private function checkShotCityOverlap(s:Shot)
+	{
+		if (FlxG.collide(s, _city))
+		{
+			_city.ShotImpact(s);
+		}
+	}
+	
+}
