@@ -3,20 +3,45 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
+import flixel.util.FlxColorUtil;
 import flixel.util.FlxMath;
+import flixel.util.FlxVector;
 
 /**
  * A FlxState which can be used for the actual gameplay.
  */
 class PlayState extends FlxState
 {
+	
+	
+	private var _background : FlxSprite;
+	
+	private var _city : City;
+	private var _player : Player;
+	private var _enemyList : FlxTypedGroup<EnemyShip>;
+	
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{
+		_background = new FlxSprite();
+		_background.makeGraphic(320, 240, FlxColorUtil.makeFromARGB(1, 123, 123, 123));
+		_background.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
+		_background.origin.set();
+		_background.setPosition(0, 0);
+		
+		_city = new City();
+		_player = new Player();
+		
+		_enemyList  = new FlxTypedGroup<EnemyShip>();
+		var e :EnemyShip = EnemyShip.spawn(new FlxVector(100, 100), 50);
+		_enemyList.add(e);
+		
 		super.create();
 	}
 	
@@ -35,5 +60,16 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+		_city.update();
+		_enemyList.update();
+		_player.update();
 	}	
+	
+	override public function draw () : Void 
+	{
+		_background.draw();
+		_city.draw();
+		_enemyList.draw();
+		_player.draw();
+	}
 }
