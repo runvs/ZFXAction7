@@ -18,10 +18,10 @@ class SmallShot extends Shot
 	public function new(x: Float, y: Float) 
 	{
 		super();
-		this.makeGraphic(1, 1, FlxColorUtil.makeFromARGB(1, 200, 20, 20));
+		this.makeGraphic(3, 3, FlxColorUtil.makeFromARGB(1, 200, 20, 20));
 		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
-		this.velocity.set(1, 1);
+		this.velocity.set(0, 5);
 		this.x = x;
 		this.y = y;
 	}	

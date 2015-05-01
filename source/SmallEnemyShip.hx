@@ -15,20 +15,14 @@ import flixel.util.FlxVector;
  */
 class SmallEnemyShip extends EnemyShip
 {
-	private var _guns : flixel.group.FlxTypedGroup<Gun>;
-	private var _shootManager : ShootManager;
-
 	private function new(shootManager : ShootManager) 
 	{
-		super();
+		super(shootManager);
 		this.makeGraphic(20, 20, FlxColorUtil.makeFromARGB(1, 200, 20, 20));
 		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 
-		_guns = new flixel.group.FlxTypedGroup<Gun>();
 		_guns.add(new SmallSpaceShipGun());
-
-		_shootManager = shootManager;
 	}
 	
 	public static function spawn (shootManager : ShootManager, pos: FlxPoint, velX  : Float = 5, velY  : Float = 0 , dir   :Int = 1 ) : EnemyShip
@@ -39,22 +33,4 @@ class SmallEnemyShip extends EnemyShip
 		
 		return e;
 	}	
-
-	 private override function shoot() : Void
-	{
-		for(i in 0..._guns.length)
-		{
-			if(_guns.members[i].isLoaded())
-			{
-				_shootManager.addEnemyShot(_guns.members[i].shoot());
-			}
-		}
-	}
-
-	public override function update() : Void
-	{
-		super.update();
-		_guns.update();
-		shoot();
-	}
 }

@@ -70,6 +70,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		super.update();
 		_city.update();
 		_enemyList.update();
+		_enemyShotList.update();
 		_player.update();
 		_tankList.update();
 	}	
