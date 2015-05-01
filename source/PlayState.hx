@@ -39,8 +39,10 @@ class PlayState extends FlxState
 		_player = new Player();
 		
 		_enemyList  = new FlxTypedGroup<EnemyShip>();
-		var e :EnemyShip = EnemyShip.spawn(new FlxVector(100, 100), 50);
-		_enemyList.add(e);
+	
+		_enemyList.add(SmallEnemyShip.spawn(new FlxVector(100, 100), 50));
+		_enemyList.add(MediumEnemyShip.spawn(new FlxVector(50, 10), 50));
+		_enemyList.add(LargeEnemyShip.spawn(new FlxVector(20, 180), 50));
 		
 		super.create();
 	}

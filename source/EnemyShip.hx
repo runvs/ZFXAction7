@@ -28,14 +28,14 @@ class EnemyShip extends FlxSprite
 		_flipFunction = flipRight;
 	}
 	
-	public static function spawn (pos: FlxPoint, velX  : Float = 5, velY  : Float = 0 , dir   :Int = 1 ) : EnemyShip
-	{
-		var e :EnemyShip = new EnemyShip();
-		e.setPosition(pos.x, pos.y);
-		e.velocity.set(velX * dir, velY * dir);
+	//public static function spawn (pos: FlxPoint, velX  : Float = 5, velY  : Float = 0 , dir   :Int = 1 ) : EnemyShip
+	//{
+	//	var e :EnemyShip = new EnemyShip();
+	//	e.setPosition(pos.x, pos.y);
+	//	e.velocity.set(velX * dir, velY * dir);
 		
-		return e;
-	}
+	//	return e;
+	//}
 	
 	public function flipLeft() : Void	// flip on left side of the screen
 	{
