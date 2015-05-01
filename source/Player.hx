@@ -15,6 +15,7 @@ class Player extends FlxSprite
 	private var _targetAngle: Float;
 	private var _lastAngleIncrement : Float;
 	private var _tankManager : TankManager;
+	private var _shootTimer : Float;
 	
 	public function new(tm: TankManager) 
 	{
@@ -27,6 +28,7 @@ class Player extends FlxSprite
 		this.setPosition(320, 280);
 		_targetAngle = 90;
 		_lastAngleIncrement = 0;
+		_shootTimer  = 0;
 	}
 	
 	
@@ -43,7 +45,7 @@ class Player extends FlxSprite
 			_lastAngleIncrement += GameProperties.GetPlayerTurnAngle() * FlxG.elapsed;
 		}
 		else
-		{
+		{ 
 			_lastAngleIncrement = 0;
 		}
 		
@@ -59,18 +61,24 @@ class Player extends FlxSprite
 			_lastAngleIncrement = 0;
 		}
 		
-		if (FlxG.keys.anyJustPressed(["SPACE"]))
+		if (FlxG.keys.anyPressed(["Space"]))
+		{
+			_shootTimer  += FlxG.elapsed;
+		}
+		if ((FlxG.keys.anyJustReleased(["SPACE"]) && _shootTimer != 0) || _shootTimer  > GameProperties.GetShootTimer() )
 		{
 			shoot();
+			_shootTimer = 0;
 		}
 		this.angle = 90 - _targetAngle;
 	}
 	
 	private function shoot(): Void 
 	{
+		//trace ("shoot");
 		var t : Tank  = new Tank();
 		t.setPosition (this.x, this.y);
-		var power : Float = 50;
+		var power : Float = _shootTimer / GameProperties.GetShootTimer() * 150 + 100;
 		t.velocity = new FlxPoint(Math.cos(_targetAngle*Math.PI/180) * power, - Math.sin(_targetAngle*Math.PI/180) * power);
 		_tankManager.AddTank(t);
 	}
