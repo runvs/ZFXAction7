@@ -2,6 +2,7 @@ package ;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
@@ -18,9 +19,10 @@ class Tank extends FlxSprite
 	
 	private var _ship : EnemyShip = null;
 
-	private var _dir : FlxVector;
+	private var _dir : FlxVector;	// r and phi, not x and y
 	private var _bindTimer: Float;
 	private var _rotationVelocity : Float;
+	private var _distance: Float;
 	
 	public function new() 
 	{
@@ -46,11 +48,18 @@ class Tank extends FlxSprite
 			{
 				_bound = false;
 			}
-			_dir.rotateByDegrees(_rotationVelocity  * FlxG.elapsed);
+			_dir = new FlxVector( _distance, _dir.y + _rotationVelocity  * FlxG.elapsed);
 		
-			this.setPosition(_ship.x + _dir.x, _ship.y + _dir.y);
+			SetPositionInOrbit();
 		}
 	}
+	
+	private function SetPositionInOrbit() : Void
+	{
+		var d :FlxVector = new FlxVector(Math.cos(Math.PI / 180 * _dir.y) * _dir.x, Math.sin(Math.PI / 180 * _dir.y) * _dir.x);
+		this.setPosition(_ship.x + d.x, _ship.y + d.y);
+	}
+	
 	
 	public function Bind ( e: EnemyShip): Void
 	{
@@ -65,26 +74,43 @@ class Tank extends FlxSprite
 				trace("bind");
 				_ship = e;
 				_bound = true;
+				
+				// store velocity vector
 				var v : FlxVector = new FlxVector(this.velocity.x, this.velocity.y);
-				var c : Float = _dir.dotProduct(v) / _dir.length / v.length;
-				this.velocity.set();
-				this.acceleration.set();
-				_dir = new FlxVector( -_ship.x  + this.x, -_ship.y  + this.y);
-				if (c < 0)
+				// reset velocity and acceleration to 0 (everything up frm now will be done by manually setting positions.
+				FlxTween.tween(this.velocity, { x:0, y:0 }, 2.5);
+				FlxTween.tween(this.acceleration, { x:0, y:0 }, 2.5);
+				
+				
+				
+				var d : FlxVector = new FlxVector( - e.x + this.x, - e.y  + this.y);
+				//var angularVelocity: Float = (d.degrees - _dir.y ) / FlxG.elapsed;
+				_dir = new FlxVector(d.length, d.degrees);
+				
+				var rad : FlxVector = new FlxVector(d.y, -d.x);
+				
+				var projv : FlxVector = new FlxVector(v.x, v.y);
+				projv = projv.projectTo(rad);
+				var angularVelocity: Float = projv.length;
+				_distance = d.length;
+				
+				var c : Float = Math.acos(d.dotProduct(v) / d.length / v.length);
+				trace (angularVelocity);
+				if (c < Math.PI/2)
 				{
-					_rotationVelocity = -45;
+					_rotationVelocity = - angularVelocity;
+					FlxTween.tween(this, { _rotationVelocity: -45 }, 2.5, { ease:FlxEase.sineInOut } );
 				}
 				else
 				{
-					_rotationVelocity = 45;
+					_rotationVelocity = angularVelocity;
+					FlxTween.tween(this, { _rotationVelocity:45 }, 2.5, { ease:FlxEase.sineInOut});
 				}
-				
+				FlxTween.tween(this , {_distance:100 }, 2.5,{ ease:FlxEase.sineInOut});
 			}
 			else
 			{
 				
-				_dir = new FlxVector( e.x  - this.x, e.y  - this.y);
-				this.acceleration = new FlxPoint(_dir.x * 50 * FlxG.elapsed, _dir.y * 50 * FlxG.elapsed);
 			}
 		}
 		
