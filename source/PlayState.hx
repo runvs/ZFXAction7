@@ -13,7 +13,7 @@ import flixel.util.FlxVector;
 /**
  * A FlxState which can be used for the actual gameplay.
  */
-class PlayState extends FlxState implements TankManager
+class PlayState extends FlxState implements TankManager implements ShootManager
 {
 	private var _background : FlxSprite;
 	
@@ -22,7 +22,9 @@ class PlayState extends FlxState implements TankManager
 	private var _enemyList : FlxTypedGroup<EnemyShip>;
 	private var _tankList : FlxTypedGroup<Tank>;
 	
-	
+	private var _enemyShotList : FlxTypedGroup<Shot>;
+	private var _playerShotList : FlxTypedGroup<Shot>;
+
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -38,10 +40,15 @@ class PlayState extends FlxState implements TankManager
 		_player = new Player(this);
 		
 		_enemyList  = new FlxTypedGroup<EnemyShip>();
-		var e :EnemyShip = EnemyShip.spawn(new FlxVector(100, 100), 50);
-		_enemyList.add(e);
+	
+		_enemyList.add(SmallEnemyShip.spawn(this, new FlxVector(100, 100), 50));
+		//_enemyList.add(MediumEnemyShip.spawn(this, new FlxVector(50, 10), 50));
+		//_enemyList.add(LargeEnemyShip.spawn(this, new FlxVector(20, 180), 50));
 		
 		_tankList  = new FlxTypedGroup<Tank>();
+
+		_enemyShotList = new FlxTypedGroup<Shot>();
+		_playerShotList = new FlxTypedGroup<Shot>();	
 		
 		super.create();
 	}
@@ -77,6 +84,7 @@ class PlayState extends FlxState implements TankManager
 		_enemyList.draw();
 		_player.draw();
 		_tankList.draw();
+		_enemyShotList.draw();
 	}
 	
 	/* INTERFACE TankManager */
@@ -85,8 +93,23 @@ class PlayState extends FlxState implements TankManager
 	{
 		_tankList.add(T);
 	}
-	
-	private function checkTankEnemyOverlap(t: Tank)
+
+	/* INTERFACE ShootManager */
+
+	public function addEnemyShot(shot : Shot) : Void
+	{
+		_enemyShotList.add(shot);
+	}
+
+	public function addPlayerShot(shot : Shot) : Void
+	{
+		_playerShotList.add(shot);
+	}
+
+
+
+
+private function checkTankEnemyOverlap(t: Tank)
 	{
 		_enemyList.forEachAlive(
 		function(e:EnemyShip) 
@@ -99,7 +122,4 @@ class PlayState extends FlxState implements TankManager
 				}
 		}
 		);
-		
-	}
-	
-}
+	}}
