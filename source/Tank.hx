@@ -32,7 +32,7 @@ class Tank extends FlxSprite
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		_bound = false;
 		this.angularVelocity = 45;
-		_bindTimer = 0.75;
+		_bindTimer = 1.5;
 	}
 	
 	public override function update () :Void
@@ -40,7 +40,8 @@ class Tank extends FlxSprite
 		super.update();
 		if (_bound == false)
 		{
-			this.velocity = new FlxPoint(velocity.x, velocity.y + GameProperties.GetGravitationalAcceleration() * FlxG.elapsed);
+			this.velocity = new FlxPoint(velocity.x , velocity.y + GameProperties.GetGravitationalAcceleration() * FlxG.elapsed );
+			this.velocity = new FlxPoint(velocity.x * 0.994, velocity.y * 0.994);
 		}
 		else
 		{
@@ -68,34 +69,32 @@ class Tank extends FlxSprite
 		{
 			
 			_bindTimer -= FlxG.elapsed;
-			//trace (_bindTimer);
 			if (_bindTimer <= 0)
 			{
-				trace("bind");
 				_ship = e;
 				_bound = true;
 				
 				// store velocity vector
 				var v : FlxVector = new FlxVector(this.velocity.x, this.velocity.y);
+				
 				// reset velocity and acceleration to 0 (everything up frm now will be done by manually setting positions.
-				FlxTween.tween(this.velocity, { x:0, y:0 }, 2.5);
-				FlxTween.tween(this.acceleration, { x:0, y:0 }, 2.5);
-				
-				
-				
+				FlxTween.tween(this.velocity, { x:0, y:0 }, 2.5, { ease:FlxEase.sineInOut });
+				FlxTween.tween(this.acceleration, { x:0, y:0 }, 2.5, { ease:FlxEase.sineInOut });
+
+				// d is the distance vector in x,y from enemy to this.
 				var d : FlxVector = new FlxVector( - e.x + this.x, - e.y  + this.y);
-				//var angularVelocity: Float = (d.degrees - _dir.y ) / FlxG.elapsed;
+				// _dir is the distance vector in r,phi
 				_dir = new FlxVector(d.length, d.degrees);
-				
-				var rad : FlxVector = new FlxVector(d.y, -d.x);
-				
+				// calculate tangential vector for distance vector (x,y) -> (y, -x)
+				var tangential : FlxVector = new FlxVector(d.y, -d.x);
+				// project v to tangential and calculate it's length
 				var projv : FlxVector = new FlxVector(v.x, v.y);
-				projv = projv.projectTo(rad);
+				projv = projv.projectTo(tangential);
 				var angularVelocity: Float = projv.length;
+				
 				_distance = d.length;
 				
 				var c : Float = Math.acos(d.dotProduct(v) / d.length / v.length);
-				trace (angularVelocity);
 				if (c < Math.PI/2)
 				{
 					_rotationVelocity = - angularVelocity;
@@ -110,7 +109,9 @@ class Tank extends FlxSprite
 			}
 			else
 			{
-				
+				var d : FlxVector = new FlxVector( e.x - this.x, e.y  - this.y);
+				d.normalize();
+				this.acceleration  = new FlxPoint(d.x* 25, d.y * 25);
 			}
 		}
 		

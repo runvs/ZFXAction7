@@ -31,8 +31,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	override public function create():Void
 	{
 		_background = new FlxSprite();
-		_background.makeGraphic(320, 240, FlxColorUtil.makeFromARGB(1, 123, 123, 123));
-		_background.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
+		_background = _background.loadGraphic(AssetPaths.Background__png, false, 640, 480);
+		//_background.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		_background.origin.set();
 		_background.setPosition(0, 0);
 		
