@@ -25,7 +25,7 @@ class Player extends FlxSprite
 		this.origin.set(8, 16);
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		
-		this.setPosition(320, 280);
+		this.setPosition(320, 480-32);
 		_targetAngle = 90;
 		_lastAngleIncrement = 0;
 		_shootTimer  = 0;
@@ -78,7 +78,7 @@ class Player extends FlxSprite
 		//trace ("shoot");
 		var t : Tank  = new Tank();
 		t.setPosition (this.x, this.y);
-		var power : Float = _shootTimer / GameProperties.GetShootTimer() * 150 + 100;
+		var power : Float = (_shootTimer / GameProperties.GetShootTimer()) * 325 + 125;
 		t.velocity = new FlxPoint(Math.cos(_targetAngle*Math.PI/180) * power, - Math.sin(_targetAngle*Math.PI/180) * power);
 		_tankManager.AddTank(t);
 	}

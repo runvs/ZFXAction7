@@ -2,6 +2,8 @@ package ;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
 import flixel.util.FlxVector;
@@ -17,7 +19,10 @@ class Tank extends FlxSprite
 	
 	private var _ship : EnemyShip = null;
 
-	private var _dir : FlxVector;
+	private var _dir : FlxVector;	// r and phi, not x and y
+	private var _bindTimer: Float;
+	private var _rotationVelocity : Float;
+	private var _distance: Float;
 	
 	public function new() 
 	{
@@ -27,6 +32,7 @@ class Tank extends FlxSprite
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		_bound = false;
 		this.angularVelocity = 45;
+		_bindTimer = 1.5;
 	}
 	
 	public override function update () :Void
@@ -34,7 +40,8 @@ class Tank extends FlxSprite
 		super.update();
 		if (_bound == false)
 		{
-			this.velocity = new FlxPoint(velocity.x, velocity.y + GameProperties.GetGravitationalAcceleration() * FlxG.elapsed);
+			this.velocity = new FlxPoint(velocity.x , velocity.y + GameProperties.GetGravitationalAcceleration() * FlxG.elapsed );
+			this.velocity = new FlxPoint(velocity.x * 0.994, velocity.y * 0.994);
 		}
 		else
 		{
@@ -42,22 +49,70 @@ class Tank extends FlxSprite
 			{
 				_bound = false;
 			}
-			_dir.rotateByDegrees(45 * FlxG.elapsed);
+			_dir = new FlxVector( _distance, _dir.y + _rotationVelocity  * FlxG.elapsed);
 		
-			this.setPosition(_ship.x + _dir.x, _ship.y + _dir.y);
+			SetPositionInOrbit();
 		}
-		
 	}
+	
+	private function SetPositionInOrbit() : Void
+	{
+		var d :FlxVector = new FlxVector(Math.cos(Math.PI / 180 * _dir.y) * _dir.x, Math.sin(Math.PI / 180 * _dir.y) * _dir.x);
+		this.setPosition(_ship.x + d.x, _ship.y + d.y);
+	}
+	
 	
 	public function Bind ( e: EnemyShip): Void
 	{
+		
 		if (!_bound)
 		{
-			trace("bind");
-			_ship = e;
-			_bound = true;
-			this.velocity.set();
-			_dir = new FlxVector(-_ship.x  + this.x, -_ship.y  + this.y);
+			
+			_bindTimer -= FlxG.elapsed;
+			if (_bindTimer <= 0)
+			{
+				_ship = e;
+				_bound = true;
+				
+				// store velocity vector
+				var v : FlxVector = new FlxVector(this.velocity.x, this.velocity.y);
+				
+				// reset velocity and acceleration to 0 (everything up frm now will be done by manually setting positions.
+				FlxTween.tween(this.velocity, { x:0, y:0 }, 2.5, { ease:FlxEase.sineInOut });
+				FlxTween.tween(this.acceleration, { x:0, y:0 }, 2.5, { ease:FlxEase.sineInOut });
+
+				// d is the distance vector in x,y from enemy to this.
+				var d : FlxVector = new FlxVector( - e.x + this.x, - e.y  + this.y);
+				// _dir is the distance vector in r,phi
+				_dir = new FlxVector(d.length, d.degrees);
+				// calculate tangential vector for distance vector (x,y) -> (y, -x)
+				var tangential : FlxVector = new FlxVector(d.y, -d.x);
+				// project v to tangential and calculate it's length
+				var projv : FlxVector = new FlxVector(v.x, v.y);
+				projv = projv.projectTo(tangential);
+				var angularVelocity: Float = projv.length;
+				
+				_distance = d.length;
+				
+				var c : Float = Math.acos(d.dotProduct(v) / d.length / v.length);
+				if (c < Math.PI/2)
+				{
+					_rotationVelocity = - angularVelocity;
+					FlxTween.tween(this, { _rotationVelocity: -45 }, 2.5, { ease:FlxEase.sineInOut } );
+				}
+				else
+				{
+					_rotationVelocity = angularVelocity;
+					FlxTween.tween(this, { _rotationVelocity:45 }, 2.5, { ease:FlxEase.sineInOut});
+				}
+				FlxTween.tween(this , {_distance:100 }, 2.5,{ ease:FlxEase.sineInOut});
+			}
+			else
+			{
+				var d : FlxVector = new FlxVector( e.x - this.x, e.y  - this.y);
+				d.normalize();
+				this.acceleration  = new FlxPoint(d.x* 25, d.y * 25);
+			}
 		}
 		
 	}
