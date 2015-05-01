@@ -22,7 +22,7 @@ class SmallEnemyShip extends EnemyShip
 		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 
-		_guns.add(new SmallSpaceShipGun());
+		_guns.add(new SmallSpaceShipGun(this));
 	}
 	
 	public static function spawn (shootManager : ShootManager, pos: FlxPoint, velX  : Float = 5, velY  : Float = 0 , dir   :Int = 1 ) : EnemyShip

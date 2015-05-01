@@ -23,7 +23,7 @@ class City extends FlxSprite
 		this.setPosition(0, 480-32);
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
-		_guns.add(new FlakGun(3, 45, 50));
+		_guns.add(new FlakGun(this, 3, 45, 50));
 		_shootManager = shootManager;	
 	}
 
@@ -41,7 +41,7 @@ class City extends FlxSprite
 			if(_guns.members[i].isLoaded())
 			{
 				//yay, we can fire guns! lets look for a target... 
-				var target : FlxVector = lookForTarget(_guns.members[i]);
+				var target : flixel.util.FlxVector = lookForTarget(_guns.members[i]);
 				//no idea how i can set relative positions.. so ill work around
 				var shot : Shot = _guns.members[i].shoot(target);
 				shot.x = 320;

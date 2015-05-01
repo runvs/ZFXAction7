@@ -8,10 +8,12 @@ import flixel.FlxSprite;
  */
 class Gun extends FlxSprite
 {
+	private var _owner : FlxSprite;
 
-	public function new() 
+	public function new(owner : FlxSprite) 
 	{
 		super();
+		_owner = owner;
 	}
 	
 	public override function update() : Void 
@@ -24,7 +26,7 @@ class Gun extends FlxSprite
 		super.draw();
 	}
 
-	public function shoot() : Shot
+	public function shoot(target : flixel.util.FlxVector) : Shot
 	{
 		return null;
 	}

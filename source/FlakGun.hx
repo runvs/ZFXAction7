@@ -21,9 +21,9 @@ class FlakGun extends Gun
 	private var _accuracy : Float; 	//	1.0 is best
 	private var _angularSpread : Float; // in theory, 0 is best
 
-	public function new(numberOfBullets : Int, accuracy : Float, angularSpread : Float) 
+	public function new(owner : FlxSprite, numberOfBullets : Int, accuracy : Float, angularSpread : Float) 
 	{
-		super();
+		super(owner);
 
 		this.makeGraphic(5, 5, FlxColorUtil.makeFromARGB(1, 255, 0, 0));
 		this.origin.set();
@@ -49,10 +49,10 @@ class FlakGun extends Gun
 		super.draw();
 	}
 
-	public override function shoot() : Shot
+	public override function shoot(target : FlxVector) : Shot
 	{
 		_gunIsReady = false;
-		return new FlakShot(_numberOfBullets, _accuracy, _angularSpread, this.x, this.y, 320, 75);
+		return new FlakShot(_numberOfBullets, _accuracy, _angularSpread, this.x, this.y, target.x, target.y);
 	}
 
 	private function onTimer(timer:flixel.util.FlxTimer) : Void
