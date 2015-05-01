@@ -18,11 +18,12 @@ class EnemyShip extends FlxSprite
 
 	private var _flipFunction :Void -> Void = null;
 	
+	
 	private function new() 
 	{
 		super();
 		this.makeGraphic(60, 20, FlxColorUtil.makeFromARGB(1, 200, 20, 20));
-		this.origin.set();
+		this.origin.set(30,10);
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		FlxTween.tween(this.offset, { y:10 }, 1, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );
 		_flipFunction = flipRight;
