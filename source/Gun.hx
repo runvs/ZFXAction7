@@ -25,14 +25,9 @@ class Gun extends FlxSprite
 		super.draw();
 	}
 
-	public function shoot(target : flixel.util.FlxVector) : flixel.group.FlxTypedGroup<Projectile>
+	public function shoot(target : FlxSprite) : flixel.group.FlxTypedGroup<Projectile>
 	{
 		return null;
-	}
-
-	public function shootAtSprite(target : FlxSprite) : flixel.group.FlxTypedGroup<Projectile>
-	{
-		return shoot(new flixel.util.FlxVector(target.x, target.y));
 	}
 
 	public function isLoaded() : Bool

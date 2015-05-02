@@ -114,15 +114,12 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		enemyShot.kill();
 	}
 	
-	private function shotDropCollision(playerShot:Projectile, enemyShot:Projectile):Void
+	private function shotEnemyCollision(playerShot:Projectile, enemyShot:Projectile):Void
 	{
 		trace("shots hit!");
 		playerShot.kill();
 		enemyShot.kill();
 	}
-	
-	
-	
 	
 	override public function draw () : Void 
 	{

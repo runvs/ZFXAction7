@@ -46,7 +46,7 @@ class City extends FlxSprite
 			//if(FlxG.keys.anyPressed(["Q"]))
 			{
 				//yay, we can fire guns! lets look for a target... 
-				var target : flixel.util.FlxVector = lookForTarget(_guns.members[i]);
+				var target : FlxSprite = lookForTarget(_guns.members[i]);
 
 				if(target == null)
 				{
@@ -61,7 +61,7 @@ class City extends FlxSprite
 		}
 	}	
 	
-	private function lookForTarget(gun : Gun) : flixel.util.FlxVector
+	private function lookForTarget(gun : Gun) : flixel.FlxSprite
 	{
 		//look for closest shot
 		var closestShot : Projectile = null;
@@ -82,10 +82,11 @@ class City extends FlxSprite
 		if(closestShot != null)
 		{
 			//aim at it
-			return AimOMatic.aim( new flixel.util.FlxVector(gun.x, gun.y), new flixel.util.FlxVector(closestShot.x, closestShot.y), new flixel.util.FlxVector(closestShot.velocity.x, closestShot.velocity.y) , gun.getProjectileSpeed() );	
+			//return AimOMatic.aim( new flixel.util.FlxVector(gun.x, gun.y), new flixel.util.FlxVector(closestShot.x, closestShot.y), new flixel.util.FlxVector(closestShot.velocity.x, closestShot.velocity.y) , gun.getProjectileSpeed() );	
+			
 		}
 	
-		return null;
+		return closestShot;
 	}
 	
 	public function ShotImpact(s:Projectile)

@@ -40,7 +40,7 @@ class SmallSpaceShipGun extends Gun
 		super.draw();
 	}
 
-	public override function shoot(target : FlxVector) : flixel.group.FlxTypedGroup<Projectile>
+	public override function shoot(target : FlxSprite) : flixel.group.FlxTypedGroup<Projectile>
 	{
 		_gunIsReady = false;
 		var projectiles : flixel.group.FlxTypedGroup<Projectile> = new flixel.group.FlxTypedGroup<Projectile>();

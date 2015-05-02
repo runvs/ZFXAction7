@@ -64,7 +64,9 @@ class EnemyShip extends FlxSprite
 		{
 			if(_guns.members[i].isLoaded())
 			{
-				var target : FlxVector = new FlxVector(this.x, 400);
+				var target : FlxSprite = new FlxSprite();
+				target.x = this.x;
+				target.y = 400;
 				//no idea how i can set relative positions.. so ill work around
 				var shot : flixel.group.FlxTypedGroup<Projectile> = _guns.members[i].shoot(target);
 				_shootManager.addEnemyShot(shot);

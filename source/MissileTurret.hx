@@ -52,11 +52,11 @@ class MissileTurret extends Gun
 		super.draw();
 	}
 
-	public override function shootAtSprite(target : FlxSprite) : flixel.group.FlxTypedGroup<Projectile>
+	public override function shoot(target : FlxSprite) : flixel.group.FlxTypedGroup<Projectile>
 	{
 		_gunIsReady = false;
 		var projectiles : flixel.group.FlxTypedGroup<Projectile> = new flixel.group.FlxTypedGroup<Projectile>();
-		
+
 		for(i in 0..._numberOfBullets)
 		{
 			//missile turret initially shoots out the missile in a linear direction 

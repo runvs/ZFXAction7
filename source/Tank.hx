@@ -53,7 +53,8 @@ class Tank extends FlxSprite
 			
 			if (_gun.isLoaded())
 			{
-				_shootManager.addPlayerShot(_gun.shoot(AimOMatic.aim(new FlxVector(x, y), new FlxVector(_ship.x, _ship.y), new FlxVector(_ship.velocity.x, _ship.velocity.y), _gun.getProjectileSpeed())));
+				//_shootManager.addPlayerShot(_gun.shoot(AimOMatic.aim(new FlxVector(x, y), new FlxVector(_ship.x, _ship.y), new FlxVector(_ship.velocity.x, _ship.velocity.y), _gun.getProjectileSpeed())));
+				_shootManager.addPlayerShot(_gun.shoot(_ship));
 			}
 			
 			if (_ship  == null)
