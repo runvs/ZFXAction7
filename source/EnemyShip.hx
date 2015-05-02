@@ -57,21 +57,38 @@ class EnemyShip extends FlxSprite
 		_flipFunction();
 		_guns.update();
 		shoot();
+		checkDead();
 	}
 
 	private function shoot() : Void
 	{
-		for(i in 0..._guns.length)
+		if (alive)
 		{
-			if(_guns.members[i].isLoaded())
+			for(i in 0..._guns.length)
 			{
-				var target : FlxSprite = new FlxSprite();
-				target.x = this.x;
-				target.y = 400;
-				//no idea how i can set relative positions.. so ill work around
-				var shot : flixel.group.FlxTypedGroup<Projectile> = _guns.members[i].shoot(target);
-				_shootManager.addEnemyShot(shot);
+				if(_guns.members[i].isLoaded())
+				{
+					var target : FlxSprite = new FlxSprite();
+					target.x = this.x;
+					target.y = 400;
+					//no idea how i can set relative positions.. so ill work around
+					var shot : flixel.group.FlxTypedGroup<Projectile> = _guns.members[i].shoot(target);
+					_shootManager.addEnemyShot(shot);
+				}
 			}
 		}
+	}
+	
+	private function checkDead(): Void 
+	{
+		if (health <= 0)
+		{
+			kill();
+		}
+	}
+	
+	public function takeDamage(s:Projectile): Void
+	{
+		health -= s.Damage; 
 	}
 }

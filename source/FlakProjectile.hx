@@ -28,6 +28,7 @@ class FlakProjectile extends Projectile
 		super();
 		makeGraphic(4, 4, FlxColorUtil.makeFromARGB(1, 150, 150, 0));
 		_path = path;
+		Damage = 10;
 	}	
 
 	public override function draw()

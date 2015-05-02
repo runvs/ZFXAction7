@@ -103,10 +103,12 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	private function shotEnemyCollision(playerShot:Projectile, enemy:EnemyShip):Void
 	{
 		trace("shots hit!");
-		if (FlxG.pixelPerfectOverlap(playerShot, enemy))
+		//if (FlxG.pixelPerfectOverlap(playerShot, enemy))
 		{
+			enemy.takeDamage(playerShot);
 			playerShot.kill();
-			enemy.kill();
+			//enemy.kill();
+			
 		}
 	}
 	

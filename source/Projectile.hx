@@ -15,6 +15,8 @@ import flixel.util.FlxVector;
  */
 class Projectile extends FlxSprite
 {
+	public var Damage : Float;
+	
 	public function new() 
 	{
 		super();
