@@ -208,8 +208,12 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		if (FlxG.overlap(s, _city))
 		{
 			trace ("checkShotCityOverlap overlap");
-			_city.ShotImpact(s);
-			s.kill();
+			if (FlxG.pixelPerfectOverlap(s, _city, 1))
+			{
+				_city.ShotImpact(s);
+				s.kill();
+			}
+			
 		}
 	}
 	

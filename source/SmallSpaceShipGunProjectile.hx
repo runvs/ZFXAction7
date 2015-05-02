@@ -21,9 +21,10 @@ class SmallSpaceShipGunProjectile extends Projectile
 		this.makeGraphic(6, 6, FlxColorUtil.makeFromARGB(1, 200, 20, 20));
 		this.origin.set();
 		this.acceleration.set(0, 5);
+		this.velocity = new FlxPoint(0, 10);
 		this.x = x;
 		this.y = y;
-		this.maxVelocity.set(75, 75);
+		this.maxVelocity.set(75, 100);
 	}	
 	
 	public override function update() : Void 

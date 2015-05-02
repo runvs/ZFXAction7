@@ -25,12 +25,9 @@ class City extends FlxSprite
 	public function new(shootManager : ShootManager) 
 	{
 		super();
-		this.makeGraphic(320, 16, FlxColorUtil.makeFromARGB(1, 20, 20, 200));
-		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
-		this.origin.set(0,0);
-		this.setPosition(0, FlxG.height - 32);
-		this.updateHitbox();
-
+		this.loadGraphic(AssetPaths.city__png, false, 640, 163);
+		//this.offset.set(0, 163);
+		this.setPosition(0, FlxG.height - 32- this.height);
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
 
 		//_guns.add(new FlakGun(this, 4, 15, 25, 250, 2));
@@ -112,7 +109,7 @@ class City extends FlxSprite
 		var bitmapData:BitmapData = source.framePixels;
 		
 
-		_flashPoint.x = Std.int(s.x/2) + region.startX;
+		_flashPoint.x = Std.int(s.x) + region.startX;
 		_flashPoint.y = Std.int(s.y - this.y) + region.startY;
 		_flashRect2.width = bitmapData.width;
 		_flashRect2.height = bitmapData.height;
