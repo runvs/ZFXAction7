@@ -40,4 +40,9 @@ class Gun extends FlxSprite
 	{
 		
 	}
+
+	public function getProjectileSpeed() : Float
+	{
+		return 0;
+	}
 }

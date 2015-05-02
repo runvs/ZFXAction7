@@ -21,7 +21,9 @@ class FlakGun extends Gun
 	private var _accuracy : Float; 	//	1.0 is best
 	private var _angularSpread : Float; // in theory, 0 is best
 
-	public function new(owner : FlxSprite, numberOfBullets : Int, accuracy : Float, angularSpread : Float) 
+	private var _projectileSpeed : Float;
+
+	public function new(owner : FlxSprite, numberOfBullets : Int, accuracy : Float, angularSpread : Float, projectileSpeed : Float, reloadTime : Float)
 	{
 		super(owner);
 
@@ -29,12 +31,13 @@ class FlakGun extends Gun
 		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 
-		_gunTimer = new flixel.util.FlxTimer(2, onTimer, 0);
+		_gunTimer = new flixel.util.FlxTimer(reloadTime, onTimer, 0);
 		_gunIsReady = true;		
 
 		_numberOfBullets = numberOfBullets;
 		_accuracy = accuracy;
 		_angularSpread = angularSpread;
+		_projectileSpeed = projectileSpeed;
 	}
 	
 	public override function update() : Void 
@@ -52,7 +55,7 @@ class FlakGun extends Gun
 	public override function shoot(target : FlxVector) : Shot
 	{
 		_gunIsReady = false;
-		return new FlakShot(_numberOfBullets, _accuracy, _angularSpread, this.x, this.y, target.x, target.y);
+		return new FlakShot(_numberOfBullets, _accuracy, _angularSpread, _projectileSpeed, this.x + this._owner.x + this._owner.width/2, this.y + this._owner.y, target.x, target.y);
 	}
 
 	private function onTimer(timer:flixel.util.FlxTimer) : Void
@@ -69,5 +72,10 @@ class FlakGun extends Gun
 	public override function isLoaded()
 	{
 		return _gunIsReady;
+	}
+
+	public override function getProjectileSpeed() : Float
+	{
+		return _projectileSpeed;
 	}
 }

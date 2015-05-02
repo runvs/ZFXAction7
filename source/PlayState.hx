@@ -76,7 +76,34 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_tankList.forEachAlive(checkTankEnemyOverlap);
 		
 		_player.update();
+
+		//FlxG.collide(_playerShotList, _enemyShotList, shotCollision);
+
+		_playerShotList.forEachAlive
+		(
+			function(playerShot:Shot)
+			{
+				_enemyShotList.forEachAlive
+				(
+					function(enemyShot:Shot)
+					{
+						if(playerShot.collidesWith(enemyShot))
+						{
+							enemyShot.kill();
+							playerShot.hit();
+						}
+					}
+				);
+			}
+		);
 	}	
+
+	public function shotCollision(playerShot:Shot, enemyShot:Shot):Void
+	{
+		trace("shots hit!");
+		playerShot.kill();
+		enemyShot.kill();
+	}
 	
 	override public function draw () : Void 
 	{
@@ -101,6 +128,11 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	public function addEnemyShot(shot : Shot) : Void
 	{
 		_enemyShotList.add(shot);
+	}
+
+	public function getEnemyShots() : FlxTypedGroup<Shot>
+	{
+		return _enemyShotList;
 	}
 
 	public function addPlayerShot(shot : Shot) : Void

@@ -24,30 +24,31 @@ class FlakShot extends Shot
 	private var bullets : flixel.group.FlxSpriteGroup;
 	private var bulletPaths : Array<flixel.util.FlxPath>;
 
-	public function new(numberOfBullets : Int, accuracy : Float, angularSpread : Float, x : Float, y : Float, targetX : Float, targetY : Float) 
+	public function new(numberOfBullets : Int, accuracy : Float, angularSpread : Float, projectileSpeed : Float, spawnX : Float, spawnY : Float, targetX : Float, targetY : Float) 
 	{
 		super();
-
-		bullets = new flixel.group.FlxSpriteGroup(x, y, numberOfBullets);
+		bullets = new flixel.group.FlxSpriteGroup(spawnX, spawnY, numberOfBullets);
 		bulletPaths = new Array<flixel.util.FlxPath>();
 
 		for(i in 0...numberOfBullets)
 		{
-			var bullet : FlxSprite = new FlxSprite(320, 240);
-			bullet.makeGraphic(4, 4, FlxColorUtil.makeFromARGB(1, 20, 20, 200));
+			var bullet : FlxSprite = new FlxSprite(0, 0);
+			bullet.makeGraphic(4, 4, FlxColorUtil.makeFromARGB(1, 150, 150, 0));
 			bullets.add(bullet);
 
-			var spawnVector : FlxVector = new FlxVector(320, 240);
+			var spawnVector : FlxVector = new FlxVector(spawnX, spawnY);
 			var targetVector : FlxVector = new FlxVector(targetX, targetY);
 			var pathVector : FlxVector = new FlxVector(targetVector.x - spawnVector.x, targetVector.y - spawnVector.y);
+			
 			pathVector = pathVector.rotateByDegrees(FlxRandom.floatRanged(-angularSpread/2, angularSpread/2));
 			pathVector = pathVector.addNew(spawnVector);
-
+			
 			var bulletPath : flixel.util.FlxPath = new flixel.util.FlxPath();
 			var path : Array<flixel.util.FlxPoint> = new Array<FlxPoint>();
 			var endPoint : FlxPoint = new FlxPoint(pathVector.x + FlxRandom.floatRanged(-accuracy, accuracy), pathVector.y + FlxRandom.floatRanged(-accuracy, accuracy));
+			
 			path.push(endPoint);
-			bulletPath.start(bullet, path, 25, flixel.util.FlxPath.FORWARD, true);
+			bulletPath.start(bullet, path, projectileSpeed, flixel.util.FlxPath.FORWARD, true);
 			bulletPaths.push(bulletPath);
 		}
 	}	
