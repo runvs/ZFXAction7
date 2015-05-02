@@ -32,8 +32,10 @@ class City extends FlxSprite
 		this.updateHitbox();
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
-		_guns.add(new FlakGun(this, 2,  10, 15, 250, 1));
-		//_guns.add(new MissileTurret(this, 3, 15, 25, 250, 1));
+
+		//_guns.add(new FlakGun(this, 4, 15, 25, 250, 2));
+		//_guns.add(new MissileTurret(this, 1, 15, 25, 250, 10));
+		_guns.add(new LaserGun(this, 0, 0, 5));
 		_shootManager = shootManager;	
 		_population = 10000;
 		
@@ -89,13 +91,6 @@ class City extends FlxSprite
 			}
 		);
 
-		if(closestShot != null)
-		{
-			//aim at it
-			//return AimOMatic.aim( new flixel.util.FlxVector(gun.x, gun.y), new flixel.util.FlxVector(closestShot.x, closestShot.y), new flixel.util.FlxVector(closestShot.velocity.x, closestShot.velocity.y) , gun.getProjectileSpeed() );	
-			
-		}
-	
 		return closestShot;
 	}
 	

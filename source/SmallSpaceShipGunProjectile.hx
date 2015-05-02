@@ -25,8 +25,9 @@ class SmallSpaceShipGunProjectile extends Projectile
 		this.y = y;
 		this.maxVelocity.set(75, 75);
 	}	
+	
 	public override function update() : Void 
-	{		
+	{
 		super.update();
 	}
 }
