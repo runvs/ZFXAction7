@@ -21,7 +21,7 @@ class SmallEnemyShip extends EnemyShip
 		this.makeGraphic(20, 20, FlxColorUtil.makeFromARGB(1, 200, 20, 20));
 		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
-
+		this.updateHitbox();
 		_guns.add(new SmallSpaceShipGun(this));
 		health = _healthMax = GameProperties.GetSmallEnemyShipHealth();
 	}

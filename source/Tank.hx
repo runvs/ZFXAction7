@@ -57,9 +57,17 @@ class Tank extends FlxSprite
 				_shootManager.addPlayerShot(_gun.shoot(_ship));
 			}
 			
-			if (_ship  == null)
+			if (_ship  == null || !_ship.alive)
 			{
 				_bound = false;
+				if (_dir != null)
+				{
+					// TODO: Check this!
+					//var o :FlxVector = new FlxVector(Math.cos(Math.PI / 180 * _dir.y) * _dir.x, Math.sin(Math.PI / 180 * _dir.y) * _dir.x);
+					//_dir = new FlxVector( _distance, _dir.y + _rotationVelocity  * FlxG.elapsed);
+					//var d : FlxVector = new FlxVector(Math.cos(Math.PI / 180 * _dir.y) * _dir.x, Math.sin(Math.PI / 180 * _dir.y) * _dir.x);
+					//this.velocity = new FlxPoint((d-o)/FlxG.elapsed);
+				}
 			}
 			_dir = new FlxVector( _distance, _dir.y + _rotationVelocity  * FlxG.elapsed);
 		
