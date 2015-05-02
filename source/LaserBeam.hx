@@ -41,9 +41,6 @@ class LaserBeam extends Projectile
 		//stretch and rotate
 		var length : Float = start.dist(end);
 		this.setGraphicSize(2, Std.int(length));
-		//this.scale.set(1, length);
-		
-	//	this.updateHitbox();
 		origin.set();
 
 		var startToEnd : FlxVector = new FlxVector(end.x - start.x , end.y - start.y);
@@ -51,7 +48,6 @@ class LaserBeam extends Projectile
 	
 		_fadeOutTimer = new flixel.util.FlxTimer(_fadeOutTime, null, 1);
 
-	//	offset.set();
 
 		this.x = start.x;
 		this.y = start.y;	

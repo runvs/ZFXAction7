@@ -71,8 +71,6 @@ class MissileProjectile extends Projectile
 
 			if(_accelerating)
 			{
-				
-				trace(this.velocity);
 				if(this.velocity.y < -90)
 				{
 					_tracking = true;

@@ -65,6 +65,7 @@ class LaserGun extends Gun
 			var endPoint : FlxVector = new FlxVector(targetSprite.x + targetSprite.width/2, targetSprite.y);//new FlxVector(pathVector.x + FlxRandom.floatRanged(-_accuracy, _accuracy), pathVector.y + FlxRandom.floatRanged(-_accuracy, _accuracy));
 				
 			var beam : Projectile = new LaserBeam(startPoint, endPoint);
+
 			projectiles.add(beam);	
 		}
 
@@ -89,6 +90,6 @@ class LaserGun extends Gun
 
 	public override function getProjectileSpeed() : Float
 	{
-		return Math.POSITIVE_INFINITY;
+		return 250;
 	}
 }
