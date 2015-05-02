@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.util.FlxColorUtil;
+import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import flixel.util.FlxVector;
 import openfl.display.BitmapData;
@@ -19,8 +20,7 @@ class City extends FlxSprite
 	private var _shootManager : ShootManager;
 	
 	private var _population : Float;
-	private var _popText1 : FlxText;
-	private var _popText2 : FlxText;
+	private var _populationText : NumberDisplay;
 
 	public function new(shootManager : ShootManager) 
 	{
@@ -35,16 +35,10 @@ class City extends FlxSprite
 		_guns.add(new FlakGun(this, 2,  10, 15, 250, 1));
 		//_guns.add(new MissileTurret(this, 3, 15, 25, 250, 1));
 		_shootManager = shootManager;	
-		_population = 55;
+		_population = 10000;
 		
 		// HUD
-		_popText1  = new FlxText(FlxG.width - 110, 10, 100, "", 12);
-		_popText1.alignment = "right";
-		_popText1.color = FlxColorUtil.makeFromARGB(0.85, 245, 245, 245);
-		_popText2  = new FlxText(FlxG.width - 110, 10, 100, "", 12);
-		_popText2.alignment = "right";
-		_popText2.color = FlxColorUtil.makeFromARGB(0.45, 10, 10, 10);
-		_popText2.offset.set (-2, -2);
+		_populationText = new NumberDisplay(true);
 	}
 
 	override public function update():Void 
@@ -108,11 +102,7 @@ class City extends FlxSprite
 	
 	public function drawHud () : Void 
 	{
-		_popText1.text = Std.string(Std.int(_population));
-		_popText2.text = Std.string(Std.int(_population));
-		_popText2.draw();
-		_popText1.draw();
-		
+		_populationText.drawSingleNumber(Std.int(_population), new FlxPoint(FlxG.width - 110, 10));
 	}
 	
 	

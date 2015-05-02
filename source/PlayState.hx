@@ -49,12 +49,13 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_city = new City(this);
 		_player = new Player(this, this);
 		
+		trace (FlxG.width);
 		
 		
 		
 		_enemyList  = new FlxTypedGroup<EnemyShip>();
 	
-		_enemyList.add(SmallEnemyShip.spawn(this, new FlxVector(320, 100), 40));
+		_enemyList.add(SmallEnemyShip.spawn(this, new FlxVector(320, 200), 40));
 		//_enemyList.add(MediumEnemyShip.spawn(this, new FlxVector(50, 10), 50));
 		//_enemyList.add(LargeEnemyShip.spawn(this, new FlxVector(20, 180), 50));
 		
