@@ -29,6 +29,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	
 	private var _enemyShotList : FlxTypedGroup<Projectile>;
 	private var _playerShotList : FlxTypedGroup<Projectile>;
+	
+	private var _clouds : CloudLayer;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -36,7 +38,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	override public function create():Void
 	{
 		_background = new FlxSprite();
-		_background = _background.loadGraphic(AssetPaths.Background__png, false, 640, 480);
+		_background = _background.loadGraphic(AssetPaths.Background__png, false, 640, 1000);
 		//_background.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		_background.origin.set();
 		_background.setPosition(0, 0);
@@ -61,6 +63,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_enemyShotList = new FlxTypedGroup<Projectile>();
 		_playerShotList = new FlxTypedGroup<Projectile>();	
 		
+		_clouds  = new CloudLayer();
+		
 		super.create();
 	}
 	
@@ -79,6 +83,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	override public function update():Void
 	{
 		super.update();
+		_clouds.update();
 		_city.update();
 		_enemyList.update();
 		_enemyShotList.update();
@@ -141,6 +146,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_tankList.draw();
 		_enemyShotList.draw();
 		_playerShotList.draw();
+		
+		_clouds.draw();
 		
 		// HUD STUFF
 		

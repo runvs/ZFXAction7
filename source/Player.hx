@@ -34,7 +34,7 @@ class Player extends FlxSprite
 		this.origin.set(8, 16);
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		
-		this.setPosition(320, 480-32);
+		this.setPosition(320, FlxG.height-32);
 		_targetAngle = 90;
 		_lastAngleIncrement = 0;
 		_shootTimer  = 0;
