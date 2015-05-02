@@ -25,8 +25,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	private var _enemyList : FlxTypedGroup<EnemyShip>;
 	private var _tankList : FlxTypedGroup<Tank>;
 	
-	private var _enemyShotList : FlxTypedGroup<Shot>;
-	private var _playerShotList : FlxTypedGroup<Shot>;
+	private var _enemyShotList : FlxTypedGroup<Projectile>;
+	private var _playerShotList : FlxTypedGroup<Projectile>;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -56,8 +56,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		
 		_tankList  = new FlxTypedGroup<Tank>();
 
-		_enemyShotList = new FlxTypedGroup<Shot>();
-		_playerShotList = new FlxTypedGroup<Shot>();	
+		_enemyShotList = new FlxTypedGroup<Projectile>();
+		_playerShotList = new FlxTypedGroup<Projectile>();	
 		
 		super.create();
 	}
@@ -86,28 +86,28 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_enemyShotList.forEachAlive(checkShotCityOverlap);
 		_player.update();
 
-		//FlxG.collide(_playerShotList, _enemyShotList, shotCollision);
+		FlxG.collide(_playerShotList, _enemyShotList, shotCollision);
 
 		_playerShotList.forEachAlive
 		(
-			function(playerShot:Shot)
+			function(playerShot:Projectile)
 			{
 				_enemyShotList.forEachAlive
 				(
-					function(enemyShot:Shot)
+					function(enemyShot:Projectile)
 					{
-						if(playerShot.collidesWith(enemyShot))
-						{
-							enemyShot.kill();
-							playerShot.hit();
-						}
+						//if(playerShot.collidesWith(enemyShot))
+						//{
+						//	enemyShot.kill();
+						//	playerShot.hit();
+						//}
 					}
 				);
 			}
 		);
 	}	
 
-	public function shotCollision(playerShot:Shot, enemyShot:Shot):Void
+	public function shotCollision(playerShot:Projectile, enemyShot:Projectile):Void
 	{
 		trace("shots hit!");
 		playerShot.kill();
@@ -137,23 +137,26 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 
 	/* INTERFACE ShootManager */
 
-	public function addEnemyShot(shot : Shot) : Void
+	public function addEnemyShot(projectiles : flixel.group.FlxTypedGroup<Projectile>) : Void
 	{
-		_enemyShotList.add(shot);
+		for(i in 0...projectiles.length)
+		{
+			_enemyShotList.add(projectiles.members[i]);	
+		}
 	}
 
-	public function getEnemyShots() : FlxTypedGroup<Shot>
+	public function getEnemyShots() : FlxTypedGroup<Projectile>
 	{
 		return _enemyShotList;
 	}
 
-	public function addPlayerShot(shot : Shot) : Void
+	public function addPlayerShot(projectiles : flixel.group.FlxTypedGroup<Projectile>) : Void
 	{
-		_playerShotList.add(shot);
+		for(i in 0...projectiles.length)
+		{
+			_playerShotList.add(projectiles.members[i]);	
+		}	
 	}
-
-
-
 
 	private function checkTankEnemyOverlap(t: Tank)
 	{
@@ -170,7 +173,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		);
 	}
 
-	private function checkShotCityOverlap(s:Shot)
+	private function checkShotCityOverlap(s:Projectile)
 	{
 		//trace ("checkShotCityOverlap");
 		if (FlxG.overlap(s, _city))

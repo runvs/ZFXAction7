@@ -13,7 +13,7 @@ import flixel.util.FlxVector;
  * ...
  * @author 
  */
-class SmallShot extends Shot
+class SmallSpaceShipGunProjectile extends Projectile
 {
 	public function new(x: Float, y: Float) 
 	{

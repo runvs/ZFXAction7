@@ -52,10 +52,32 @@ class FlakGun extends Gun
 		super.draw();
 	}
 
-	public override function shoot(target : FlxVector) : Shot
+	public override function shoot(target : FlxVector) : flixel.group.FlxTypedGroup<Projectile>
 	{
 		_gunIsReady = false;
-		return new FlakShot(_numberOfBullets, _accuracy, _angularSpread, _projectileSpeed, this.x + this._owner.x + this._owner.width/2, this.y + this._owner.y, target.x, target.y);
+		var projectiles : flixel.group.FlxTypedGroup<Projectile> = new flixel.group.FlxTypedGroup<Projectile>();
+
+		for(i in 0..._numberOfBullets)
+		{
+			var spawnVector : FlxVector = new FlxVector(this.x + this._owner.x + this._owner.width/2, this.y + this._owner.y);
+			var targetVector : FlxVector = new FlxVector(target.x, target.y);
+			var pathVector : FlxVector = new FlxVector(targetVector.x - spawnVector.x, targetVector.y - spawnVector.y);
+			
+			pathVector = pathVector.rotateByDegrees(FlxRandom.floatRanged(-_angularSpread/2, _angularSpread/2));
+			pathVector = pathVector.addNew(spawnVector);
+			
+			var path : flixel.util.FlxPath = new flixel.util.FlxPath();
+			var pathPoints : Array<flixel.util.FlxPoint> = new Array<FlxPoint>();
+			var endPoint : FlxPoint = new FlxPoint(pathVector.x + FlxRandom.floatRanged(-_accuracy, _accuracy), pathVector.y + FlxRandom.floatRanged(-_accuracy, _accuracy));
+			
+			pathPoints.push(endPoint);
+
+			var projectile : FlakProjectile = new FlakProjectile(path);
+			projectiles.add(projectile);
+			path.start(projectile, pathPoints, _projectileSpeed, flixel.util.FlxPath.FORWARD, true);
+		}
+
+		return projectiles;
 	}
 
 	private function onTimer(timer:flixel.util.FlxTimer) : Void

@@ -23,7 +23,7 @@ class AimOMatic
         var c : Float = tx * tx + ty * ty;
 
         var ts = solve(a, b, c);
-        trace(ts);
+      
         var solution : FlxVector = null;
 
         if(ts != null)

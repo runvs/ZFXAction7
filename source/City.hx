@@ -26,7 +26,7 @@ class City extends FlxSprite
 		this.updateHitbox();
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
-		_guns.add(new FlakGun(this, 3, 0, 0, 150, 10));
+		_guns.add(new FlakGun(this, 3, 0, 0, 250, 1));
 		_shootManager = shootManager;	
 	}
 
@@ -53,8 +53,8 @@ class City extends FlxSprite
 				}
 				else
 				{
-					var shot : Shot = _guns.members[i].shoot(target);
-					_shootManager.addPlayerShot(shot);
+					var projectiles : flixel.group.FlxTypedGroup<Projectile> = _guns.members[i].shoot(target);
+					_shootManager.addPlayerShot(projectiles);
 				}
 			}
 		}
@@ -63,11 +63,11 @@ class City extends FlxSprite
 	private function lookForTarget(gun : Gun) : flixel.util.FlxVector
 	{
 		//look for closest shot
-		var closestShot : Shot = null;
+		var closestShot : Projectile = null;
 		var distanceOfClosestShot : Float = 812738172381723;
 		_shootManager.getEnemyShots().forEachAlive
 		(		
-			function(shot:Shot) 
+			function(shot:Projectile) 
 			{ 
 				var distance : FlxVector = new FlxVector(gun.x - shot.x, gun.y - shot.y);
 				if (distance.length < distanceOfClosestShot)
@@ -87,7 +87,7 @@ class City extends FlxSprite
 		return null;
 	}
 	
-	public function ShotImpact(s:Shot)
+	public function ShotImpact(s:Projectile)
 	{
 		var source:FlxSprite = new FlxSprite();
 		source.makeGraphic(10, 10, FlxColorUtil.makeFromARGB(0.0, 255, 0, 0));

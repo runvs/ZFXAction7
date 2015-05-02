@@ -6,8 +6,8 @@ package ;
 
 interface ShootManager 
 {
-	public function addEnemyShot(s : Shot) : Void;
-	public function addPlayerShot(s : Shot) : Void;
+	public function addEnemyShot(projectiles : flixel.group.FlxTypedGroup<Projectile>) : Void;
+	public function addPlayerShot(projectiles: flixel.group.FlxTypedGroup<Projectile>) : Void;
 
-	public function getEnemyShots() : flixel.group.FlxTypedGroup<Shot>;
+	public function getEnemyShots() : flixel.group.FlxTypedGroup<Projectile>;
 }

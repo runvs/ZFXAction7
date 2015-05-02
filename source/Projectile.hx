@@ -13,7 +13,7 @@ import flixel.util.FlxVector;
  * ...
  * @author 
  */
-class Shot extends FlxSprite
+class Projectile extends FlxSprite
 {
 	public function new() 
 	{
