@@ -5,7 +5,6 @@ import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
-import js.html.svg.Number;
 
 /**
  * ...
