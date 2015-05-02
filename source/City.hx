@@ -30,8 +30,8 @@ class City extends FlxSprite
 		this.setPosition(0, FlxG.height - 32- this.height);
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
 
-		//_guns.add(new FlakGun(this, 4, 15, 25, 250, 2));
-		//_guns.add(new MissileTurret(this, 1, 15, 25, 250, 10));
+		_guns.add(new FlakGun(this, 4, 15, 25, 250, 2));
+		_guns.add(new MissileTurret(this, 1, 15, 25, 250, 10));
 		_guns.add(new LaserGun(this, 0, 0, 5));
 		_shootManager = shootManager;	
 		_population = 10000;

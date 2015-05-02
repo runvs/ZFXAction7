@@ -37,7 +37,7 @@ class Tank extends FlxSprite
 		_mode = TankMode.Flight;
 		this.angularVelocity = 45;
 		_bindTimer = 1.5;
-		_gun = new FlakGun(this, 1, 10, 10, 250, 1);
+		_gun = new TankGun(this, 0, 0, 3);
 	}
 	
 	public override function update () :Void

@@ -12,13 +12,14 @@ import flixel.util.FlxVector;
  * ...
  * @author 
  */
-class LaserGun extends Gun
+class TankGun extends Gun
 {
 	private var _gunTimer : flixel.util.FlxTimer;
 	private var _gunIsReady : Bool;
 
 	private var _accuracy : Float; 	//	1.0 is best
 	private var _angularSpread : Float; // in theory, 0 is best
+	private var _projectileSpeed : Float;
 
 	public function new(owner : FlxSprite, accuracy : Float, angularSpread : Float, reloadTime : Float)
 	{
@@ -33,6 +34,7 @@ class LaserGun extends Gun
 
 		_accuracy = accuracy;
 		_angularSpread = angularSpread;
+		_projectileSpeed = 100;
 	}
 	
 	public override function update() : Void 
@@ -53,20 +55,22 @@ class LaserGun extends Gun
 		var projectiles : flixel.group.FlxTypedGroup<Projectile> = new flixel.group.FlxTypedGroup<Projectile>();
 
 		var spawnVector : FlxVector = new FlxVector(this.x + this._owner.x + this._owner.width/2, this.y + this._owner.y);
-		
-		if(targetSprite != null)
+		var target : FlxVector = AimOMatic.aim(spawnVector, new FlxVector(targetSprite.x, targetSprite.y), new FlxVector(targetSprite.velocity.x, targetSprite.velocity.y), _projectileSpeed);
+	
+		if(target != null)
 		{
-			var pathVector : FlxVector = new FlxVector(targetSprite.x - spawnVector.x, targetSprite.y - spawnVector.y);
-				
-			pathVector = pathVector.rotateByDegrees(FlxRandom.floatRanged(-_angularSpread/2, _angularSpread/2));
-			pathVector = pathVector.addNew(spawnVector);
-					
-			var startPoint : FlxVector = spawnVector;
-			var endPoint : FlxVector = new FlxVector(targetSprite.x + targetSprite.width/2, targetSprite.y);//new FlxVector(pathVector.x + FlxRandom.floatRanged(-_accuracy, _accuracy), pathVector.y + FlxRandom.floatRanged(-_accuracy, _accuracy));
-				
-			var beam : Projectile = new LaserBeam(startPoint, endPoint);
+			var direction : FlxVector = new FlxVector(target.x - spawnVector.x, target.y - spawnVector.y);
+			direction = direction.normalize();
 
-			projectiles.add(beam);	
+			var velocity : FlxVector = new FlxVector(direction.x * _projectileSpeed, direction.y * _projectileSpeed);	
+		
+			var minimumLifeTime = 3;
+			var maximumLifeTime = 5;
+			var projectile : TankProjectile = new TankProjectile(FlxRandom.floatRanged(minimumLifeTime, maximumLifeTime), velocity);
+			projectile.x = spawnVector.x;
+			projectile.y = spawnVector.y;
+			projectiles.add(projectile);
+			
 		}
 
 		return projectiles;
@@ -90,6 +94,6 @@ class LaserGun extends Gun
 
 	public override function getProjectileSpeed() : Float
 	{
-		return 250;
+		return Math.POSITIVE_INFINITY;
 	}
 }
