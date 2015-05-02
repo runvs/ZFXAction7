@@ -23,6 +23,7 @@ class SmallEnemyShip extends EnemyShip
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 
 		_guns.add(new SmallSpaceShipGun(this));
+		health = _healthMax = GameProperties.GetSmallEnemyShipHealth();
 	}
 	
 	public static function spawn (shootManager : ShootManager, pos: FlxPoint, velX  : Float = 5, velY  : Float = 0 , dir   :Int = 1 ) : EnemyShip

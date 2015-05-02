@@ -19,6 +19,7 @@ class EnemyShip extends FlxSprite
 	private var _flipFunction :Void -> Void = null;
 	private var _guns : flixel.group.FlxTypedGroup<Gun>;
 	private var _shootManager : ShootManager;
+	private var _healthMax : Float;
 
 	private function new(shootManager : ShootManager) 
 	{
