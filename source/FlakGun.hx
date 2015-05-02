@@ -73,6 +73,8 @@ class FlakGun extends Gun
 			pathPoints.push(endPoint);
 
 			var projectile : FlakProjectile = new FlakProjectile(path);
+			projectile.x = spawnVector.x;
+			projectile.y = spawnVector.y;
 			projectiles.add(projectile);
 			path.start(projectile, pathPoints, _projectileSpeed, flixel.util.FlxPath.FORWARD, true);
 		}
