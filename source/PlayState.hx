@@ -86,39 +86,28 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_enemyShotList.forEachAlive(checkShotCityOverlap);
 		_player.update();
 
-		FlxG.overlap(_playerShotList, _enemyShotList, shotDropCollision);
+		FlxG.collide(_playerShotList, _enemyShotList, shotShotCollision); //laguna asked for it
 		FlxG.overlap(_playerShotList, _enemyList, shotEnemyCollision); 
-		_playerShotList.forEachAlive
-		(
-			function(playerShot:Projectile)
-			{
-				_enemyShotList.forEachAlive
-				(
-					function(enemyShot:Projectile)
-					{
-						//if(playerShot.collidesWith(enemyShot))
-						//{
-						//	enemyShot.kill();
-						//	playerShot.hit();
-						//}
-					}
-				);
-			}
-		);
 	}	
 
-	private function shotDropCollision(playerShot:Projectile, enemyShot:Projectile):Void
+	private function shotShotCollision(playerShot:Projectile, enemyShot:Projectile):Void
 	{
 		trace("shots hit!");
-		playerShot.kill();
-		enemyShot.kill();
+		//if (FlxG.pixelPerfectOverlap(playerShot, enemyShot, 1))
+		{
+			playerShot.kill();
+			enemyShot.kill();
+		}
 	}
 	
-	private function shotEnemyCollision(playerShot:Projectile, enemyShot:Projectile):Void
+	private function shotEnemyCollision(playerShot:Projectile, enemy:EnemyShip):Void
 	{
 		trace("shots hit!");
-		playerShot.kill();
-		enemyShot.kill();
+		if (FlxG.pixelPerfectOverlap(playerShot, enemy))
+		{
+			playerShot.kill();
+			enemy.kill();
+		}
 	}
 	
 	override public function draw () : Void 

@@ -26,8 +26,8 @@ class City extends FlxSprite
 		this.updateHitbox();
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
-		//_guns.add(new FlakGun(this, 3, 15, 25, 250, 1));
-		_guns.add(new MissileTurret(this, 3, 15, 25, 250, 1));
+		_guns.add(new FlakGun(this, 3, 15, 25, 250, 1));
+		//_guns.add(new MissileTurret(this, 3, 15, 25, 250, 1));
 		_shootManager = shootManager;	
 	}
 
