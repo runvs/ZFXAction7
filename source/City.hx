@@ -26,7 +26,7 @@ class City extends FlxSprite
 		this.updateHitbox();
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
-		_guns.add(new FlakGun(this, 3, 15, 25, 250, 1));
+		_guns.add(new FlakGun(this, 1, 0, 0, 250, 1));
 		//_guns.add(new MissileTurret(this, 3, 15, 25, 250, 1));
 		_shootManager = shootManager;	
 	}
@@ -70,7 +70,7 @@ class City extends FlxSprite
 		(		
 			function(shot:Projectile) 
 			{ 
-				var distance : FlxVector = new FlxVector(gun.x - shot.x, gun.y - shot.y);
+				var distance : FlxVector = new FlxVector(gun.x + this.x + this.width/2 - shot.x, gun.y + this.y  - shot.y);
 				if (distance.length < distanceOfClosestShot)
 				{
 					closestShot = shot;

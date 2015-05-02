@@ -95,8 +95,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		trace("shots hit!");
 		//if (FlxG.pixelPerfectOverlap(playerShot, enemyShot, 1))
 		{
-			playerShot.kill();
-			enemyShot.kill();
+			//playerShot.kill();
+			//enemyShot.kill();
 		}
 	}
 	
