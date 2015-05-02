@@ -15,7 +15,8 @@ import flixel.util.FlxVector;
 class Tank extends FlxSprite
 {
 
-	private var _bound:Bool;
+	private var _mode : TankMode;
+	public function GetMode () : TankMode { return _mode; };
 	
 	private var _ship : EnemyShip = null;
 
@@ -33,7 +34,7 @@ class Tank extends FlxSprite
 		this.makeGraphic(8, 8, FlxColorUtil.makeFromARGB(1, 220, 220, 220));
 		this.origin.set(4,4);
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
-		_bound = false;
+		_mode = TankMode.Flight;
 		this.angularVelocity = 45;
 		_bindTimer = 1.5;
 		_gun = new FlakGun(this, 1, 10, 10, 250, 1);
@@ -42,36 +43,36 @@ class Tank extends FlxSprite
 	public override function update () :Void
 	{
 		super.update();
-		if (_bound == false)
+		
+		
+		if (_mode == TankMode.Flight)
 		{
 			this.velocity = new FlxPoint(velocity.x , velocity.y + GameProperties.GetGravitationalAcceleration() * FlxG.elapsed );
-			this.velocity = new FlxPoint(velocity.x * 0.994, velocity.y * 0.994);
+			this.velocity = new FlxPoint(velocity.x * 0.994, velocity.y * 0.994);	
 		}
-		else
+		else if (_mode == TankMode.Bound)
 		{
 			_gun.update();
 			
 			if (_gun.isLoaded())
 			{
-				//_shootManager.addPlayerShot(_gun.shoot(AimOMatic.aim(new FlxVector(x, y), new FlxVector(_ship.x, _ship.y), new FlxVector(_ship.velocity.x, _ship.velocity.y), _gun.getProjectileSpeed())));
 				_shootManager.addPlayerShot(_gun.shoot(_ship));
 			}
 			
 			if (_ship  == null || !_ship.alive)
 			{
-				_bound = false;
-				if (_dir != null)
-				{
-					// TODO: Check this!
-					//var o :FlxVector = new FlxVector(Math.cos(Math.PI / 180 * _dir.y) * _dir.x, Math.sin(Math.PI / 180 * _dir.y) * _dir.x);
-					//_dir = new FlxVector( _distance, _dir.y + _rotationVelocity  * FlxG.elapsed);
-					//var d : FlxVector = new FlxVector(Math.cos(Math.PI / 180 * _dir.y) * _dir.x, Math.sin(Math.PI / 180 * _dir.y) * _dir.x);
-					//this.velocity = new FlxPoint((d-o)/FlxG.elapsed);
-				}
+				_mode = TankMode.Parachute;
+				FlxTween.tween(this.offset, { x:40 }, 2, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );
+				
 			}
 			_dir = new FlxVector( _distance, _dir.y + _rotationVelocity  * FlxG.elapsed);
 		
 			SetPositionInOrbit();
+		}
+		else if (_mode == TankMode.Parachute)
+		{
+			this.velocity = new FlxPoint(velocity.x , velocity.y + GameProperties.GetGravitationalAcceleration() * FlxG.elapsed );
+			this.velocity = new FlxPoint(velocity.x * 0.994, velocity.y * 0.994);	
 		}
 	}
 	
@@ -85,14 +86,13 @@ class Tank extends FlxSprite
 	public function Bind ( e: EnemyShip): Void
 	{
 		
-		if (!_bound)
+		if (_mode != TankMode.Bound)
 		{
-			
 			_bindTimer -= FlxG.elapsed;
 			if (_bindTimer <= 0)
 			{
 				_ship = e;
-				_bound = true;
+				_mode = TankMode.Bound;
 				
 				// store velocity vector
 				var v : FlxVector = new FlxVector(this.velocity.x, this.velocity.y);
@@ -134,7 +134,6 @@ class Tank extends FlxSprite
 				this.acceleration  = new FlxPoint(d.x* 25, d.y * 25);
 			}
 		}
-		
 	}
 	
 }

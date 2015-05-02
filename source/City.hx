@@ -2,7 +2,10 @@ package ;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.text.FlxText;
 import flixel.util.FlxColorUtil;
+import flixel.util.FlxPoint;
+import flixel.util.FlxRandom;
 import flixel.util.FlxVector;
 import openfl.display.BitmapData;
 
@@ -15,6 +18,9 @@ class City extends FlxSprite
 
 	private var _guns : flixel.group.FlxTypedGroup<Gun>;
 	private var _shootManager : ShootManager;
+	
+	private var _population : Float;
+	private var _populationText : NumberDisplay;
 
 	public function new(shootManager : ShootManager) 
 	{
@@ -22,14 +28,19 @@ class City extends FlxSprite
 		this.makeGraphic(320, 16, FlxColorUtil.makeFromARGB(1, 20, 20, 200));
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		this.origin.set(0,0);
-		this.setPosition(0, 480 - 32);
+		this.setPosition(0, FlxG.height - 32);
 		this.updateHitbox();
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
+
 		//_guns.add(new FlakGun(this, 4, 15, 25, 250, 2));
 		//_guns.add(new MissileTurret(this, 1, 15, 25, 250, 10));
 		_guns.add(new LaserGun(this, 0, 0, 5));
 		_shootManager = shootManager;	
+		_population = 10000;
+		
+		// HUD
+		_populationText = new NumberDisplay(true);
 	}
 
 	override public function update():Void 
@@ -83,6 +94,14 @@ class City extends FlxSprite
 		return closestShot;
 	}
 	
+	
+	public function drawHud () : Void 
+	{
+		_populationText.drawSingleNumber(Std.int(_population), new FlxPoint(FlxG.width - 110, 10));
+	}
+	
+	
+	
 	public function ShotImpact(s:Projectile)
 	{
 		var source:FlxSprite = new FlxSprite();
@@ -108,8 +127,20 @@ class City extends FlxSprite
 		calcFrame();
 		#end
 		//////// end copy from stamp
-		//trace (Std.int(s.x));
-		//this.pixels.
-		s.kill();
+		var decimate = _population  * FlxRandom.floatRanged( 0, 0.01) + 50;
+		
+		checkDead();
+		
+		
+		_population -= decimate;
 	}
+	
+	private function checkDead() : Void 
+	{
+		if (_population <= 0)
+		{
+			kill();
+		}
+	}
+	
 }

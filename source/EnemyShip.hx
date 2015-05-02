@@ -37,7 +37,11 @@ class EnemyShip extends FlxSprite
 			this.velocity.set( -this.velocity.x, 0);
 			this.scale.set( GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 			_flipFunction = flipRight;
-			this.y += FlxRandom.floatRanged( -32, 32);
+			this.y += FlxRandom.floatRanged( 0, 48);
+			if (y > FlxG.height / 3)
+			{
+				y = FlxG.height / 3;
+			}
 		}
 	}
 	public function flipRight() : Void	// flip on right side of the screen
@@ -47,7 +51,11 @@ class EnemyShip extends FlxSprite
 			this.velocity.set( -this.velocity.x, 0);
 			this.scale.set( -GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 			_flipFunction = flipLeft;
-			this.y += FlxRandom.floatRanged( -32, 32);
+			this.y += FlxRandom.floatRanged( 0, 48);
+			if (y > FlxG.height / 3)
+			{
+				y = FlxG.height / 3;
+			}
 		}
 	}
 

@@ -28,11 +28,6 @@ class SmallSpaceShipGunProjectile extends Projectile
 	
 	public override function update() : Void 
 	{
-		
-		//if (this.velocity.y > 75 )
-		//{
-			//this.velocity  = new FlxPoint(velocity.x, 75);
-		//}
 		super.update();
 	}
 }
