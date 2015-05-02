@@ -22,6 +22,7 @@ class City extends FlxSprite
 	private var _population : Float;
 	private var _populationText : NumberDisplay;
 
+
 	public function new(shootManager : ShootManager) 
 	{
 		super();
@@ -30,9 +31,9 @@ class City extends FlxSprite
 		this.setPosition(0, FlxG.height - 32- this.height);
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
 
-		_guns.add(new FlakGun(this, 4, 15, 25, 250, 2));
-		_guns.add(new MissileTurret(this, 1, 15, 25, 250, 10));
-		_guns.add(new LaserGun(this, 0, 0, 5));
+		//_guns.add(new FlakGun(this, 4, 15, 25, 250, 2));
+		//_guns.add(new MissileTurret(this, 1, 15, 25, 250, 10));
+		//_guns.add(new LaserGun(this, 0, 0, 5));
 		_shootManager = shootManager;	
 		_population = 10000;
 		
@@ -99,35 +100,51 @@ class City extends FlxSprite
 	
 	
 	
+	private function stampCircle(p:FlxPoint): Void
+	{
+		var imax : Int = 10;
+		
+		for (i in (-imax)...(imax))
+		{
+			for (j in (-imax) ... imax)
+			{
+				if (i * i + j * j < imax * imax)
+				{
+					var source:FlxSprite = new FlxSprite();
+					source.makeGraphic(2, 2, FlxColorUtil.makeFromARGB(0.0, 255, 0, 0));
+					
+					//////// copy from stamp
+					source.drawFrame();
+					var bitmapData:BitmapData = source.framePixels;
+					
+
+					_flashPoint.x = Std.int(p.x + i) + region.startX;
+					_flashPoint.y = Std.int(p.y - this.y+ j) + region.startY;
+					_flashRect2.width = bitmapData.width;
+					_flashRect2.height = bitmapData.height;
+					cachedGraphics.bitmap.copyPixels(bitmapData, _flashRect2, _flashPoint, null, null, false);
+					_flashRect2.width = cachedGraphics.bitmap.width;
+					_flashRect2.height = cachedGraphics.bitmap.height;
+					
+					resetFrameBitmapDatas();
+					
+					#if FLX_RENDER_BLIT
+					dirty = true;
+					calcFrame();
+					#end
+					//////// end copy from stamp
+				}
+			}
+		}
+	}
+	
 	public function ShotImpact(s:Projectile)
 	{
-		var source:FlxSprite = new FlxSprite();
-		source.makeGraphic(10, 10, FlxColorUtil.makeFromARGB(0.0, 255, 0, 0));
-		
-		//////// copy from stamp
-		source.drawFrame();
-		var bitmapData:BitmapData = source.framePixels;
-		
 
-		_flashPoint.x = Std.int(s.x) + region.startX;
-		_flashPoint.y = Std.int(s.y - this.y) + region.startY;
-		_flashRect2.width = bitmapData.width;
-		_flashRect2.height = bitmapData.height;
-		cachedGraphics.bitmap.copyPixels(bitmapData, _flashRect2, _flashPoint, null, null, false);
-		_flashRect2.width = cachedGraphics.bitmap.width;
-		_flashRect2.height = cachedGraphics.bitmap.height;
-		
-		resetFrameBitmapDatas();
-		
-		#if FLX_RENDER_BLIT
-		dirty = true;
-		calcFrame();
-		#end
-		//////// end copy from stamp
 		var decimate = _population  * FlxRandom.floatRanged( 0, 0.01) + 50;
 		
 		checkDead();
-		
+		stampCircle(new FlxPoint(s.x, s.y));
 		
 		_population -= decimate;
 	}
