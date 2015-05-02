@@ -18,18 +18,21 @@ class FlakGun extends Gun
 	private var _gunIsReady : Bool;
 
 	private var _numberOfBullets : Int;
-	private var _accuracy : Float; 	//	1.0 is best
-	private var _angularSpread : Float; // in theory, 0 is best
+	private var _accuracy : Float; 
+	private var _angularSpread : Float;
 
 	private var _projectileSpeed : Float;
 
-	public function new(owner : FlxSprite, numberOfBullets : Int, accuracy : Float, angularSpread : Float, projectileSpeed : Float, reloadTime : Float)
+	public function new(owner : FlxSprite, position : FlxVector, numberOfBullets : Int, accuracy : Float, angularSpread : Float, projectileSpeed : Float, reloadTime : Float)
 	{
 		super(owner);
 
-		this.makeGraphic(5, 5, FlxColorUtil.makeFromARGB(1, 255, 0, 0));
+		this.makeGraphic(5, 5, FlxColorUtil.makeFromARGB(1, 100, 150, 100));
 		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
+
+		this.x = owner.x + position.x;
+		this.y = owner.y + position.y;
 
 		_gunTimer = new flixel.util.FlxTimer(reloadTime, onTimer, 0);
 		_gunIsReady = true;		
@@ -57,7 +60,7 @@ class FlakGun extends Gun
 		_gunIsReady = false;
 		var projectiles : flixel.group.FlxTypedGroup<Projectile> = new flixel.group.FlxTypedGroup<Projectile>();
 
-		var spawnVector : FlxVector = new FlxVector(this.x + this._owner.x + this._owner.width/2, this.y + this._owner.y);
+		var spawnVector : FlxVector = new FlxVector(this.x, this.y);
 		var target : FlxVector = AimOMatic.aim(spawnVector, new FlxVector(targetSprite.x, targetSprite.y), new FlxVector(targetSprite.velocity.x, targetSprite.velocity.y), _projectileSpeed);
 	
 		if(target != null)
