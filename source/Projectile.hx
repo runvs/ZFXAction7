@@ -20,5 +20,6 @@ class Projectile extends FlxSprite
 	public function new() 
 	{
 		super();
+		this.health = 10;
 	}	
 }

@@ -30,15 +30,35 @@ class City extends FlxSprite
 		//this.offset.set(0, 163);
 		this.setPosition(0, FlxG.height - 32- this.height);
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
+		var leftFlakGun : FlakGun = new FlakGun(this, new FlxVector(50, 0), 4, 15, 25, 250, 2);	
+		var rightFlakGun : FlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, 0), 4, 15, 25, 250, 2);
+	
+		//_guns.add(leftFlakGun);
+		//_guns.add(rightFlakGun);
 
-		//_guns.add(new FlakGun(this, 4, 15, 25, 250, 2));
-		//_guns.add(new MissileTurret(this, 1, 15, 25, 250, 10));
-		//_guns.add(new LaserGun(this, 0, 0, 5));
+		var leftMissileTurret : MissileTurret = new MissileTurret(this, new FlxVector(100, 0), 250, 10);
+		var rightMissileTurret : MissileTurret = new MissileTurret(this, new FlxVector(FlxG.width - 100, 0), 250, 10);
+
+		//_guns.add(leftMissileTurret);
+		//_guns.add(rightMissileTurret);
+
+		var leftLaserGun : LaserGun = new LaserGun(this, new FlxVector(150, 0), 15, 25, 10);
+		var rightLaserGun : LaserGun = new LaserGun(this, new FlxVector(FlxG.width - 150, 0), 15, 25, 10);
+
+		_guns.add(leftLaserGun);
+		_guns.add(rightLaserGun);
+
 		_shootManager = shootManager;	
 		_population = 10000;
 		
 		// HUD
 		_populationText = new NumberDisplay(true);
+	}
+
+	override public function draw():Void
+	{
+		super.draw();
+		_guns.draw();
 	}
 
 	override public function update():Void 
