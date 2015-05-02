@@ -43,7 +43,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		//bmd.applyFilter(bmd, new flash.geom.Rectangle(0, 0, 100, 100),  new flash.geom.Point(100, 100), new flash.filters.BlurFilter(20,20,9000));
 		//_background.pixels = bmd;
 		_city = new City(this);
-		_player = new Player(this);
+		_player = new Player(this, this);
 		
 		
 		
@@ -86,8 +86,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_enemyShotList.forEachAlive(checkShotCityOverlap);
 		_player.update();
 
-		FlxG.collide(_playerShotList, _enemyShotList, shotCollision);
-
+		FlxG.overlap(_playerShotList, _enemyShotList, shotDropCollision);
+		FlxG.overlap(_playerShotList, _enemyList, shotEnemyCollision); 
 		_playerShotList.forEachAlive
 		(
 			function(playerShot:Projectile)
@@ -107,7 +107,14 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		);
 	}	
 
-	public function shotCollision(playerShot:Projectile, enemyShot:Projectile):Void
+	private function shotDropCollision(playerShot:Projectile, enemyShot:Projectile):Void
+	{
+		trace("shots hit!");
+		playerShot.kill();
+		enemyShot.kill();
+	}
+	
+	private function shotDropCollision(playerShot:Projectile, enemyShot:Projectile):Void
 	{
 		trace("shots hit!");
 		playerShot.kill();

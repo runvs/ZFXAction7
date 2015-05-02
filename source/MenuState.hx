@@ -23,6 +23,8 @@ class MenuState extends FlxState
 		super.create();
 		_playButton = new FlxButton(0, 0, "Play", startGame);
 		add(_playButton);
+		FlxG.sound.playMusic(AssetPaths.zfxaction7ost__mp3,0.85);
+		
 	}
 	
 	/**

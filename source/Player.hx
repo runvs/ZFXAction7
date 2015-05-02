@@ -16,11 +16,13 @@ class Player extends FlxSprite
 	private var _lastAngleIncrement : Float;
 	private var _tankManager : TankManager;
 	private var _shootTimer : Float;
+	private var _shootManager : ShootManager;
 	
-	public function new(tm: TankManager) 
+	public function new(tm: TankManager, sm : ShootManager) 
 	{
 		super();
 		_tankManager = tm;
+		_shootManager = sm;
 		this.makeGraphic(16, 16, FlxColorUtil.makeFromARGB(1.0, 20, 200, 20));
 		this.origin.set(8, 16);
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
@@ -76,7 +78,7 @@ class Player extends FlxSprite
 	private function shoot(): Void 
 	{
 		//trace ("shoot");
-		var t : Tank  = new Tank();
+		var t : Tank  = new Tank(_shootManager);
 		t.setPosition (this.x, this.y);
 		var power : Float = (_shootTimer / GameProperties.GetShootTimer()) * 325 + 125;
 		t.velocity = new FlxPoint(Math.cos(_targetAngle*Math.PI/180) * power, - Math.sin(_targetAngle*Math.PI/180) * power);

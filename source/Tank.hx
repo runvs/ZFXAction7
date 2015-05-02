@@ -23,16 +23,20 @@ class Tank extends FlxSprite
 	private var _bindTimer: Float;
 	private var _rotationVelocity : Float;
 	private var _distance: Float;
+	private var _gun : Gun;
+	private var _shootManager : ShootManager;
 	
-	public function new() 
+	public function new(sm : ShootManager) 
 	{
 		super();
+		_shootManager = sm;
 		this.makeGraphic(8, 8, FlxColorUtil.makeFromARGB(1, 220, 220, 220));
 		this.origin.set(4,4);
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		_bound = false;
 		this.angularVelocity = 45;
 		_bindTimer = 1.5;
+		_gun = new FlakGun(this, 1, 10, 10, 250, 1);
 	}
 	
 	public override function update () :Void
@@ -45,6 +49,13 @@ class Tank extends FlxSprite
 		}
 		else
 		{
+			_gun.update();
+			
+			if (_gun.isLoaded())
+			{
+				_shootManager.addPlayerShot(_gun.shoot(AimOMatic.aim(new FlxVector(x, y), new FlxVector(_ship.x, _ship.y), new FlxVector(_ship.velocity.x, _ship.velocity.y), _gun.getProjectileSpeed())));
+			}
+			
 			if (_ship  == null)
 			{
 				_bound = false;
