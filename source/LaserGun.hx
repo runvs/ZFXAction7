@@ -62,7 +62,7 @@ class LaserGun extends Gun
 			pathVector = pathVector.addNew(spawnVector);
 					
 			var startPoint : FlxVector = spawnVector;
-			var endPoint : FlxVector = new FlxVector(targetSprite.x, targetSprite.y);//new FlxVector(pathVector.x + FlxRandom.floatRanged(-_accuracy, _accuracy), pathVector.y + FlxRandom.floatRanged(-_accuracy, _accuracy));
+			var endPoint : FlxVector = new FlxVector(targetSprite.x + targetSprite.width/2, targetSprite.y);//new FlxVector(pathVector.x + FlxRandom.floatRanged(-_accuracy, _accuracy), pathVector.y + FlxRandom.floatRanged(-_accuracy, _accuracy));
 				
 			var beam : Projectile = new LaserBeam(startPoint, endPoint);
 			projectiles.add(beam);	

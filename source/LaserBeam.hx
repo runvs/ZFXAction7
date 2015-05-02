@@ -34,19 +34,24 @@ class LaserBeam extends Projectile
 
 		_start = start;
 		_end = end;
-
+	
 		makeGraphic(2, 1, FlxColorUtil.makeFromARGB(1, 0, 255, 0));
 		_fadeOutTime = 0.5;
 
 		//stretch and rotate
 		var length : Float = start.dist(end);
-		this.scale.set(1, -length);
-		this.updateHitbox();
-		var startToEnd : FlxVector = new FlxVector(end.x - start.x , end.y - start.y);
-		this.angle = 180 - startToEnd.degreesBetween(new FlxVector(0, 1));
-		_fadeOutTimer = new flixel.util.FlxTimer(_fadeOutTime, null, 1);
+		this.setGraphicSize(2, Std.int(length));
+		//this.scale.set(1, length);
+		
+	//	this.updateHitbox();
 		origin.set();
-		offset.set();
+
+		var startToEnd : FlxVector = new FlxVector(end.x - start.x , end.y - start.y);
+		this.angle = - startToEnd.degreesBetween(new FlxVector(0, 1));
+	
+		_fadeOutTimer = new flixel.util.FlxTimer(_fadeOutTime, null, 1);
+
+	//	offset.set();
 
 		this.x = start.x;
 		this.y = start.y;	
