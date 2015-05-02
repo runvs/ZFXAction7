@@ -9,6 +9,9 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxMath;
 import flixel.util.FlxVector;
+import haxe.remoting.FlashJsConnection;
+import openfl.display.BitmapData;
+import openfl.filters.BitmapFilter;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -36,8 +39,14 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_background.origin.set();
 		_background.setPosition(0, 0);
 		
+		//var bmd : BitmapData = _background.getFlxFrameBitmapData();
+		//bmd.applyFilter(bmd, new flash.geom.Rectangle(0, 0, 100, 100),  new flash.geom.Point(100, 100), new flash.filters.BlurFilter(20,20,9000));
+		//_background.pixels = bmd;
 		_city = new City(this);
 		_player = new Player(this);
+		
+		
+		
 		
 		_enemyList  = new FlxTypedGroup<EnemyShip>();
 	
@@ -74,7 +83,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_tankList.update();
 		_playerShotList.update();
 		_tankList.forEachAlive(checkTankEnemyOverlap);
-		
+		_enemyShotList.forEachAlive(checkShotCityOverlap);
 		_player.update();
 
 		//FlxG.collide(_playerShotList, _enemyShotList, shotCollision);
@@ -104,6 +113,9 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		playerShot.kill();
 		enemyShot.kill();
 	}
+	
+	
+	
 	
 	override public function draw () : Void 
 	{
@@ -143,7 +155,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 
 
 
-private function checkTankEnemyOverlap(t: Tank)
+	private function checkTankEnemyOverlap(t: Tank)
 	{
 		_enemyList.forEachAlive(
 		function(e:EnemyShip) 
@@ -156,4 +168,16 @@ private function checkTankEnemyOverlap(t: Tank)
 				}
 		}
 		);
-	}}
+	}
+
+	private function checkShotCityOverlap(s:Shot)
+	{
+		//trace ("checkShotCityOverlap");
+		if (FlxG.overlap(s, _city))
+		{
+			trace ("checkShotCityOverlap overlap");
+			_city.ShotImpact(s);
+		}
+	}
+	
+}

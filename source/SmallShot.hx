@@ -21,8 +21,17 @@ class SmallShot extends Shot
 		this.makeGraphic(3, 3, FlxColorUtil.makeFromARGB(1, 200, 20, 20));
 		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
-		this.velocity.set(0, 5);
+		//this.velocity.set(0, 50);
+		this.acceleration.set(0, 5);
 		this.x = x;
 		this.y = y;
 	}	
+	public override function update() : Void 
+	{
+		super.update();
+		if (this.velocity.y > 75 )
+		{
+			this.velocity  = new FlxPoint(velocity.x, 75);
+		}
+	}
 }
