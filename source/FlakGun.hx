@@ -56,15 +56,15 @@ class FlakGun extends Gun
 	{
 		_gunIsReady = false;
 		var projectiles : flixel.group.FlxTypedGroup<Projectile> = new flixel.group.FlxTypedGroup<Projectile>();
-		var target : FlxVector = AimOMatic.aim(new FlxVector(this.x, this.y), new FlxVector(targetSprite.x, targetSprite.y), new FlxVector(targetSprite.velocity.x, targetSprite.velocity.y), _projectileSpeed);
-		//trace (targetSprite.velocity);
+
+		var spawnVector : FlxVector = new FlxVector(this.x + this._owner.x + this._owner.width/2, this.y + this._owner.y);
+		var target : FlxVector = AimOMatic.aim(spawnVector, new FlxVector(targetSprite.x, targetSprite.y), new FlxVector(targetSprite.velocity.x, targetSprite.velocity.y), _projectileSpeed);
+	
 		if(target != null)
 		{
 			for(i in 0..._numberOfBullets)
 			{
-				var spawnVector : FlxVector = new FlxVector(this.x + this._owner.x + this._owner.width/2, this.y + this._owner.y);
-				var targetVector : FlxVector = new FlxVector(target.x, target.y);
-				var pathVector : FlxVector = new FlxVector(targetVector.x - spawnVector.x, targetVector.y - spawnVector.y);
+				var pathVector : FlxVector = new FlxVector(target.x - spawnVector.x, target.y - spawnVector.y);
 				
 				pathVector = pathVector.rotateByDegrees(FlxRandom.floatRanged(-_angularSpread/2, _angularSpread/2));
 				pathVector = pathVector.addNew(spawnVector);

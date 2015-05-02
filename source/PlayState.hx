@@ -86,7 +86,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_enemyShotList.forEachAlive(checkShotCityOverlap);
 		_player.update();
 
-		FlxG.collide(_playerShotList, _enemyShotList, shotShotCollision); //laguna asked for it
+		FlxG.overlap(_playerShotList, _enemyShotList, shotShotCollision); //laguna asked for it
 		FlxG.overlap(_playerShotList, _enemyList, shotEnemyCollision); 
 	}	
 
@@ -95,8 +95,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		//trace("shots hit!");
 		//if (FlxG.pixelPerfectOverlap(playerShot, enemyShot, 1))
 		{
-			//playerShot.kill();
-			//enemyShot.kill();
+			playerShot.kill();
+			enemyShot.kill();
 		}
 	}
 	

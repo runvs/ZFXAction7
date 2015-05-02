@@ -18,15 +18,14 @@ class SmallSpaceShipGunProjectile extends Projectile
 	public function new(x: Float, y: Float) 
 	{
 		super();
-		this.makeGraphic(3, 3, FlxColorUtil.makeFromARGB(1, 200, 20, 20));
+		this.makeGraphic(6, 6, FlxColorUtil.makeFromARGB(1, 200, 20, 20));
 		this.origin.set();
-		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
+
 		//this.velocity.set(0, 50);
-		//this.acceleration.set(0, 5);
-		this.velocity.set( 75,0);
+		this.acceleration.set(0, 5);
 		this.x = x;
 		this.y = y;
-		this.maxVelocity.set(1000, 75);
+		this.maxVelocity.set(75, 75);
 	}	
 	public override function update() : Void 
 	{
