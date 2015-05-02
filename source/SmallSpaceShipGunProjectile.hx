@@ -22,16 +22,20 @@ class SmallSpaceShipGunProjectile extends Projectile
 		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		//this.velocity.set(0, 50);
-		this.acceleration.set(0, 5);
+		//this.acceleration.set(0, 5);
+		this.velocity.set( 75,0);
 		this.x = x;
 		this.y = y;
+		this.maxVelocity.set(1000, 75);
 	}	
 	public override function update() : Void 
 	{
+		
+		//if (this.velocity.y > 75 )
+		//{
+			//this.velocity  = new FlxPoint(velocity.x, 75);
+		//}
+		
 		super.update();
-		if (this.velocity.y > 75 )
-		{
-			this.velocity  = new FlxPoint(velocity.x, 75);
-		}
 	}
 }

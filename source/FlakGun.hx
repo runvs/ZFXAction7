@@ -57,7 +57,7 @@ class FlakGun extends Gun
 		_gunIsReady = false;
 		var projectiles : flixel.group.FlxTypedGroup<Projectile> = new flixel.group.FlxTypedGroup<Projectile>();
 		var target : FlxVector = AimOMatic.aim(new FlxVector(this.x, this.y), new FlxVector(targetSprite.x, targetSprite.y), new FlxVector(targetSprite.velocity.x, targetSprite.velocity.y), _projectileSpeed);
-		
+		//trace (targetSprite.velocity);
 		if(target != null)
 		{
 			for(i in 0..._numberOfBullets)
