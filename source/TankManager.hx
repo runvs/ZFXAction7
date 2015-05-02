@@ -6,5 +6,5 @@ package ;
 
 interface TankManager 
 {
-	public function AddTank(T:Tank) : Void;
+	public function SpawnTank(T:Tank) : Void;
 }

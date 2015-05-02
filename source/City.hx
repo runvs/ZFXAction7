@@ -2,7 +2,9 @@ package ;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.text.FlxText;
 import flixel.util.FlxColorUtil;
+import flixel.util.FlxRandom;
 import flixel.util.FlxVector;
 import openfl.display.BitmapData;
 
@@ -15,6 +17,10 @@ class City extends FlxSprite
 
 	private var _guns : flixel.group.FlxTypedGroup<Gun>;
 	private var _shootManager : ShootManager;
+	
+	private var _population : Float;
+	private var _popText1 : FlxText;
+	private var _popText2 : FlxText;
 
 	public function new(shootManager : ShootManager) 
 	{
@@ -26,9 +32,19 @@ class City extends FlxSprite
 		this.updateHitbox();
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
-		//_guns.add(new FlakGun(this, 1, 0, 0, 250, 1));
+		_guns.add(new FlakGun(this, 2,  10, 15, 250, 1));
 		//_guns.add(new MissileTurret(this, 3, 15, 25, 250, 1));
 		_shootManager = shootManager;	
+		_population = 55;
+		
+		// HUD
+		_popText1  = new FlxText(FlxG.width - 110, 10, 100, "", 12);
+		_popText1.alignment = "right";
+		_popText1.color = FlxColorUtil.makeFromARGB(0.85, 245, 245, 245);
+		_popText2  = new FlxText(FlxG.width - 110, 10, 100, "", 12);
+		_popText2.alignment = "right";
+		_popText2.color = FlxColorUtil.makeFromARGB(0.45, 10, 10, 10);
+		_popText2.offset.set (-2, -2);
 	}
 
 	override public function update():Void 
@@ -89,6 +105,18 @@ class City extends FlxSprite
 		return closestShot;
 	}
 	
+	
+	public function drawHud () : Void 
+	{
+		_popText1.text = Std.string(Std.int(_population));
+		_popText2.text = Std.string(Std.int(_population));
+		_popText2.draw();
+		_popText1.draw();
+		
+	}
+	
+	
+	
 	public function ShotImpact(s:Projectile)
 	{
 		var source:FlxSprite = new FlxSprite();
@@ -114,8 +142,20 @@ class City extends FlxSprite
 		calcFrame();
 		#end
 		//////// end copy from stamp
-		//trace (Std.int(s.x));
-		//this.pixels.
-		s.kill();
+		var decimate = _population  * FlxRandom.floatRanged( 0, 0.01) + 50;
+		
+		checkDead();
+		
+		
+		_population -= decimate;
 	}
+	
+	private function checkDead() : Void 
+	{
+		if (_population <= 0)
+		{
+			kill();
+		}
+	}
+	
 }

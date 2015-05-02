@@ -2,6 +2,7 @@ package ;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.text.FlxText;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
 
@@ -18,6 +19,12 @@ class Player extends FlxSprite
 	private var _shootTimer : Float;
 	private var _shootManager : ShootManager;
 	
+	private var _ammunition : Int;
+	private var _ammunitionMax : Int;
+	
+	private var _ammunitionText1 : FlxText;
+	private var _ammunitionText2 : FlxText;
+	
 	public function new(tm: TankManager, sm : ShootManager) 
 	{
 		super();
@@ -31,6 +38,14 @@ class Player extends FlxSprite
 		_targetAngle = 90;
 		_lastAngleIncrement = 0;
 		_shootTimer  = 0;
+		_ammunition = _ammunitionMax = 4;
+		
+		/// hud objects
+		_ammunitionText1 = new FlxText(10, 10, 200, "", 12);
+		_ammunitionText1.color = FlxColorUtil.makeFromARGB(0.85, 245, 245, 245);
+		_ammunitionText2 = new FlxText(10, 10, 200, "", 12);
+		_ammunitionText2.color = FlxColorUtil.makeFromARGB(0.45, 10, 10, 10);
+		_ammunitionText2.offset.set( -2, -2);
 	}
 	
 	
@@ -75,14 +90,39 @@ class Player extends FlxSprite
 		this.angle = 90 - _targetAngle;
 	}
 	
-	private function shoot(): Void 
+	public override function draw () : Void 
 	{
-		//trace ("shoot");
-		var t : Tank  = new Tank(_shootManager);
-		t.setPosition (this.x, this.y);
-		var power : Float = (_shootTimer / GameProperties.GetShootTimer()) * 325 + 125;
-		t.velocity = new FlxPoint(Math.cos(_targetAngle*Math.PI/180) * power, - Math.sin(_targetAngle*Math.PI/180) * power);
-		_tankManager.AddTank(t);
+		super.draw();
 	}
 	
+	public function drawHud () : Void 
+	{
+		_ammunitionText2.text = Std.string(_ammunition);
+		_ammunitionText2.draw();
+		_ammunitionText1.text = Std.string(_ammunition);
+		_ammunitionText1.draw();
+	}
+	
+	
+	private function shoot(): Void 
+	{
+		if (_ammunition > 0)
+		{
+			var t : Tank  = new Tank(_shootManager);
+			t.setPosition (this.x, this.y);
+			var power : Float = (_shootTimer / GameProperties.GetShootTimer()) * 325 + 125;
+			t.velocity = new FlxPoint(Math.cos(_targetAngle*Math.PI/180) * power, - Math.sin(_targetAngle*Math.PI/180) * power);
+			_tankManager.SpawnTank(t);
+			_ammunition--;
+		}
+	}
+	
+	public function refillAmmunition () : Void 
+	{
+		_ammunition++;
+		if (_ammunition > _ammunitionMax )
+		{
+			_ammunition = _ammunitionMax;
+		}
+	}
 }

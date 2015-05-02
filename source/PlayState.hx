@@ -8,8 +8,10 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxMath;
+import flixel.util.FlxTimer;
 import flixel.util.FlxVector;
 import haxe.remoting.FlashJsConnection;
+import haxe.Timer;
 import openfl.display.BitmapData;
 import openfl.filters.BitmapFilter;
 
@@ -83,17 +85,34 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_tankList.update();
 		_playerShotList.update();
 		_tankList.forEachAlive(checkTankEnemyOverlap);
+		_tankList.forEachAlive(checkTankRefill);
 		_enemyShotList.forEachAlive(checkShotCityOverlap);
 		_player.update();
 
 		FlxG.overlap(_playerShotList, _enemyShotList, shotShotCollision); //laguna asked for it
 		FlxG.overlap(_playerShotList, _enemyList, shotEnemyCollision); 
+		
+		
+		checkGameOver();
+		
 	}	
 
+	private function checkTankRefill ( t: Tank) : Void 
+	{
+		if (t.GetMode() == TankMode.Parachute)
+		{
+			if (t.y > FlxG.height - 40)
+			{
+				t.kill();
+				_player.refillAmmunition();
+			}
+		}
+	}
+	
 	private function shotShotCollision(playerShot:Projectile, enemyShot:Projectile):Void
 	{
 		//trace("shots hit!");
-		//if (FlxG.pixelPerfectOverlap(playerShot, enemyShot, 1))
+		if (FlxG.pixelPerfectOverlap(playerShot, enemyShot, 1))
 		{
 			playerShot.kill();
 			enemyShot.kill();
@@ -102,9 +121,10 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	
 	private function shotEnemyCollision(playerShot:Projectile, enemy:EnemyShip):Void
 	{
-		trace("shots hit!");
+		//trace("enemyhit!");
 		//if (FlxG.pixelPerfectOverlap(playerShot, enemy))
 		{
+			//trace("enemyhit ppo!");	
 			enemy.takeDamage(playerShot);
 			playerShot.kill();
 			//enemy.kill();
@@ -121,11 +141,17 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_tankList.draw();
 		_enemyShotList.draw();
 		_playerShotList.draw();
+		
+		// HUD STUFF
+		
+		_player.drawHud();
+		_city.drawHud();
+		
 	}
 	
 	/* INTERFACE TankManager */
 	
-	public function AddTank(T:Tank )  : Void
+	public function SpawnTank(T:Tank)  : Void
 	{
 		_tankList.add(T);
 	}
@@ -175,6 +201,15 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		{
 			trace ("checkShotCityOverlap overlap");
 			_city.ShotImpact(s);
+			s.kill();
+		}
+	}
+	
+	function checkGameOver():Void 
+	{
+		if (!_city.alive)
+		{
+			var t : FlxTimer = new FlxTimer(0.75, function (t:FlxTimer) : Void { FlxG.switchState(new MenuState()); } );
 		}
 	}
 	
