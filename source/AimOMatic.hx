@@ -97,7 +97,7 @@ class AimOMatic
     }
   
     //solve ax^2 + bx + c
-    public static function solve(a : Float, b : Float, c : Float) 
+    public static function solve(a : Float, b : Float, c : Float) : FlxVector
     {
     
       var solution : flixel.util.FlxVector = null;

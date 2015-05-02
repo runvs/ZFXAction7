@@ -41,7 +41,7 @@ class FlakProjectile extends Projectile
 
 		if(_path.finished)
 		{
-			explode();
+			//explode();
 		}
 		
 		_path.update();
