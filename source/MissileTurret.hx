@@ -63,7 +63,7 @@ class MissileTurret extends Gun
 			//before the missiles own engine starts
 			var projectile : MissileProjectile = new MissileProjectile(target, 5);
 			projectile.x = this.x + _owner.x + _owner.width/2;
-			projectile.y = 0;
+			projectile.y = this.y + _owner.y;
 			//the missile then tracks the target itself since its guided
 			projectiles.add(projectile);
 		}
