@@ -27,28 +27,49 @@ class Tank extends FlxSprite
 	private var _gun : Gun;
 	private var _shootManager : ShootManager;
 	
+	private var _turret : FlxSprite;
+	
 	public function new(sm : ShootManager) 
 	{
 		super();
 		_shootManager = sm;
-		this.makeGraphic(8, 8, FlxColorUtil.makeFromARGB(1, 220, 220, 220));
-		this.origin.set(4,4);
-		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		_mode = TankMode.Flight;
 		this.angularVelocity = 45;
 		_bindTimer = 1.5;
 		_gun = new TankGun(this, 0, 0, 3);
+		
+		// flxsprite stuff
+		this.loadGraphic(AssetPaths.tankBase__png, true, 16, 16);
+		this.animation.add("drive", [0, 1], 10, true);
+		this.animation.play("drive");
+		this.origin.set(8, 8);
+		
+		_turret = new FlxSprite();
+		_turret.loadGraphic(AssetPaths.tankTurret__png, true, 32, 16);
+		_turret.animation.add("idle", [0], 5, true);
+		_turret.animation.add("shoot", [1, 2, 3, 4, 0], 20, false);
+		_turret.animation.play("idle");
+		_turret.origin.set( 4, 8 );
+		
+	}
+	
+	public override function draw() : Void 
+	{
+		super.draw();
+		_turret.draw();
 	}
 	
 	public override function update () :Void
 	{
 		super.update();
-		
-		
+
+			
 		if (_mode == TankMode.Flight)
 		{
 			this.velocity = new FlxPoint(velocity.x , velocity.y + GameProperties.GetGravitationalAcceleration() * FlxG.elapsed );
 			this.velocity = new FlxPoint(velocity.x * 0.994, velocity.y * 0.994);	
+			_turret.angle = this.angle;
+			
 		}
 		else if (_mode == TankMode.Bound)
 		{
@@ -57,12 +78,14 @@ class Tank extends FlxSprite
 			if (_gun.isLoaded())
 			{
 				_shootManager.addPlayerShot(_gun.shoot(_ship));
+				_turret.animation.play("shoot");
 			}
 			
 			if (_ship  == null || !_ship.alive)
 			{
 				_mode = TankMode.Parachute;
 				FlxTween.tween(this.offset, { x:40 }, 2, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );
+				FlxTween.tween(_turret.offset, { x:40 }, 2, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );
 				
 			}
 			_dir = new FlxVector( _distance, _dir.y + _rotationVelocity  * FlxG.elapsed);
@@ -73,13 +96,19 @@ class Tank extends FlxSprite
 		{
 			this.velocity = new FlxPoint(velocity.x , velocity.y + GameProperties.GetGravitationalAcceleration() * FlxG.elapsed );
 			this.velocity = new FlxPoint(velocity.x * 0.994, velocity.y * 0.994);	
+			_turret.angle = this.angle;
 		}
+		
+		_turret.update();
+		_turret.x = x + 4;		// 4 is *the* magic number.
+		_turret.y = y;
 	}
 	
 	private function SetPositionInOrbit() : Void
 	{
 		var d :FlxVector = new FlxVector(Math.cos(Math.PI / 180 * _dir.y) * _dir.x, Math.sin(Math.PI / 180 * _dir.y) * _dir.x);
 		this.setPosition(_ship.x + d.x, _ship.y + d.y);
+		_turret.angle = _dir.y + 180;
 	}
 	
 	

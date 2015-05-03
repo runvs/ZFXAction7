@@ -83,7 +83,10 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	
 	 private function cleanUp():Void
     {
+		// delete unneeded shots
+		_enemyShotList.forEach(function(p:Projectile) : Void { if (p.y > FlxG.height || p.x < -10 || p.x > FlxG.width+10) p.kill(); } );
         {
+			// clean list from dead shots
             var newEnemyShotList:FlxTypedGroup<Projectile> = new FlxTypedGroup<Projectile>();
             _enemyShotList.forEach(function(s:Projectile) { if (s.alive) { newEnemyShotList.add(s); } else { s.destroy(); } } );
             _enemyShotList = newEnemyShotList;
@@ -96,10 +99,11 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	override public function update():Void
 	{
 		super.update();
+		cleanUp();
 		_clouds.update();
 		_city.update();
 		_enemyList.update();
-		_enemyShotList.forEach(function(p:Projectile) : Void { if (p.y > FlxG.height + 20) p.kill(); } );
+		
 		_enemyShotList.update();
 		_tankList.update();
 		_playerShotList.update();
