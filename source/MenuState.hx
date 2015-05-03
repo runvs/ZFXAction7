@@ -28,7 +28,7 @@ class MenuState extends FlxState
 		_description = new FlxText(0, 0, -1, "Shoot your tanks into an orbit around\nenemy spaceships to kill them.\n\nBuy new Towers by clicking on the sidebar.\n\nTo upgrade your defense, click the Towers.\nEverything costs 1.", 24);
 		_description.alignment = "center";
 		
-		_about = new FlxText(0, 0, -1, "A game by runvs\n thunraz: graphics\n laguna: code, sound\n morkar: code\n\n created for zfxaction7\n\nvisit us at http://runvs.io", 18);
+		_about = new FlxText(0, 0, -1, "A game by runvs\n thunraz: graphics\n laguna: code, sound\n morkar: code\n\n created for zfxaction7\n\nvisit us at https://runvs.io", 18);
 		_about.alignment = "center";
 		_about.color = flixel.util.FlxColorUtil.makeFromARGB(1, 128, 129, 130);
 		flixel.util.FlxSpriteUtil.screenCenter(_about, true, false);
