@@ -69,23 +69,29 @@ class City extends FlxSprite
 		this.setPosition(0, FlxG.height - 32 - this.height);
 
 		_flakCannonIcon = new FlxSprite();
-		_flakCannonIcon.makeGraphic(10, 10, FlxColorUtil.makeFromARGB(1, 255, 255, 255), true);
+		_flakCannonIcon.loadGraphic(AssetPaths.turretFlakBase__png, false, 16, 16);
+		_flakCannonIcon.scale.set(2, 2);
+		_flakCannonIcon.updateHitbox();
 		_flakCannonIcon.x = FlxG.width - 30;
-		_flakCannonIcon.y = FlxG.height - 0.75 * FlxG.height;
+		_flakCannonIcon.y = FlxG.height - 0.75 * FlxG.height - 32;
 
 		_flakCannonIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.73 * FlxG.height, -1, "0/2", 16);
 
 		_missileLauncherIcon = new FlxSprite();
-		_missileLauncherIcon.makeGraphic(10, 10, FlxColorUtil.makeFromARGB(1, 255, 255, 255), true);
+		_missileLauncherIcon.loadGraphic(AssetPaths.turretMissileLauncher__png, false, 16, 16);
+		_missileLauncherIcon.scale.set(2, 2);
+		_missileLauncherIcon.updateHitbox();
 		_missileLauncherIcon.x = FlxG.width - 30;
-		_missileLauncherIcon.y = FlxG.height - 0.65 * FlxG.height;
+		_missileLauncherIcon.y = FlxG.height - 0.65 * FlxG.height -32;
 
 		_missileLauncherIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.63 * FlxG.height, -1, "0/2", 16);
 
 		_laserGunIcon = new FlxSprite();
-		_laserGunIcon.makeGraphic(10, 10, FlxColorUtil.makeFromARGB(1, 255, 255, 255), true);
+		_laserGunIcon.loadGraphic(AssetPaths.turretLaser__png, false, 16, 16);
+		_laserGunIcon.scale.set(2, 2);
+		_laserGunIcon.updateHitbox();
 		_laserGunIcon.x = FlxG.width - 30;
-		_laserGunIcon.y = FlxG.height - 0.55 * FlxG.height;
+		_laserGunIcon.y = FlxG.height - 0.55 * FlxG.height -32;
 
 		_laserGunIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.53 * FlxG.height, -1, "0/2", 16);
 
@@ -221,14 +227,7 @@ class City extends FlxSprite
 		super.draw();
 		_guns.draw();
 
-		_flakCannonIcon.draw();
-		_flakCannonIconText.draw();
-			
-		_missileLauncherIcon.draw();
-		_missileLauncherIconText.draw();
 
-		_laserGunIcon.draw();
-		_laserGunIconText.draw();	
 	}
 
 	override public function update():Void 
@@ -329,14 +328,17 @@ class City extends FlxSprite
 		//look for closest shot
 		var farthestShot : Projectile = null;
 		var yCoordinateOfFarthestShot : Float  = FlxG.height;
+		var distanceOfClosestShot : Float = 812738172381723;
 		_shootManager.getEnemyShots().forEachAlive
 		(		
 			function(shot:Projectile) 
 			{ 
-				if (shot.y < yCoordinateOfFarthestShot)
+				var distance : FlxVector = new FlxVector(gun.x + this.x + this.width/2 - shot.x, gun.y + this.y  - shot.y);
+				if (shot.y < yCoordinateOfFarthestShot &&  distance.length < distanceOfClosestShot)
 				{
 					farthestShot = shot;
 					yCoordinateOfFarthestShot = shot.y;
+					distanceOfClosestShot = distance.length;
 				}
 			}
 		);
@@ -364,6 +366,15 @@ class City extends FlxSprite
 		_moneymarker.draw();
 		_moneymarker.setPosition(_moneyindicator.x - 2, FlxG.height - 350);
 		_moneymarker.draw();	
+		
+				_flakCannonIcon.draw();
+		_flakCannonIconText.draw();
+			
+		_missileLauncherIcon.draw();
+		_missileLauncherIconText.draw();
+
+		_laserGunIcon.draw();
+		_laserGunIconText.draw();	
 	}
 	
 	private function stampCircle(p:FlxPoint): Void

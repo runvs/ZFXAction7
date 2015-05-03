@@ -52,7 +52,7 @@ class MissileProjectile extends Projectile
 		this.angularVelocity = 299;
 		//this.offset.set(-25, -25);
 		//FlxTween.tween(this.offset, { x:25, y:25 }, 1, { type:FlxTween.PINGPONG, ease:FlxEase.backInOut } );
-		_engineTimer = new flixel.util.FlxTimer(5, null, 1);
+		_engineTimer = new flixel.util.FlxTimer(engineStartTime, null, 1);
 		_missilePath = new flixel.util.FlxPath();	
 		_engineStarted = false;
 		_projectileSpeed = 200;

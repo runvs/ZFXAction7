@@ -58,7 +58,7 @@ class MissileTurret extends Gun
 
 		//missile turret initially shoots out the missile in a linear direction 
 		//before the missiles own engine starts
-		var projectile : MissileProjectile = new MissileProjectile(target, 5);
+		var projectile : MissileProjectile = new MissileProjectile(target, 1.75);
 		projectile.x = this.x;
 		projectile.y = this.y;
 		//the missile then tracks the target itself since its guided
