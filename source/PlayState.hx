@@ -58,7 +58,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		//var bmd : BitmapData = _background.getFlxFrameBitmapData();
 		//bmd.applyFilter(bmd, new flash.geom.Rectangle(0, 0, 100, 100),  new flash.geom.Point(100, 100), new flash.filters.BlurFilter(20,20,9000));
 		//_background.pixels = bmd;
-		_city = new City(this);
+		_city = new City(this, this);
 		_player = new Player(this, this);
 		
 		//trace (FlxG.width);
