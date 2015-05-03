@@ -6,6 +6,7 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
+import flixel.util.FlxTimer;
 
 /**
  * ...
@@ -26,6 +27,8 @@ class Player extends FlxSprite
 	private var _ammunitionText : NumberDisplay;
 	
 	private var _flumpsound : FlxSound;
+	private var _refillammoTimer : FlxTimer;
+	private var _refillSound : FlxSound;
 	
 	public function new(tm: TankManager, sm : ShootManager) 
 	{
@@ -41,6 +44,9 @@ class Player extends FlxSprite
 		_lastAngleIncrement = 0;
 		_shootTimer  = 0;
 		_ammunition = _ammunitionMax = 4;
+		 
+	
+		_refillammoTimer = new FlxTimer(2, function ( t:FlxTimer) : Void {   refillAmmunition(); }, 0);
 		
 		/// hud objects
 		_ammunitionText = new NumberDisplay(true);
@@ -48,6 +54,8 @@ class Player extends FlxSprite
 		// sound
 		_flumpsound = new FlxSound();
 		_flumpsound = FlxG.sound.load(AssetPaths.flump__mp3);
+		_refillSound  = new FlxSound();
+		_refillSound = FlxG.sound.load(AssetPaths.bip__mp3, 0.25);
 	}
 	
 	
@@ -120,9 +128,14 @@ class Player extends FlxSprite
 	public function refillAmmunition () : Void 
 	{
 		_ammunition++;
+		
 		if (_ammunition > _ammunitionMax )
 		{
 			_ammunition = _ammunitionMax;
+		}	
+		else
+		{
+			_refillSound.play();
 		}
 	}
 }

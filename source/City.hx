@@ -22,6 +22,7 @@ class City extends FlxSprite
 	
 	private var _population : Float;
 	private var _populationText : NumberDisplay;
+	private var _populationicon : FlxSprite;
 
 	private var _flakUpdateScreen : FlakUpdateScreen;
 	private var _lasergunUpdateScreen : LaserUpdateScreen;
@@ -46,6 +47,7 @@ class City extends FlxSprite
 	private var _laserGunIconText : FlxText;
 	
 	private var _hitSound : FlxSound;
+	
 
 	public function new(shootManager : ShootManager) 
 	{
@@ -88,6 +90,10 @@ class City extends FlxSprite
 		_population = 10000;
 		
 		// HUD
+		_populationicon = new FlxSprite();
+		_populationicon.loadGraphic(AssetPaths.person__png, false, 16, 16);
+		_populationicon.setPosition(FlxG.width - 32, 10);
+		_populationicon.scale.set(2, 2);
 		_populationText = new NumberDisplay(true);
 		_flakUpdateScreen = new FlakUpdateScreen();
 		_lasergunUpdateScreen = new LaserUpdateScreen();
@@ -294,7 +300,7 @@ class City extends FlxSprite
 	public function drawHud () : Void 
 	{
 		_populationText.drawSingleNumber(Std.int(_population), new FlxPoint(FlxG.width - 110, 10));
-
+		_populationicon.draw();
 	}
 	
 	
