@@ -33,13 +33,13 @@ class FlakGun extends Gun
 		
 		this.loadGraphic(AssetPaths.turretFlakBase__png, false, 16, 16);
 		this.scale.set(2, 2);
+		//this.updateHitbox();
 		_turret = new FlxSprite();
 		_turret.loadGraphic(AssetPaths.turretFlakCannon__png, false, 16, 16);
 		_turret.origin.set(8, 9);
 		_turret.scale.set(2, 2);
-		_turret.setPosition ( x, y);
-		
-
+		_turret.setPosition (x, y);
+		//_turret.updateHitbox();
 
 		_gunTimer = new flixel.util.FlxTimer(reloadTime, onTimer, 0);
 		_gunIsReady = true;		
@@ -50,7 +50,6 @@ class FlakGun extends Gun
 		_projectileSpeed = projectileSpeed;
 		
 		FlxTween.tween(_turret, { angle:-180 }, 3.5, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );
-		
 	}
 	
 	public override function update() : Void 
