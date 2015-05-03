@@ -69,6 +69,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		super.create();
 	}
 	
+	
+	
 	/**
 	 * Function that is called when this state is destroyed - you might want to 
 	 * consider setting all objects this state uses to null to help garbage collection.
@@ -78,6 +80,16 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		super.destroy();
 	}
 
+	
+	 private function cleanUp():Void
+    {
+        {
+            var newEnemyShotList:FlxTypedGroup<Projectile> = new FlxTypedGroup<Projectile>();
+            _enemyShotList.forEach(function(s:Projectile) { if (s.alive) { newEnemyShotList.add(s); } else { s.destroy(); } } );
+            _enemyShotList = newEnemyShotList;
+        }
+    }
+	
 	/**
 	 * Function that is called once every frame.
 	 */
@@ -87,6 +99,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_clouds.update();
 		_city.update();
 		_enemyList.update();
+		_enemyShotList.forEach(function(p:Projectile) : Void { if (p.y > FlxG.height + 20) p.kill(); } );
 		_enemyShotList.update();
 		_tankList.update();
 		_playerShotList.update();
@@ -94,6 +107,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_tankList.forEachAlive(checkTankRefill);
 		_enemyShotList.forEachAlive(checkShotCityOverlap);
 		_player.update();
+		
 
 		// if(_playerShotList.members.length > 0 && _enemyShotList.members.length > 0)
 		// {
@@ -142,7 +156,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	private function shotEnemyCollision(playerShot:Projectile, enemy:EnemyShip):Void
 	{
 		trace("enemyhit!");
-		if (FlxG.pixelPerfectOverlap(playerShot, enemy))
+		//if (FlxG.pixelPerfectOverlap(playerShot, enemy))	// no need for ppoverlap, as the player WANTS to destroy the enemy
 		{
 			//trace("enemyhit ppo!");	
 			enemy.takeDamage(playerShot);
