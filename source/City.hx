@@ -82,8 +82,8 @@ class City extends FlxSprite
 		_laserGunIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.53 * FlxG.height, -1, "0/2", 16);
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
-		_leftFlakGun = new FlakGun(this, new FlxVector(50, this.height-16), 2, 100, 38, 250, 3);	
-		_rightFlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, this.height-16), 2, 100, 38, 250, 3);
+		_leftFlakGun = new FlakGun(this, new FlxVector(50, this.height-16), 2, 60, 15, 200, 3);	
+		_rightFlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, this.height-16), 2, 60, 15, 200, 3);
 	
 		//we have flak guns by default
 		_guns.add(_leftFlakGun);

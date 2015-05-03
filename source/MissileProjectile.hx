@@ -1,5 +1,6 @@
 package ;
 
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.tweens.FlxEase;
@@ -35,11 +36,19 @@ class MissileProjectile extends Projectile
 	public function new(target : FlxSprite, engineStartTime : Float) 
 	{
 		super();
-		makeGraphic(3, 8, FlxColorUtil.makeFromARGB(1, 150, 150, 0));
+		//makeGraphic(3, 8, FlxColorUtil.makeFromARGB(1, 150, 150, 0));
+		this.loadGraphic(AssetPaths.projectileRocket__png, false, 4, 8);
+		this.scale.set(1.5, 1.5);
+		this.updateHitbox();
+		
 		_target = target;
 
-		var power : Float = 200;
-		this.velocity = new FlxPoint(Math.cos(80 * Math.PI/180) * power, - Math.sin(80 * Math.PI/180) * power);
+		//var power : Float = FlxRandom.floatRanged(-150, 150);
+		var power = 200;
+		
+		var a  = FlxRandom.floatRanged(75, 115);
+		
+		this.velocity = new FlxPoint(Math.cos(a * Math.PI/180) * power, - Math.sin(a * Math.PI/180) * power);
 		this.angularVelocity = 299;
 		//this.offset.set(-25, -25);
 		//FlxTween.tween(this.offset, { x:25, y:25 }, 1, { type:FlxTween.PINGPONG, ease:FlxEase.backInOut } );

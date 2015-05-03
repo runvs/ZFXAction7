@@ -81,6 +81,10 @@ class FlakGun extends Gun
 			{
 				var pathVector : FlxVector = new FlxVector(target.x - spawnVector.x, target.y - spawnVector.y);
 				
+				if (targetSprite.y < 300 )
+				{
+					continue;
+				}
 				pathVector = pathVector.rotateByDegrees(FlxRandom.floatRanged(-_angularSpread/2, _angularSpread/2));
 				pathVector = pathVector.addNew(spawnVector);
 				
