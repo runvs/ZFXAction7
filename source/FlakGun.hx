@@ -125,4 +125,14 @@ class FlakGun extends Gun
 	{
 		return _projectileSpeed;
 	}
+
+	public override function prefersCloseTarget() : Bool
+	{
+		return true;
+	}
+
+	public override function prefersFarTarget() : Bool
+	{
+		return false;
+	}
 }

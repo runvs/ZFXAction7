@@ -11,11 +11,13 @@ class UpdateScreen extends flixel.FlxSubState
 	private var _closeButton : FlxButton;
 	private var _label : flixel.text.FlxText;
 	private var _labelText : String;
+	private var _city : City;
 
-	public function new(string : String)
+	public function new(string : String, city : City)
 	{
 		super();
 		_labelText = string;
+		_city = city;
 	}
 
 	public override function create() : Void
@@ -58,6 +60,12 @@ class UpdateScreen extends flixel.FlxSubState
 	public function onOut() : Void
 	{
 
+	}
+
+	public override function close() : Void
+	{
+		_city.continueMoneyTimer();
+		super.close();
 	}
 
 	public override function draw() : Void

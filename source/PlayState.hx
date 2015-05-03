@@ -165,8 +165,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		FlxG.overlap(_playerShotList, _enemyList, shotEnemyCollision); 
 		
 		
-		checkGameOver();
-		
+		checkGameOver();		
 	}	
 
 	private function checkTankRefill ( t: Tank) : Void 

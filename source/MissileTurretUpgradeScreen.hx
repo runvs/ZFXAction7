@@ -12,10 +12,10 @@ class MissileTurretUpgradeScreen extends UpdateScreen
 	private var _improveRateOfFire : FlxButton;
 	private var _projectileSpeed : flixel.text.FlxText;
 	private var _rateOfFire : flixel.text.FlxText;
-
-	public function new(missileTurret : MissileTurret)
+	
+	public function new(missileTurret : MissileTurret, city : City)
 	{
-		super("MissileTurret Upgrades");
+		super("MissileTurret Upgrades", city);
 		_missileTurret = missileTurret;
 	}
 
@@ -49,15 +49,23 @@ class MissileTurretUpgradeScreen extends UpdateScreen
 	{
 		if(_missileTurret._projectileSpeed > 0)
 		{
-			_missileTurret._projectileSpeed--;
-			updateStrings();
+			if(_city.decreaseMoney(1))
+			{
+				_missileTurret._projectileSpeed--;
+				updateStrings();
+			}
 		}
 	}
 
 	private function improveRateOfFire() : Void
 	{
-		_missileTurret._rateOfFire--;
-
-		updateStrings();
+		if(_missileTurret._rateOfFire > 1)
+		{
+			if(_city.decreaseMoney(1))
+			{
+				_missileTurret._rateOfFire--;
+				updateStrings();	
+			}
+		}
 	}		
 }

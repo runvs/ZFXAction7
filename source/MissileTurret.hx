@@ -87,4 +87,14 @@ class MissileTurret extends Gun
 	{
 		return _projectileSpeed;
 	}
+
+	public override function prefersCloseTarget() : Bool
+	{
+		return false;
+	}
+
+	public override function prefersFarTarget() : Bool
+	{
+		return true;
+	}	
 }
