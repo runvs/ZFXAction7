@@ -228,6 +228,10 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_city.drawHud();
 		_overlay.draw();
 		
+		if(subState != null)
+		{
+			subState.draw();	
+		}	
 	}
 	
 	/* INTERFACE TankManager */

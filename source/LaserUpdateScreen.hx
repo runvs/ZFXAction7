@@ -30,13 +30,17 @@ class LaserUpdateScreen extends UpdateScreen
 	{
 		super.create();
 		
-		_improveAccuracy = new flixel.ui.FlxButton(500, 150, "+", improveAccuracy);
-		_improveSpread = new flixel.ui.FlxButton(500, 200, "+", improveSpread);
-		_improveRateOfFire = new flixel.ui.FlxButton(500, 250, "+", improveRateOfFire);
+		_improveAccuracy = new flixel.ui.FlxButton(Std.int(flixel.FlxG.width * (0.75-0.125)), 150, "", improveAccuracy);
+		_improveSpread = new flixel.ui.FlxButton(Std.int(flixel.FlxG.width * (0.75-0.125)), 200, "", improveSpread);
+		_improveRateOfFire = new flixel.ui.FlxButton(Std.int(flixel.FlxG.width * (0.75 - 0.125)), 250, "", improveRateOfFire);
 
-		_accuracy = new flixel.text.FlxText(150, 150, -1, "", 16);
-		_spread = new flixel.text.FlxText(150, 200, -1, "", 16);
-		_rateOfFire = new flixel.text.FlxText(150, 250, -1, "", 16);
+		loadPlusButton(_improveAccuracy);
+		loadPlusButton(_improveSpread);
+		loadPlusButton(_improveRateOfFire);
+
+		_accuracy = new flixel.text.FlxText(Std.int(flixel.FlxG.width * 0.25), 150, -1, "", 16);
+		_spread = new flixel.text.FlxText(Std.int(flixel.FlxG.width * 0.25), 200, -1, "", 16);
+		_rateOfFire = new flixel.text.FlxText(Std.int(flixel.FlxG.width * 0.25), 250, -1, "", 16);
 
 		add(_accuracy);
 		add(_spread);

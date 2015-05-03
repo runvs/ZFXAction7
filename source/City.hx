@@ -179,11 +179,6 @@ class City extends FlxSprite
 
 		_laserGunIcon.draw();
 		_laserGunIconText.draw();	
-
-		if(_playState.subState != null)
-		{
-			_playState.subState.draw();	
-		}
 	}
 
 	override public function update():Void 
