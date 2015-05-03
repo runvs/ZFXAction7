@@ -100,8 +100,8 @@ class City extends FlxSprite
 		_rightFlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, this.height-16), 2, 60, 15, 200, 3);
 	
 		//we have flak guns by default
-		_guns.add(_leftFlakGun);
-		_guns.add(_rightFlakGun);
+		// _guns.add(_leftFlakGun);
+		// _guns.add(_rightFlakGun);
 
 		_shootManager = shootManager;	
 		_population = GameProperties.GetInitialPopulation();

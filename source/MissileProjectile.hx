@@ -9,6 +9,7 @@ import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import flixel.util.FlxVector;
+import flixel.util.FlxTimer;
 
 /**
  * Flaks are defined by
@@ -32,6 +33,9 @@ class MissileProjectile extends Projectile
 	private var _engineStarted : Bool;
 	private var _accelerating : Bool;
 	private var _tracking : Bool;
+	private var _explosion : FlxSprite;
+	private var _exploded : Bool;
+	private var _explodeSound : flixel.system.FlxSound;
 
 	public function new(target : FlxSprite, engineStartTime : Float) 
 	{
@@ -56,18 +60,38 @@ class MissileProjectile extends Projectile
 		_missilePath = new flixel.util.FlxPath();	
 		_engineStarted = false;
 		_projectileSpeed = 200;
+
+		_exploded = false;
+		
+		// FlxSprite stuff
+		_explosion = new FlxSprite();
+		_explosion.loadGraphic(AssetPaths.explosionFlak__png, true, 32, 32);
+		_explosion.animation.add("idle", [0], 30, true);
+		_explosion.animation.add("explode", [1, 2, 3, 4, 5, 6, 7, 8], 23, false);
+		_explosion.animation.play("idle");
+		var s : Float = FlxRandom.floatRanged(0.5, 2);
+		_explosion.scale.set(s,s);
+		_explosion.updateHitbox();
+		
+		// FlxSound stuff
+		_explodeSound = FlxG.sound.load(AssetPaths.explo1__mp3, 0.35);	
 	}	
 
 	public override function draw()
 	{
-		super.draw();
+		if (!_exploded)
+		{
+			super.draw();
+		}
+		_explosion.draw();
 	}
 
 	public override function update()
 	{
 		super.update();
 		_engineTimer.update();
-
+		_explosion.update();
+		
 		if(_target.alive == false)//für simon
 		{
 			explode();
@@ -99,12 +123,25 @@ class MissileProjectile extends Projectile
 			this.velocity = new FlxPoint(velocity.x , velocity.y + GameProperties.GetGravitationalAcceleration() * FlxG.elapsed );
 			this.velocity = new FlxPoint(velocity.x * 0.994, velocity.y * 0.994);		
 		}
+		
 		//_path.update();
 	}
 
 	public override function explode() : Void
 	{
-		this.kill();
+		if (!_exploded )
+		{
+			_exploded = true;
+			_explosion.setPosition(x, y);
+			_explosion.animation.play("explode", true);
+			this.width = _explosion.width;		// try to trick the collisions
+			this.height = _explosion.height;
+			var t : flixel.util.FlxTimer = new flixel.util.FlxTimer(9.0 / 20.0, function(t:FlxTimer) { this.kill(); } );
+			
+			_explodeSound.pan = (x / FlxG.width * 2) - 1;
+			
+			_explodeSound.play();
+		}
 	}
 
 	private function startEngine() : Void
