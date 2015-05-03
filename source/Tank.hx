@@ -107,7 +107,7 @@ class Tank extends FlxSprite
 	private function SetPositionInOrbit() : Void
 	{
 		var d :FlxVector = new FlxVector(Math.cos(Math.PI / 180 * _dir.y) * _dir.x, Math.sin(Math.PI / 180 * _dir.y) * _dir.x);
-		this.setPosition(_ship.x + d.x, _ship.y + d.y);
+		this.setPosition(_ship.x + _ship.width/2 + d.x, _ship.y + _ship.height/2 + d.y);
 		_turret.angle = _dir.y + 180;
 	}
 	
@@ -131,7 +131,7 @@ class Tank extends FlxSprite
 				FlxTween.tween(this.acceleration, { x:0, y:0 }, 2.5, { ease:FlxEase.sineInOut });
 
 				// d is the distance vector in x,y from enemy to this.
-				var d : FlxVector = new FlxVector( - e.x + this.x, - e.y  + this.y);
+				var d : FlxVector = new FlxVector( - (_ship.x + _ship.width/2) + this.x, - (_ship.y + _ship.height/2)  + this.y);
 				// _dir is the distance vector in r,phi
 				_dir = new FlxVector(d.length, d.degrees);
 				// calculate tangential vector for distance vector (x,y) -> (y, -x)

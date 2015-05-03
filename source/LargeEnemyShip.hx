@@ -23,14 +23,14 @@ class LargeEnemyShip extends EnemyShip
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 
 		this.updateHitbox();
-		this.origin.set(this.width/2, this.height/2);
+		//this.origin.set(this.width/2, this.height/2);
 		var g : SmallSpaceShipGun = new SmallSpaceShipGun(this, 4.25);
-		g.x = 50;
+		g.x = -50;
 		g.y = 8;
 		_guns.add(g);
 		
 		g =new SmallSpaceShipGun(this, 5.1);
-		g.x = -50;
+		g.x = 50;
 		_guns.add(g);
 		health = _healthMax = 200;
 	}
@@ -46,7 +46,7 @@ class LargeEnemyShip extends EnemyShip
 	
 	public override function GetShipStrength () :Float
 	{
-		return 3;
+		return 2;
 	}
 	public override function AttractionFieldStrength() : Float 
 	{

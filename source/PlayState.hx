@@ -115,6 +115,14 @@ class PlayState extends FlxState implements TankManager implements ShootManager
             _enemyShotList.forEach(function(s:Projectile) { if (s.alive) { newEnemyShotList.add(s); } else { s.destroy(); } } );
             _enemyShotList = newEnemyShotList;
         }
+		
+		// delete unneeded enemies
+        {
+			// clean list from dead shots
+            var newEnemyList:FlxTypedGroup<EnemyShip> = new FlxTypedGroup<EnemyShip>();
+            _enemyList.forEach(function(s:EnemyShip) { if (s.alive) { newEnemyList.add(s); } else { s.destroy(); } } );
+            _enemyList = newEnemyList;
+        }
     }
 	
 	/**
@@ -137,14 +145,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_player.update();
 		_overlay.update();
 		
-		_enemySpawnTimer += FlxG.elapsed;
-		
-		if (_enemySpawnTimer >= GetSpawnTime())
-		{	
-			spawnEnemyShip();
-			
-			_enemySpawnTimer = 0;
-		}
+		updateEnemySpawner();
 		
 		FlxG.overlap(_playerShotList, _enemyShotList, shotShotCollision); //laguna asked for it
 		FlxG.overlap(_playerShotList, _enemyList, shotEnemyCollision); 
@@ -308,13 +309,24 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		var r : Int = FlxRandom.intRanged(0,1);
 		if (r == 0)
 		{
-			_enemyList.add(LargeEnemyShip.spawn(this, p, v.x, v.y, 1));
-			//_enemyList.add(SmallEnemyShip.spawn(this, p, v.x, v.y, 1));
-			//_enemyl
+			_enemyList.add(SmallEnemyShip.spawn(this, p, v.x, v.y, 1));
 		}
 		else
 		{
 			_enemyList.add(LargeEnemyShip.spawn(this, p, v.x, v.y, 1));
+		}
+	}
+	
+	function updateEnemySpawner():Void 
+	{
+		trace (GetSpawnTime() + " " + _enemySpawnTimer  + " " + _maxEnemies + " " + GetEnemyStrength());
+		_enemySpawnTimer += FlxG.elapsed;
+		
+		if (_enemySpawnTimer >= GetSpawnTime())
+		{	
+			spawnEnemyShip();
+			
+			_enemySpawnTimer = 0;
 		}
 	}
 	
