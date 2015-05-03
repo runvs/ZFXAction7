@@ -70,7 +70,8 @@ class LaserBeam extends Projectile
 		_sound = FlxG.sound.load(AssetPaths.lasershoot1__mp3, 0.5);
 		_sound.play();
 		
-		FlxTween.tween(this, {alpha: 0}, _fadeOutTime, {type:FlxTween.PINGPONG, ease:FlxEase.sineInOut});
+		FlxTween.tween(this, { alpha: 0 }, _fadeOutTime, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );
+		_target.hurt(10);
 	}	
 
 	public override function draw()
@@ -97,6 +98,6 @@ class LaserBeam extends Projectile
 	public override function explode() : Void
 	{
 		this.kill();
-		_target.hurt(10);
+		
 	}
 }

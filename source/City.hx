@@ -82,8 +82,8 @@ class City extends FlxSprite
 		_laserGunIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.53 * FlxG.height, -1, "0/2", 16);
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
-		_leftFlakGun = new FlakGun(this, new FlxVector(50, this.height), 2, 100, 38, 250, 3);	
-		_rightFlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, this.height), 2, 100, 38, 250, 3);
+		_leftFlakGun = new FlakGun(this, new FlxVector(50, this.height-16), 2, 100, 38, 250, 3);	
+		_rightFlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, this.height-16), 2, 100, 38, 250, 3);
 	
 		//we have flak guns by default
 		_guns.add(_leftFlakGun);
@@ -151,7 +151,7 @@ class City extends FlxSprite
 	{
 		if(_leftMissileTurret == null)
 		{
-			_leftMissileTurret = new MissileTurret(this, new FlxVector(100, this.height), 250, 10);
+			_leftMissileTurret = new MissileTurret(this, new FlxVector(100, this.height-16), 250, 10);
 			_guns.add(_leftMissileTurret);
 			flixel.plugin.MouseEventManager.add(_leftMissileTurret, showMissileUpgrades, null, null, null);
 			return;
@@ -159,7 +159,7 @@ class City extends FlxSprite
 
 		if(_rightMissileTurret == null)
 		{
-			_rightMissileTurret = new MissileTurret(this, new FlxVector(FlxG.width - 100, this.height), 250, 10);
+			_rightMissileTurret = new MissileTurret(this, new FlxVector(FlxG.width - 100, this.height-16), 250, 10);
 			_guns.add(_rightMissileTurret);
 			flixel.plugin.MouseEventManager.add(_rightMissileTurret, showMissileUpgrades, null, null, null);
 			return;
