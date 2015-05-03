@@ -28,7 +28,6 @@ class FlakGun extends Gun
 		super(owner);
 
 		this.makeGraphic(5, 5, FlxColorUtil.makeFromARGB(1, 100, 150, 100));
-		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 
 		this.x = owner.x + position.x;

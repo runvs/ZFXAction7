@@ -47,11 +47,10 @@ class City extends FlxSprite
 	public function new(shootManager : ShootManager) 
 	{
 		super();
-		this.makeGraphic(320, 16, FlxColorUtil.makeFromARGB(1, 20, 20, 200));
-		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
-		this.origin.set(0,0);
-		this.setPosition(0, FlxG.height - 32);
-		this.updateHitbox();
+
+		this.loadGraphic(AssetPaths.city__png, false, 640, 163);
+		//this.offset.set(0, 163);
+		this.setPosition(0, FlxG.height - 32 - this.height);
 
 		_flakCannonIcon = new FlxSprite();
 		_flakCannonIcon.makeGraphic(10, 10, FlxColorUtil.makeFromARGB(1, 255, 255, 255), true);
@@ -75,8 +74,8 @@ class City extends FlxSprite
 		_laserGunIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.53 * FlxG.height, -1, "0/2", 16);
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
-		_leftFlakGun = new FlakGun(this, new FlxVector(50, 0), 3, 15, 25, 250, 2);	
-		_rightFlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, 0), 3, 15, 25, 250, 2);
+		_leftFlakGun = new FlakGun(this, new FlxVector(50, this.height), 3, 15, 25, 250, 2);	
+		_rightFlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, this.height), 3, 15, 25, 250, 2);
 	
 		//we have flak guns by default
 		_guns.add(_leftFlakGun);
@@ -122,7 +121,7 @@ class City extends FlxSprite
 	{
 		if(_leftLaserGun == null)
 		{
-			_leftLaserGun = new LaserGun(this, new FlxVector(150, 0), 15, 25, 10);
+			_leftLaserGun = new LaserGun(this, new FlxVector(150, this.height), 15, 25, 10);
 			_guns.add(_leftLaserGun);
 			flixel.plugin.MouseEventManager.add(_leftLaserGun, showLaserUpgrades, null, null, null);
 			return;
@@ -130,7 +129,7 @@ class City extends FlxSprite
 
 		if(_rightLaserGun == null)
 		{
-			_rightLaserGun = new LaserGun(this, new FlxVector(FlxG.width - 150, 0), 15, 25, 10);
+			_rightLaserGun = new LaserGun(this, new FlxVector(FlxG.width - 150, this.height), 15, 25, 10);
 			_guns.add(_rightLaserGun);
 			flixel.plugin.MouseEventManager.add(_rightLaserGun, showLaserUpgrades, null, null, null);
 			return;
@@ -141,7 +140,7 @@ class City extends FlxSprite
 	{
 		if(_leftMissileTurret == null)
 		{
-			_leftMissileTurret = new MissileTurret(this, new FlxVector(100, 0), 250, 10);
+			_leftMissileTurret = new MissileTurret(this, new FlxVector(100, this.height), 250, 10);
 			_guns.add(_leftMissileTurret);
 			flixel.plugin.MouseEventManager.add(_leftMissileTurret, showMissileUpgrades, null, null, null);
 			return;
@@ -149,7 +148,7 @@ class City extends FlxSprite
 
 		if(_rightMissileTurret == null)
 		{
-			_rightMissileTurret = new MissileTurret(this, new FlxVector(FlxG.width - 100, 0), 250, 10);
+			_rightMissileTurret = new MissileTurret(this, new FlxVector(FlxG.width - 100, this.height), 250, 10);
 			_guns.add(_rightMissileTurret);
 			flixel.plugin.MouseEventManager.add(_rightMissileTurret, showMissileUpgrades, null, null, null);
 			return;
@@ -293,35 +292,51 @@ class City extends FlxSprite
 	
 	
 	
+	private function stampCircle(p:FlxPoint): Void
+	{
+		var imax : Int = 10;
+		
+		for (i in (-imax)...(imax))
+		{
+			for (j in (-imax) ... imax)
+			{
+				if (i * i + j * j < imax * imax)
+				{
+					var source:FlxSprite = new FlxSprite();
+					source.makeGraphic(2, 2, FlxColorUtil.makeFromARGB(0.0, 255, 0, 0));
+					
+					//////// copy from stamp
+					source.drawFrame();
+					var bitmapData:BitmapData = source.framePixels;
+					
+
+					_flashPoint.x = Std.int(p.x + i) + region.startX;
+					_flashPoint.y = Std.int(p.y - this.y+ j) + region.startY;
+					_flashRect2.width = bitmapData.width;
+					_flashRect2.height = bitmapData.height;
+					cachedGraphics.bitmap.copyPixels(bitmapData, _flashRect2, _flashPoint, null, null, false);
+					_flashRect2.width = cachedGraphics.bitmap.width;
+					_flashRect2.height = cachedGraphics.bitmap.height;
+					
+					resetFrameBitmapDatas();
+					
+					#if FLX_RENDER_BLIT
+					dirty = true;
+					calcFrame();
+					#end
+					//////// end copy from stamp
+				}
+			}
+		}
+	}
+	
 	public function ShotImpact(s:Projectile)
 	{
-		var source:FlxSprite = new FlxSprite();
-		source.makeGraphic(10, 10, FlxColorUtil.makeFromARGB(0.0, 255, 0, 0));
-		
-		//////// copy from stamp
-		source.drawFrame();
-		var bitmapData:BitmapData = source.framePixels;
-		
 
-		_flashPoint.x = Std.int(s.x/2) + region.startX;
-		_flashPoint.y = Std.int(s.y - this.y) + region.startY;
-		_flashRect2.width = bitmapData.width;
-		_flashRect2.height = bitmapData.height;
-		cachedGraphics.bitmap.copyPixels(bitmapData, _flashRect2, _flashPoint, null, null, false);
-		_flashRect2.width = cachedGraphics.bitmap.width;
-		_flashRect2.height = cachedGraphics.bitmap.height;
-		
-		resetFrameBitmapDatas();
-		
-		#if FLX_RENDER_BLIT
-		dirty = true;
-		calcFrame();
-		#end
-		//////// end copy from stamp
 		var decimate = _population  * FlxRandom.floatRanged( 0, 0.01) + 50;
 		
 		checkDead();
-		
+		stampCircle(new FlxPoint(s.x, s.y));
 		
 		_population -= decimate;
 	}
