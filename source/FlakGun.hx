@@ -17,11 +17,11 @@ class FlakGun extends Gun
 	private var _gunTimer : flixel.util.FlxTimer;
 	private var _gunIsReady : Bool;
 
-	private var _numberOfBullets : Int;
-	private var _accuracy : Float; 
-	private var _angularSpread : Float;
+	public var _numberOfBullets : Int;
+	public var _accuracy : Float; 
+	public var _angularSpread : Float;
 
-	private var _projectileSpeed : Float;
+	public var _projectileSpeed : Float;
 
 	public function new(owner : FlxSprite, position : FlxVector, numberOfBullets : Int, accuracy : Float, angularSpread : Float, projectileSpeed : Float, reloadTime : Float)
 	{

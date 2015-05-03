@@ -16,11 +16,33 @@ import openfl.display.BitmapData;
 class City extends FlxSprite
 {
 
-	private var _guns : flixel.group.FlxTypedGroup<Gun>;
+	public var _guns : flixel.group.FlxTypedGroup<Gun>;
 	private var _shootManager : ShootManager;
 	
 	private var _population : Float;
 	private var _populationText : NumberDisplay;
+
+	private var _flakUpdateScreen : FlakUpdateScreen;
+	private var _lasergunUpdateScreen : LaserUpdateScreen;
+	private var _missileTurretUpgradeScreen : MissileTurretUpgradeScreen;
+	
+	public var _leftFlakGun : FlakGun;
+	public var _rightFlakGun : FlakGun;
+
+	public var _leftMissileTurret : MissileTurret;
+	public var _rightMissileTurret : MissileTurret;
+
+	public var _leftLaserGun : LaserGun;
+	public var _rightLaserGun : LaserGun;
+
+	private var _missileLauncherIcon : FlxSprite;
+	private var _missileLauncherIconText : FlxText;
+
+	private var _flakCannonIcon : FlxSprite;
+	private var _flakCannonIconText : FlxText;
+
+	private var _laserGunIcon : FlxSprite;
+	private var _laserGunIconText : FlxText;
 
 	public function new(shootManager : ShootManager) 
 	{
@@ -31,36 +53,137 @@ class City extends FlxSprite
 		this.setPosition(0, FlxG.height - 32);
 		this.updateHitbox();
 
+		_flakCannonIcon = new FlxSprite();
+		_flakCannonIcon.makeGraphic(10, 10, FlxColorUtil.makeFromARGB(1, 255, 255, 255), true);
+		_flakCannonIcon.x = FlxG.width - 30;
+		_flakCannonIcon.y = FlxG.height - 0.75 * FlxG.height;
+
+		_flakCannonIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.73 * FlxG.height, -1, "0/2", 16);
+
+		_missileLauncherIcon = new FlxSprite();
+		_missileLauncherIcon.makeGraphic(10, 10, FlxColorUtil.makeFromARGB(1, 255, 255, 255), true);
+		_missileLauncherIcon.x = FlxG.width - 30;
+		_missileLauncherIcon.y = FlxG.height - 0.65 * FlxG.height;
+
+		_missileLauncherIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.63 * FlxG.height, -1, "0/2", 16);
+
+		_laserGunIcon = new FlxSprite();
+		_laserGunIcon.makeGraphic(10, 10, FlxColorUtil.makeFromARGB(1, 255, 255, 255), true);
+		_laserGunIcon.x = FlxG.width - 30;
+		_laserGunIcon.y = FlxG.height - 0.55 * FlxG.height;
+
+		_laserGunIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.53 * FlxG.height, -1, "0/2", 16);
+
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
-		var leftFlakGun : FlakGun = new FlakGun(this, new FlxVector(50, 0), 4, 15, 25, 250, 2);	
-		var rightFlakGun : FlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, 0), 4, 15, 25, 250, 2);
+		_leftFlakGun = new FlakGun(this, new FlxVector(50, 0), 3, 15, 25, 250, 2);	
+		_rightFlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, 0), 3, 15, 25, 250, 2);
 	
-		//_guns.add(leftFlakGun);
-		//_guns.add(rightFlakGun);
-
-		var leftMissileTurret : MissileTurret = new MissileTurret(this, new FlxVector(100, 0), 250, 10);
-		var rightMissileTurret : MissileTurret = new MissileTurret(this, new FlxVector(FlxG.width - 100, 0), 250, 10);
-
-		//_guns.add(leftMissileTurret);
-		//_guns.add(rightMissileTurret);
-
-		var leftLaserGun : LaserGun = new LaserGun(this, new FlxVector(150, 0), 15, 25, 10);
-		var rightLaserGun : LaserGun = new LaserGun(this, new FlxVector(FlxG.width - 150, 0), 15, 25, 10);
-
-		_guns.add(leftLaserGun);
-		_guns.add(rightLaserGun);
+		//we have flak guns by default
+		_guns.add(_leftFlakGun);
+		_guns.add(_rightFlakGun);
 
 		_shootManager = shootManager;	
 		_population = 10000;
 		
 		// HUD
 		_populationText = new NumberDisplay(true);
+		_flakUpdateScreen = new FlakUpdateScreen();
+		_lasergunUpdateScreen = new LaserUpdateScreen();
+		_missileTurretUpgradeScreen = new MissileTurretUpgradeScreen();
+		flixel.plugin.MouseEventManager.add(_leftFlakGun, showFlakUpgrades, null, null, null);
+		flixel.plugin.MouseEventManager.add(_rightFlakGun, showFlakUpgrades, null, null, null);
+
+		flixel.plugin.MouseEventManager.add(_laserGunIcon, addLaserGun, null, null, null);
+		flixel.plugin.MouseEventManager.add(_missileLauncherIcon, addMissileLauncher, null, null, null);
 	}
+
+	public function showFlakUpgrades(sprite:FlxSprite)
+	{
+		var spriteAsFlak : FlakGun = cast sprite;
+
+		_flakUpdateScreen.show(spriteAsFlak);
+	}
+
+	public function showLaserUpgrades(sprite:FlxSprite)
+	{
+		var spriteAsLaser : LaserGun = cast sprite;
+
+		_lasergunUpdateScreen.show(spriteAsLaser);
+	}
+
+	public function showMissileUpgrades(sprite:FlxSprite)
+	{
+		var spriteAsMissileLauncher : MissileTurret = cast sprite;
+
+		_missileTurretUpgradeScreen.show(spriteAsMissileLauncher);
+	}	
+
+	private function addLaserGun(sprite:FlxSprite):Void
+	{
+		if(_leftLaserGun == null)
+		{
+			_leftLaserGun = new LaserGun(this, new FlxVector(150, 0), 15, 25, 10);
+			_guns.add(_leftLaserGun);
+			flixel.plugin.MouseEventManager.add(_leftLaserGun, showLaserUpgrades, null, null, null);
+			return;
+		}
+
+		if(_rightLaserGun == null)
+		{
+			_rightLaserGun = new LaserGun(this, new FlxVector(FlxG.width - 150, 0), 15, 25, 10);
+			_guns.add(_rightLaserGun);
+			flixel.plugin.MouseEventManager.add(_rightLaserGun, showLaserUpgrades, null, null, null);
+			return;
+		}	
+	}
+
+	private function addMissileLauncher(sprite:FlxSprite):Void
+	{
+		if(_leftMissileTurret == null)
+		{
+			_leftMissileTurret = new MissileTurret(this, new FlxVector(100, 0), 250, 10);
+			_guns.add(_leftMissileTurret);
+			flixel.plugin.MouseEventManager.add(_leftMissileTurret, showMissileUpgrades, null, null, null);
+			return;
+		}
+
+		if(_rightMissileTurret == null)
+		{
+			_rightMissileTurret = new MissileTurret(this, new FlxVector(FlxG.width - 100, 0), 250, 10);
+			_guns.add(_rightMissileTurret);
+			flixel.plugin.MouseEventManager.add(_rightMissileTurret, showMissileUpgrades, null, null, null);
+			return;
+		}	
+	}	
 
 	override public function draw():Void
 	{
 		super.draw();
 		_guns.draw();
+
+		_flakCannonIcon.draw();
+		_flakCannonIconText.draw();
+			
+		_missileLauncherIcon.draw();
+		_missileLauncherIconText.draw();
+
+		_laserGunIcon.draw();
+		_laserGunIconText.draw();
+
+		if(_flakUpdateScreen._visible)
+		{
+			_flakUpdateScreen.draw();
+		}
+
+		if(_missileTurretUpgradeScreen._visible)
+		{
+			_missileTurretUpgradeScreen.draw();
+		}
+
+		if(_lasergunUpdateScreen._visible)
+		{
+			_lasergunUpdateScreen.draw();
+		}	
 	}
 
 	override public function update():Void 
@@ -68,6 +191,54 @@ class City extends FlxSprite
 		super.update();
 		_guns.update();
 		shoot();
+
+		if(_flakUpdateScreen._visible)
+		{
+			_flakUpdateScreen.update();
+		}
+		
+		if(_missileTurretUpgradeScreen._visible)
+		{
+			_missileTurretUpgradeScreen.update();
+		}
+
+		if(_lasergunUpdateScreen._visible)
+		{
+			_lasergunUpdateScreen.update();
+		}
+
+		updateIconTexts();
+	}
+
+	private function updateIconTexts():Void
+	{
+		//update icon texts
+		var flakCount : Int = 0;
+		if(_leftFlakGun != null)
+			flakCount++;
+
+		if(_rightFlakGun != null)
+			flakCount++;	
+
+		_flakCannonIconText.text = "" + flakCount + "/2";
+
+		var launcherCount : Int = 0;
+		if(_leftMissileTurret != null)
+			launcherCount++;
+
+		if(_rightMissileTurret != null)
+			launcherCount++;
+
+		_missileLauncherIconText.text = "" + launcherCount + "/2";
+
+		var laserCount : Int = 0;
+		if(_leftLaserGun != null)
+			laserCount++;
+
+		if(_rightLaserGun != null)
+			laserCount++;
+
+		_laserGunIconText.text = "" + laserCount + "/2";		
 	}
 
 	private function shoot() : Void
@@ -75,7 +246,6 @@ class City extends FlxSprite
 		for(i in 0..._guns.length)
 		{
 			if(_guns.members[i].isLoaded())
-			//if(FlxG.keys.anyPressed(["Q"]))
 			{
 				//yay, we can fire guns! lets look for a target... 
 				var target : FlxSprite = lookForTarget(_guns.members[i]);
@@ -118,6 +288,7 @@ class City extends FlxSprite
 	public function drawHud () : Void 
 	{
 		_populationText.drawSingleNumber(Std.int(_population), new FlxPoint(FlxG.width - 110, 10));
+
 	}
 	
 	

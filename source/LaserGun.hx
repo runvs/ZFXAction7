@@ -17,8 +17,9 @@ class LaserGun extends Gun
 	private var _gunTimer : flixel.util.FlxTimer;
 	private var _gunIsReady : Bool;
 
-	private var _accuracy : Float; 	//	1.0 is best
-	private var _angularSpread : Float; // in theory, 0 is best
+	public var _accuracy : Float; 	//	1.0 is best
+	public var _angularSpread : Float; // in theory, 0 is best
+	public var _rateOfFire : Float;
 
 	public function new(owner : FlxSprite, position : FlxVector, accuracy : Float, angularSpread : Float, reloadTime : Float)
 	{
@@ -30,6 +31,7 @@ class LaserGun extends Gun
 		this.x = owner.x + position.x;
 		this.y = owner.y + position.y;
 		
+		_rateOfFire = reloadTime;
 		_gunTimer = new flixel.util.FlxTimer(reloadTime, onTimer, 0);
 		_gunIsReady = true;		
 
