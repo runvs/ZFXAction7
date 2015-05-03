@@ -14,7 +14,7 @@ class MenuState extends FlxState
 {
 	
 	private var _playButton: FlxButton;
-	
+	private var _description: FlxText;
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -22,6 +22,12 @@ class MenuState extends FlxState
 	{
 		super.create();
 		_playButton = new FlxButton(0, 0, "Play", startGame);
+		_playButton.scale.set(2, 2);
+
+		_description = new FlxText(0, 0, -1, "Everything costs 1.");
+		flixel.util.FlxSpriteUtil.screenCenter(_playButton);
+
+
 		add(_playButton);
 		FlxG.sound.playMusic(AssetPaths.zfxaction7ost__mp3,0.85);	
 	}

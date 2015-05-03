@@ -325,25 +325,31 @@ class City extends FlxSprite
 
 	private function lookForFarthestTarget(gun : Gun) : flixel.FlxSprite
 	{
-		//look for closest shot
-		var farthestShot : Projectile = null;
-		var yCoordinateOfFarthestShot : Float  = FlxG.height;
-		var distanceOfClosestShot : Float = 812738172381723;
+		var projectile:Projectile = null;
+
 		_shootManager.getEnemyShots().forEachAlive
 		(		
 			function(shot:Projectile) 
 			{ 
-				var distance : FlxVector = new FlxVector(gun.x + this.x + this.width/2 - shot.x, gun.y + this.y  - shot.y);
-				if (shot.y < yCoordinateOfFarthestShot &&  distance.length < distanceOfClosestShot)
+				if(projectile == null)
 				{
-					farthestShot = shot;
-					yCoordinateOfFarthestShot = shot.y;
-					distanceOfClosestShot = distance.length;
+					projectile = shot;
+				}
+				else
+				{
+					//is it closer in x?
+					if(Math.abs(shot.x - gun.x) < Math.abs(projectile.x - gun.x))
+					{
+						if(shot.y < projectile.y)
+						{
+							projectile = shot;
+						}
+					}
 				}
 			}
 		);
 
-		return farthestShot;
+		return projectile;
 	}
 	
 	
