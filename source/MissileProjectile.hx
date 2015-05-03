@@ -93,7 +93,7 @@ class MissileProjectile extends Projectile
 		//_path.update();
 	}
 
-	public function explode() : Void
+	public override function explode() : Void
 	{
 		this.kill();
 	}

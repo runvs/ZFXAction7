@@ -22,4 +22,8 @@ class Projectile extends FlxSprite
 		super();
 		this.health = 10;
 	}	
+	public function explode () : Void 
+	{
+		kill();
+	}
 }

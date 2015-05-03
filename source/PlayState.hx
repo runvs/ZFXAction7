@@ -5,11 +5,15 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
 import flixel.text.FlxText;
+import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxMath;
+import flixel.util.FlxPoint;
+import flixel.util.FlxRandom;
 import flixel.util.FlxTimer;
 import flixel.util.FlxVector;
+import haxe.macro.Expr.Position;
 import haxe.remoting.FlashJsConnection;
 import haxe.Timer;
 import openfl.display.BitmapData;
@@ -31,6 +35,12 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	private var _playerShotList : FlxTypedGroup<Projectile>;
 	
 	private var _clouds : CloudLayer;
+	
+	private var _overlay : FlxSprite;
+	
+	private var _enemySpawnTimer : Float;
+	private var _maxEnemies : Float;
+	
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -49,11 +59,14 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_city = new City(this, this);
 		_player = new Player(this, this);
 		
-		trace (FlxG.width);
+		//trace (FlxG.width);
+		
+		_maxEnemies = 1;
+		_enemySpawnTimer = 0;
 		
 		_enemyList  = new FlxTypedGroup<EnemyShip>();
-	
-		_enemyList.add(SmallEnemyShip.spawn(this, new FlxVector(320, 700), 40));
+		spawnEnemyShip();
+		//_enemyList.add(SmallEnemyShip.spawn(this, new FlxVector(320, 700), 40));
 		//_enemyList.add(MediumEnemyShip.spawn(this, new FlxVector(50, 10), 50));
 		//_enemyList.add(LargeEnemyShip.spawn(this, new FlxVector(20, 180), 50));
 		
@@ -63,6 +76,15 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_playerShotList = new FlxTypedGroup<Projectile>();	
 		
 		_clouds  = new CloudLayer();
+		
+		
+		_overlay = new FlxSprite();
+		_overlay.makeGraphic(FlxG.width, FlxG.height, FlxColorUtil.makeFromARGB(1, 0, 0, 0));
+		_overlay.origin.set();
+		_overlay.x = _overlay.y = 0;
+		_overlay.alpha = 1.0;
+		
+		FlxTween.tween(_overlay, { alpha:0 }, 1);
 		
 		super.create();
 	}
@@ -109,21 +131,16 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_tankList.forEachAlive(checkTankRefill);
 		_enemyShotList.forEachAlive(checkShotCityOverlap);
 		_player.update();
+		_overlay.update();
 		
-
-		// if(_playerShotList.members.length > 0 && _enemyShotList.members.length > 0)
-		// {
-		// 	var beam : Projectile = _playerShotList.members[0];
-		// 	var enemy : Projectile = _enemyShotList.members[0];
-
-		// 	if(beam.alive)
-		// 	{
-		// 		trace(FlxG.pixelPerfectOverlap(beam, enemy));	
-		// 	}
-
-		// 	trace("----");
-		// 	FlxG.vcr.pause();
-		// }
+		_enemySpawnTimer += FlxG.elapsed;
+		
+		if (_enemySpawnTimer >= GetSpawnTime())
+		{	
+			spawnEnemyShip();
+			
+			_enemySpawnTimer = 0;
+		}
 		
 		FlxG.overlap(_playerShotList, _enemyShotList, shotShotCollision); //laguna asked for it
 		FlxG.overlap(_playerShotList, _enemyList, shotEnemyCollision); 
@@ -145,19 +162,40 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		}
 	}
 	
+	private function GetEnemyStrength() : Float 
+	{
+		var str : Float = 0;
+		_enemyList.forEach(function (s:EnemyShip):Void
+		{
+			str += s.GetShipStrength();
+		});
+		return str;
+	}
+	
+	private function GetSpawnTime() : Float
+	{
+		var currentEnemies = GetEnemyStrength();
+		var exponent = GameProperties.GetEnemySpawnerExponent();
+		var ret = (Math.pow(currentEnemies / _maxEnemies, exponent)) * GameProperties.GetEnemySpawnerMaxTime();
+		return ret;
+	}
+	
 	private function shotShotCollision(playerShot:Projectile, enemyShot:Projectile):Void
 	{
-		trace("shots hit!");
+		//trace("shots hit!");
 		//if (FlxG.pixelPerfectOverlap(playerShot, enemyShot, 1))
 		{
-			playerShot.kill();
-			enemyShot.kill();
+			if (playerShot.alive)
+			{
+				playerShot.explode();
+				enemyShot.kill();
+			}
 		}
 	}
 	
 	private function shotEnemyCollision(playerShot:Projectile, enemy:EnemyShip):Void
 	{
-		trace("enemyhit!");
+		//trace("enemyhit!");
 		//if (FlxG.pixelPerfectOverlap(playerShot, enemy))	// no need for ppoverlap, as the player WANTS to destroy the enemy
 		{
 			//trace("enemyhit ppo!");	
@@ -181,9 +219,9 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_clouds.draw();
 		
 		// HUD STUFF
-		
 		_player.drawHud();
 		_city.drawHud();
+		_overlay.draw();
 		
 	}
 	
@@ -251,8 +289,33 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	{
 		if (!_city.alive)
 		{
+			FlxTween.tween(_overlay, { alpha:1.0 }, 0.7);
 			var t : FlxTimer = new FlxTimer(0.75, function (t:FlxTimer) : Void { FlxG.switchState(new MenuState()); } );
 		}
+	}
+	
+	function spawnEnemyShip():Void 
+	{
+		
+		var p : FlxPoint = new FlxPoint(FlxRandom.floatRanged(0, FlxG.width), FlxRandom.floatRanged(0, FlxG.height / 2));
+		var v : FlxPoint = new FlxPoint(FlxRandom.floatRanged( -20, 20), 0);
+		trace (v);
+		var r : Int = FlxRandom.intRanged(0, 2);
+		//if (r == 0)
+		{
+			
+			_enemyList.add(SmallEnemyShip.spawn(this, p, v.x, v.y, 1));
+			//_enemyl
+		}
+		//else if (r == 1)
+		//{
+			//e = new MediumEnemyShip(this);
+		//}
+		//else if (r == 2)
+		//{
+			//e = new LargeEnemyShip(this);
+		//}
+		
 	}
 	
 }

@@ -31,4 +31,9 @@ class LargeEnemyShip extends EnemyShip
 		
 		return e;
 	}	
+	
+	public override function GetShipStrength () :Float
+	{
+		return 3;
+	}
 }

@@ -1,5 +1,6 @@
 package ;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.tweens.FlxTween;
@@ -63,7 +64,7 @@ class CloudLayer extends FlxSpriteGroup
 			{
 				s.x = 495;
 			}
-			if (s.x > 500)
+			if (s.x > FlxG.width +  500)
 			{
 				s.x = -495;
 			}

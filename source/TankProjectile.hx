@@ -50,7 +50,7 @@ class TankProjectile extends Projectile
 		_lifetimeTimer.update();
 	}
 
-	public function explode() : Void
+	public override function explode() : Void
 	{
 		this.kill();
 	}

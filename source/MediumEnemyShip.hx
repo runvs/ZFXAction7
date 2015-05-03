@@ -31,4 +31,9 @@ class MediumEnemyShip extends EnemyShip
 		
 		return e;
 	}	
+	
+	public override function GetShipStrength () :Float 
+	{
+		return 2;
+	}
 }

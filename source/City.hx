@@ -2,6 +2,7 @@ package ;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
@@ -44,6 +45,8 @@ class City extends FlxSprite
 
 	private var _laserGunIcon : FlxSprite;
 	private var _laserGunIconText : FlxText;
+	
+	private var _hitSound : FlxSound;
 
 	public function new(shootManager : ShootManager, playState : PlayState) 
 	{
@@ -77,7 +80,7 @@ class City extends FlxSprite
 		_laserGunIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.53 * FlxG.height, -1, "0/2", 16);
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
-		_leftFlakGun = new FlakGun(this, new FlxVector(50, this.height), 3, 15, 25, 250, 2);	
+		_leftFlakGun = new FlakGun(this, new FlxVector(50, this.height), 3, 50, 35, 250, 2);	
 		_rightFlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, this.height), 3, 15, 25, 250, 2);
 	
 		//we have flak guns by default
@@ -95,6 +98,10 @@ class City extends FlxSprite
 
 		flixel.plugin.MouseEventManager.add(_laserGunIcon, addLaserGun, null, null, null);
 		flixel.plugin.MouseEventManager.add(_missileLauncherIcon, addMissileLauncher, null, null, null);
+		
+		// Sound 
+		_hitSound = new FlxSound();
+		_hitSound = FlxG.sound.load(AssetPaths.cityexplo__mp3, 0.9, false);
 	}
 
 	public function showFlakUpgrades(sprite:FlxSprite)
@@ -308,8 +315,10 @@ class City extends FlxSprite
 		checkDead();
 		stampCircle(new FlxPoint(s.x, s.y));
 		FlxG.camera.flash(FlxColorUtil.makeFromARGB(0.75, 232, 239, 215),0.35);
-		FlxG.camera.shake(0.015, 0.35);
+		FlxG.camera.shake(0.0075, 0.35);
 		_population -= decimate;
+		_hitSound.pan = (s.x / FlxG.width * 2) - 1;
+		_hitSound.play();
 	}
 	
 	private function checkDead() : Void 
