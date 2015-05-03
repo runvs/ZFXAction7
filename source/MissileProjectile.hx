@@ -37,7 +37,10 @@ class MissileProjectile extends Projectile
 	{
 		super();
 		//makeGraphic(3, 8, FlxColorUtil.makeFromARGB(1, 150, 150, 0));
-		this.loadGraphic(AssetPaths.projectileRocket__png, false, 4, 8);
+		this.loadGraphic(AssetPaths.projectileRocket__png, true, 4, 14);
+		this.animation.add("idle", [0]);
+		this.animation.add("fire", [1, 2], 15);
+		this.animation.play("idle");
 		this.scale.set(1.5, 1.5);
 		this.updateHitbox();
 		
@@ -111,6 +114,7 @@ class MissileProjectile extends Projectile
 	{
 		if(!_engineStarted)
 		{
+			this.animation.play("fire");
 			_engineStarted = true;
 			_accelerating = true;
 

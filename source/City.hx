@@ -100,8 +100,8 @@ class City extends FlxSprite
 		_rightFlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, this.height-16), 2, 60, 15, 200, 3);
 	
 		//we have flak guns by default
-		_guns.add(_leftFlakGun);
-		_guns.add(_rightFlakGun);
+		//_guns.add(_leftFlakGun);
+		//_guns.add(_rightFlakGun);
 
 		_shootManager = shootManager;	
 		_population = GameProperties.GetInitialPopulation();
@@ -207,7 +207,7 @@ class City extends FlxSprite
 	{
 		if(_leftMissileTurret == null)
 		{
-			_leftMissileTurret = new MissileTurret(this, new FlxVector(100, this.height-16), 250, 10);
+			_leftMissileTurret = new MissileTurret(this, new FlxVector(100, this.height-16), 400, 10);
 			_guns.add(_leftMissileTurret);
 			flixel.plugin.MouseEventManager.add(_leftMissileTurret, showMissileUpgrades, null, null, null);
 			return;
@@ -215,7 +215,7 @@ class City extends FlxSprite
 
 		if(_rightMissileTurret == null)
 		{
-			_rightMissileTurret = new MissileTurret(this, new FlxVector(FlxG.width - 100, this.height-16), 250, 10);
+			_rightMissileTurret = new MissileTurret(this, new FlxVector(FlxG.width - 100, this.height-16), 400, 10);
 			_guns.add(_rightMissileTurret);
 			flixel.plugin.MouseEventManager.add(_rightMissileTurret, showMissileUpgrades, null, null, null);
 			return;
