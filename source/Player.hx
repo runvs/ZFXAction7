@@ -40,11 +40,15 @@ class Player extends FlxSprite
 		super();
 		_tankManager = tm;
 		_shootManager = sm;
-		this.makeGraphic(16, 16, FlxColorUtil.makeFromARGB(1.0, 20, 200, 20));
-		this.origin.set(8, 16);
-		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
+		this.loadGraphic(AssetPaths.catapult__png, true, 32, 16);
+		this.animation.add("idle", [0]);
+		this.animation.add("shoot", [1, 2, 3, 3, 2, 3, 3, 0], 15, false);
+		this.animation.play("idle");
+		this.origin.set(16, 16);
+		this.scale.set(2, 2);
 		
-		this.setPosition(320, FlxG.height-32);
+		
+		this.setPosition(320, FlxG.height-48);
 		_targetAngle = 90;
 		_lastAngleIncrement = 0;
 		_shootTimer  = 0;
@@ -149,6 +153,7 @@ class Player extends FlxSprite
 	{
 		if (_ammunition > 0)
 		{
+			this.animation.play("shoot");
 			var t : Tank  = new Tank(_shootManager);
 			t.setPosition (this.x, this.y);
 			var power : Float = ((_shootTimer / GameProperties.GetShootTimer()) * 325 + 125) * 1.5;

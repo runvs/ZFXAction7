@@ -50,6 +50,6 @@ class LargeEnemyShip extends EnemyShip
 	}
 	public override function AttractionFieldStrength() : Float 
 	{
-		return 200;
+		return 160;
 	}
 }
