@@ -82,15 +82,15 @@ class City extends FlxSprite
 		_laserGunIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.53 * FlxG.height, -1, "0/2", 16);
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
-		_leftFlakGun = new FlakGun(this, new FlxVector(50, this.height), 3, 50, 35, 250, 2);	
-		_rightFlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, this.height), 3, 15, 25, 250, 2);
+		_leftFlakGun = new FlakGun(this, new FlxVector(50, this.height), 2, 100, 38, 250, 3);	
+		_rightFlakGun = new FlakGun(this, new FlxVector(FlxG.width - 50, this.height), 2, 100, 38, 250, 3);
 	
 		//we have flak guns by default
 		_guns.add(_leftFlakGun);
 		_guns.add(_rightFlakGun);
 
 		_shootManager = shootManager;	
-		_population = 10000;
+		_population = GameProperties.GetInitialPopulation();
 		
 		// HUD
 		_populationicon = new FlxSprite();
@@ -132,7 +132,7 @@ class City extends FlxSprite
 	{
 		if(_leftLaserGun == null)
 		{
-			_leftLaserGun = new LaserGun(this, new FlxVector(150, this.height), 15, 25, 10);
+			_leftLaserGun = new LaserGun(this, new FlxVector(150, this.height), 15, 25, 8);
 			_guns.add(_leftLaserGun);
 			flixel.plugin.MouseEventManager.add(_leftLaserGun, showLaserUpgrades, null, null, null);
 			return;
@@ -140,7 +140,7 @@ class City extends FlxSprite
 
 		if(_rightLaserGun == null)
 		{
-			_rightLaserGun = new LaserGun(this, new FlxVector(FlxG.width - 150, this.height), 15, 25, 10);
+			_rightLaserGun = new LaserGun(this, new FlxVector(FlxG.width - 150, this.height), 15, 25, 8);
 			_guns.add(_rightLaserGun);
 			flixel.plugin.MouseEventManager.add(_rightLaserGun, showLaserUpgrades, null, null, null);
 			return;
@@ -316,8 +316,8 @@ class City extends FlxSprite
 		
 		checkDead();
 		stampCircle(new FlxPoint(s.x, s.y));
-		FlxG.camera.flash(FlxColorUtil.makeFromARGB(0.75, 232, 239, 215),0.35);
-		FlxG.camera.shake(0.0075, 0.35);
+		FlxG.camera.flash(FlxColorUtil.makeFromARGB(0.75, 232, 239, 215),0.2);
+		FlxG.camera.shake(0.0075, 0.2);
 		_population -= decimate;
 		_hitSound.pan = (s.x / FlxG.width * 2) - 1;
 		_hitSound.play();

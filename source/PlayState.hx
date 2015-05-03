@@ -64,7 +64,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		_maxEnemies = 1;
 		_enemySpawnTimer = 0;
 		
-		var t : FlxTimer = new FlxTimer(15, function (t:FlxTimer) { increaseDifficulty(); } ); 
+		var t : FlxTimer = new FlxTimer(GameProperties.GetIncreaseDifficultyTimer(), function (t:FlxTimer) { increaseDifficulty(); }, 0 ); 
 		
 		_enemyList  = new FlxTypedGroup<EnemyShip>();
 		spawnEnemyShip();
@@ -92,6 +92,20 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	private function increaseDifficulty() : Void 
 	{
 		_maxEnemies++;
+		if (_maxEnemies > 6)
+		{
+			_maxEnemies++;
+		}
+		if (_maxEnemies > 12)
+		{
+			_maxEnemies++;
+		}
+		if (_maxEnemies > 16)
+		{
+			_maxEnemies++;
+			_maxEnemies++;
+			_maxEnemies++;
+		}
 	}
 	
 	
@@ -308,22 +322,23 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	function spawnEnemyShip():Void 
 	{
 		var p : FlxPoint = new FlxPoint(FlxRandom.floatRanged(0, FlxG.width), FlxRandom.floatRanged(0, FlxG.height / 2));
-		var v : FlxPoint = new FlxPoint(FlxRandom.floatRanged( -20, 20), 0);
+		var v : FlxPoint = new FlxPoint(FlxRandom.floatRanged( 3, 20), 0);
+		var b = FlxRandom.intRanged( -1, 1, [0]);
 		//trace (v);
 		var r : Int = FlxRandom.intRanged(0,1);
 		if (r == 0)
 		{
-			_enemyList.add(SmallEnemyShip.spawn(this, p, v.x, v.y, 1));
+			_enemyList.add(SmallEnemyShip.spawn(this, p, v.x, v.y, b));
 		}
 		else
 		{
-			_enemyList.add(LargeEnemyShip.spawn(this, p, v.x, v.y, 1));
+			_enemyList.add(LargeEnemyShip.spawn(this, p, v.x, v.y, b));
 		}
 	}
 	
 	function updateEnemySpawner():Void 
 	{
-		trace (GetSpawnTime() + " " + _enemySpawnTimer  + " " + _maxEnemies + " " + GetEnemyStrength());
+		//trace (GetSpawnTime() + " " + _enemySpawnTimer  + " " + _maxEnemies + " " + GetEnemyStrength());
 		_enemySpawnTimer += FlxG.elapsed;
 		
 		if (_enemySpawnTimer >= GetSpawnTime())
