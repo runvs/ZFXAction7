@@ -22,28 +22,32 @@ class UpdateScreen extends flixel.FlxSubState
 	{
 		super.create();
 		_background = new flixel.FlxSprite();
-		_background.makeGraphic(600, 300, flixel.util.FlxColorUtil.makeFromARGB(1.0, 123, 42, 124));
-		_background.setPosition(100, 100);
+		_background.makeGraphic(Std.int(flixel.FlxG.width * 0.75), 400, flixel.util.FlxColorUtil.makeFromARGB(1.0, 64, 65, 66));
+		_background.setPosition(Std.int(flixel.FlxG.width * 0.125), 100);
 		_background.origin.set();
 		_background.scrollFactor.set(0, 0);	
 
-		// _closeButton = new flixel.ui.FlxButton(500, 350, "close", close);
-		// _closeButton.loadGraphic(AssetPaths.button_blue__png, true, 18, 18);//, ?Unique:Bool, ?Key:String)
-
-		_closeButton = new FlxButton(500, 350, "close", close); 
-		_closeButton.loadGraphic(AssetPaths.button_blue__png, true, 18, 18); 
-		_closeButton.scale.set(5, 1);
+		_closeButton = new FlxButton(400, 400, "", close); 
+		_closeButton.loadGraphic(AssetPaths.buttonClose__png, true, 48, 18); 
+		_closeButton.scale.set(2, 2);
+	
 		_closeButton.animation.add('idle', [0]); 
 		_closeButton.animation.add('hover', [1]); 
 		_closeButton.onOver.callback = onOver; 
 		_closeButton.onOut.callback = onOut; 
 		_closeButton.visible = true;
 
-		_label = new FlxText(250, 100, -1, _labelText, 16);
+		_label = new FlxText(Std.int(flixel.FlxG.width * (0.5 - 0.125)) + 50, 100, -1, _labelText, 16);
 
 		add(_background);
 		add(_label);
 		add(_closeButton);		
+	}
+
+	public function loadPlusButton(button : FlxButton) : Void
+	{
+		button.loadGraphic(AssetPaths.buttonPlus__png, true, 18, 18); 
+		button.scale.set(2, 2);	
 	}
 
 	public function onOver() : Void
@@ -55,6 +59,7 @@ class UpdateScreen extends flixel.FlxSubState
 	{
 
 	}
+
 	public override function draw() : Void
 	{
 		super.draw();

@@ -23,10 +23,13 @@ class MissileTurretUpgradeScreen extends UpdateScreen
 	{
 		super.create();
 	
-		_improveProjectileSpeed = new flixel.ui.FlxButton(500, 150, "+", improveProjectileSpeed);
-		_improveRateOfFire = new flixel.ui.FlxButton(500, 250, "+", improveRateOfFire);
-		_projectileSpeed = new flixel.text.FlxText(150, 150, -1, "", 16);
-		_rateOfFire = new flixel.text.FlxText(150, 250, -1, "", 16);
+		_improveProjectileSpeed = new flixel.ui.FlxButton(Std.int(flixel.FlxG.width * (0.75-0.125)), 150, "", improveProjectileSpeed);
+		_improveRateOfFire = new flixel.ui.FlxButton(Std.int(flixel.FlxG.width * (0.75-0.125)), 250, "", improveRateOfFire);
+		_projectileSpeed = new flixel.text.FlxText(Std.int(flixel.FlxG.width * 0.25), 150, -1, "", 16);
+		_rateOfFire = new flixel.text.FlxText(Std.int(flixel.FlxG.width * 0.25), 250, -1, "", 16);
+
+		loadPlusButton(_improveRateOfFire);
+		loadPlusButton(_improveProjectileSpeed);
 
 		add(_improveProjectileSpeed);
 		add(_improveRateOfFire);
