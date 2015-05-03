@@ -18,7 +18,7 @@ class SmallSpaceShipGunProjectile extends Projectile
 	public function new(x: Float, y: Float) 
 	{
 		super();
-		this.makeGraphic(60, 60, FlxColorUtil.makeFromARGB(1, 200, 20, 20));
+		this.makeGraphic(6, 6, FlxColorUtil.makeFromARGB(1, 200, 20, 20));
 		//this.origin.set();
 		this.acceleration.set(0, 25);
 		this.velocity = new FlxPoint(0, 50);
