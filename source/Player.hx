@@ -119,7 +119,7 @@ class Player extends FlxSprite
 		}
 		if ((FlxG.keys.anyJustReleased(["SPACE"]) && _shootTimer != 0))// || _shootTimer  > GameProperties.GetShootTimer() )
 		{
-			_shootTimer = Math.max(_shootTimer, GameProperties.GetShootTimer());
+			_shootTimer = Math.min(_shootTimer, GameProperties.GetShootTimer());
 			shoot();
 			_shootTimer = 0;
 		}
