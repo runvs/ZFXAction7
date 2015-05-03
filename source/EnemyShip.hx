@@ -29,8 +29,7 @@ class EnemyShip extends FlxSprite
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
 		_shootManager = shootManager;	
 
-		FlxTween.tween(this.offset, { y:4 }, 4, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );
-		
+		FlxTween.tween(this.offset, { y:4 }, 4, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );	
 	}
 	
 	public function flipLeft() : Void	// flip on left side of the screen
@@ -47,6 +46,7 @@ class EnemyShip extends FlxSprite
 			}
 		}
 	}
+
 	public function flipRight() : Void	// flip on right side of the screen
 	{
 		if (this.x  > FlxG.width + 10)
@@ -64,7 +64,6 @@ class EnemyShip extends FlxSprite
 
 	override public function update():Void 
 	{
-		//trace (x);
 		super.update();
 		_flipFunction();
 		_guns.update();

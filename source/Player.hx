@@ -117,8 +117,9 @@ class Player extends FlxSprite
 		{
 			_shootTimer  += FlxG.elapsed;
 		}
-		if ((FlxG.keys.anyJustReleased(["SPACE"]) && _shootTimer != 0) || _shootTimer  > GameProperties.GetShootTimer() )
+		if ((FlxG.keys.anyJustReleased(["SPACE"]) && _shootTimer != 0))// || _shootTimer  > GameProperties.GetShootTimer() )
 		{
+			_shootTimer = Math.max(_shootTimer, GameProperties.GetShootTimer());
 			shoot();
 			_shootTimer = 0;
 		}
@@ -136,7 +137,7 @@ class Player extends FlxSprite
 		
 		var val : Float = _shootTimer / GameProperties.GetShootTimer() ;
 		if (val < 0 ) val = 0;
-		if (val > GameProperties.GetShootTimer()) val = GameProperties.GetShootTimer();
+		if (val > 1) val = 1;
 		_shootindicator.scale.set(1, val);
 		_shootindicator.alpha = val * 0.75 + 0.25;
 		_shootindicator.draw();
@@ -145,7 +146,6 @@ class Player extends FlxSprite
 		_shootmarker.setPosition( 320 + 40, FlxG.height - 32- 96 - 2);
 		_shootmarker.draw();
 		_shootbar.draw();
-		
 	}
 	
 	
@@ -156,7 +156,7 @@ class Player extends FlxSprite
 			this.animation.play("shoot");
 			var t : Tank  = new Tank(_shootManager);
 			t.setPosition (this.x, this.y);
-			var power : Float = ((_shootTimer / GameProperties.GetShootTimer()) * 325 + 125) * 1.5;
+			var power : Float = (Math.min(_shootTimer / GameProperties.GetShootTimer(), 1) * 325 + 125) * 1.5;
 			t.velocity = new FlxPoint(Math.cos(_targetAngle*Math.PI/180) * power, - Math.sin(_targetAngle*Math.PI/180) * power);
 			_tankManager.SpawnTank(t);
 			_ammunition--;

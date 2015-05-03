@@ -58,7 +58,7 @@ class TankGun extends Gun
 		var projectiles : flixel.group.FlxTypedGroup<Projectile> = new flixel.group.FlxTypedGroup<Projectile>();
 
 		var spawnVector : FlxVector = new FlxVector(this.x + this._owner.x + this._owner.width/2, this.y + this._owner.y);
-		var target : FlxVector = AimOMatic.aim(spawnVector, new FlxVector(targetSprite.x, targetSprite.y), new FlxVector(targetSprite.velocity.x, targetSprite.velocity.y), _projectileSpeed);
+		var target : FlxVector = AimOMatic.aim(spawnVector, new FlxVector(targetSprite.x + targetSprite.width/2, targetSprite.y + targetSprite.height/2), new FlxVector(targetSprite.velocity.x, targetSprite.velocity.y), _projectileSpeed);
 	
 		if(target != null)
 		{

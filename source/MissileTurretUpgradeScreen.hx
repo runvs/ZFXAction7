@@ -51,7 +51,7 @@ class MissileTurretUpgradeScreen extends UpdateScreen
 		{
 			if(_city.decreaseMoney(1))
 			{
-				_missileTurret._projectileSpeed--;
+				_missileTurret._projectileSpeed += 25;
 				updateStrings();
 			}
 		}
