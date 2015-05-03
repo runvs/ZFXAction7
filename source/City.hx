@@ -297,7 +297,7 @@ class City extends FlxSprite
 				}
 				else if(_guns.members[i].prefersFarTarget())
 				{
-					trace("far!");
+					//trace("far!");
 					target = lookForFarthestTarget(_guns.members[i]);
 				}
 

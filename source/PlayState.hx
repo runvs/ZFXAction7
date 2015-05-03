@@ -85,6 +85,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		
 		FlxTween.tween(_overlay, { alpha:0 }, 1);
 		
+		FlxG.fullscreen = true;
+		
 		super.create();
 	}
 	
@@ -279,6 +281,11 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 
 	private function checkTankEnemyOverlap(t: Tank)
 	{
+		if (t.GetMode() != TankMode.Flight)
+		{
+			return;
+		}
+		
 		_enemyList.forEachAlive(
 		function(e:EnemyShip) 
 		{ 

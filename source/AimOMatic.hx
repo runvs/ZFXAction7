@@ -56,7 +56,7 @@ class AimOMatic
     //float calculatedprojectilespeed = Vb.magnitude;
     //bool projectilespeedmatchesexpectations = (projectileSpeed == calculatedprojectilespeed);
     //...FOR CHECKING ONLY
-    trace(vx + ", " + vy);
+    //trace(vx + ", " + vy);
     return new FlxVector(vx, vy);
   }
 
