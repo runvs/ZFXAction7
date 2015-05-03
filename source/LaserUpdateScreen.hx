@@ -19,11 +19,9 @@ class LaserUpdateScreen extends UpdateScreen
 	private var _spread : flixel.text.FlxText;
 	private var _rateOfFire : flixel.text.FlxText;
 
-
-	public function new(laserGun : LaserGun)
+	public function new(laserGun : LaserGun, city: City)
 	{
-		super("Laser Upgrades");
-		_laser = laserGun;
+		super("Laser Upgrades", city);
 	}
 
 	public override function create()
@@ -42,12 +40,12 @@ class LaserUpdateScreen extends UpdateScreen
 		_spread = new flixel.text.FlxText(Std.int(flixel.FlxG.width * 0.25), 200, -1, "", 16);
 		_rateOfFire = new flixel.text.FlxText(Std.int(flixel.FlxG.width * 0.25), 250, -1, "", 16);
 
-		add(_accuracy);
-		add(_spread);
+		//add(_accuracy);
+		//add(_spread);
 		add(_rateOfFire);
 
-		add(_improveAccuracy);
-		add(_improveSpread);
+		//add(_improveAccuracy);
+		//add(_improveSpread);
 		add(_improveRateOfFire);
 		updateStrings();
 	}
@@ -63,8 +61,11 @@ class LaserUpdateScreen extends UpdateScreen
 	{
 		if(_laser._accuracy > 0)
 		{
-			_laser._accuracy--;
-			updateStrings();
+			if(_city.decreaseMoney(1))
+			{
+				_laser._accuracy--;
+				updateStrings();
+			}
 		}
 	}
 
@@ -72,15 +73,23 @@ class LaserUpdateScreen extends UpdateScreen
 	{
 		if(_laser._angularSpread > 0)
 		{
-			_laser._angularSpread--;
-			updateStrings();			
+			if(_city.decreaseMoney(1))
+			{
+				_laser._angularSpread--;
+				updateStrings();
+			}			
 		}
 	}	
 
 	private function improveRateOfFire() : Void
 	{
-		_laser._rateOfFire--;
-
-		updateStrings();
+		if(_laser._rateOfFire > 1)
+		{
+			if(_city.decreaseMoney(1))
+			{
+				_laser._rateOfFire--;
+				updateStrings();
+			}
+		}
 	}		
 }

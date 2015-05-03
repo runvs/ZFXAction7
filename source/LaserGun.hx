@@ -96,4 +96,14 @@ class LaserGun extends Gun
 	{
 		return 250;
 	}
+
+	public override function prefersCloseTarget() : Bool
+	{
+		return true;
+	}
+
+	public override function prefersFarTarget() : Bool
+	{
+		return true;
+	}	
 }

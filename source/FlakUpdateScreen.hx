@@ -19,9 +19,9 @@ class FlakUpdateScreen extends UpdateScreen
 	private var _projectileSpeed : flixel.text.FlxText;
 	private var _numberOfBullets : flixel.text.FlxText;
 
-	public function new(flak : FlakGun)
+	public function new(flak : FlakGun, city : City)
 	{
-		super("FlakGun Upgrades");
+		super("FlakGun Upgrades", city);
 		_flak = flak;
 	}
 
@@ -67,33 +67,46 @@ class FlakUpdateScreen extends UpdateScreen
 
 	private function improveAccuracy() : Void
 	{
-		if(_flak._accuracy > 0)
+		if(_flak._accuracy > 5)
 		{
-			_flak._accuracy--;
-			updateStrings();
+			if(_city.decreaseMoney(1))
+			{
+				_flak._accuracy--;
+				updateStrings();
+			}	
 		}
 	}
 
 	private function improveSpread() : Void
 	{
-		if(_flak._angularSpread > 0)
+		if(_flak._angularSpread > 2)
 		{
-			_flak._angularSpread--;
-			updateStrings();			
+			if(_city.decreaseMoney(1))
+			{
+				_flak._angularSpread--;
+				updateStrings();
+			}			
 		}
 	}	
 
 	private function improveProjectileSpeed() : Void
 	{
-		_flak._projectileSpeed++;
-
+		if(_city.decreaseMoney(1))
+		{
+			_flak._projectileSpeed += 10;
+		}
 		updateStrings();
 	}
 
 	private function improveNumberOfBullets() : Void
 	{
-		_flak._numberOfBullets++;
-
-		updateStrings();
+		if(_flak._numberOfBullets < 7)
+		{
+			if(_city.decreaseMoney(1))
+			{
+				_flak._numberOfBullets++;
+			}
+			updateStrings();
+		}
 	}		
 }

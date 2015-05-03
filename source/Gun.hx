@@ -44,4 +44,14 @@ class Gun extends FlxSprite
 	{
 		return 0;
 	}
+
+	public function prefersCloseTarget() : Bool
+	{
+		return true;
+	}
+
+	public function prefersFarTarget() : Bool
+	{
+		return false;
+	}
 }

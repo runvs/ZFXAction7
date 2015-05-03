@@ -15,7 +15,15 @@ import openfl.display.BitmapData;
  * @author 
  */
 class City extends FlxSprite
-{
+{ 
+	private var _money : Int;
+	private var _moneyIcon : FlxSprite;
+	private var _moneyNumberDisplay : NumberDisplay;
+
+	private var _moneyindicator : FlxSprite;
+	private var _moneymarker: FlxSprite;
+	private var _moneybar: FlxSprite;
+	private var _moneyTimer : flixel.util.FlxTimer;
 
 	public var _guns : flixel.group.FlxTypedGroup<Gun>;
 	private var _shootManager : ShootManager;
@@ -48,12 +56,12 @@ class City extends FlxSprite
 	private var _laserGunIconText : FlxText;
 	
 	private var _hitSound : FlxSound;
-	
+	private var _lastTime : Float;
 
 	public function new(shootManager : ShootManager, playState : PlayState) 
 	{
 		super();
-
+		_lastTime = 0;
 		_playState = playState;
 
 		this.loadGraphic(AssetPaths.city__png, false, 640, 163);
@@ -108,24 +116,66 @@ class City extends FlxSprite
 		// Sound 
 		_hitSound = new FlxSound();
 		_hitSound = FlxG.sound.load(AssetPaths.cityexplo__mp3, 0.9, false);
+
+		_moneyindicator = new FlxSprite();
+		_moneyindicator.makeGraphic(8, 96, FlxColorUtil.makeFromARGB(1.0, 200, 50, 50));
+		_moneyindicator.origin.set(4, 96);
+		_moneyindicator.setPosition(FlxG.width - 40, FlxG.height - 150 );
+		
+		_moneyTimer = new flixel.util.FlxTimer(GameProperties.GetMoneyTimer(), increaseMoney, 0);
+		_moneymarker = new FlxSprite();
+		_moneymarker.makeGraphic(12, 2, FlxColorUtil.makeFromARGB(1.0, 200, 50, 50));
+		_moneymarker.origin.set(0, 0);
+		
+		_moneybar = new FlxSprite();
+		_moneybar.makeGraphic(2, 96, FlxColorUtil.makeFromARGB(1.0, 200, 50, 50));
+		_moneybar.origin.set(1, 96);
+		_moneybar.setPosition(FlxG.width - 40 + 12, FlxG.height - 96 - 32 );	
+
+		_moneyIcon = new FlxSprite();
+		_moneyIcon.loadGraphic(AssetPaths.moneyIcon__png, false, 16, 16);
+		_moneyIcon.setPosition(FlxG.width - 32, 45);
+		_moneyIcon.scale.set(2, 2);
+		_moneyNumberDisplay = new NumberDisplay(true);		
+	}
+
+	public function increaseMoney(timer:flixel.util.FlxTimer) : Void
+	{
+		_money++;
+	}
+
+	public function decreaseMoney(amount: Int) : Bool
+	{
+		if(_money < amount)
+		{
+			return false;
+		}
+		else
+		{
+			_money -= amount;
+			return true;
+		}
 	}
 
 	public function showFlakUpgrades(sprite:FlxSprite)
 	{
 		var spriteAsFlak : FlakGun = cast sprite;
-		_playState.openSubState(new FlakUpdateScreen(spriteAsFlak));
+		pauseMoneyTimer();
+		_playState.openSubState(new FlakUpdateScreen(spriteAsFlak, this));
 	}
 
 	public function showLaserUpgrades(sprite:FlxSprite)
 	{
 		var spriteAsLaser : LaserGun = cast sprite;
-		_playState.openSubState(new LaserUpdateScreen(spriteAsLaser));
+		pauseMoneyTimer();
+		_playState.openSubState(new LaserUpdateScreen(spriteAsLaser, this));
 	}
 
 	public function showMissileUpgrades(sprite:FlxSprite)
 	{
 		var spriteAsMissileLauncher : MissileTurret = cast sprite;
-		_playState.openSubState(new MissileTurretUpgradeScreen(spriteAsMissileLauncher));
+		pauseMoneyTimer();
+		_playState.openSubState(new MissileTurretUpgradeScreen(spriteAsMissileLauncher, this));
 	}	
 
 	private function addLaserGun(sprite:FlxSprite):Void
@@ -228,7 +278,17 @@ class City extends FlxSprite
 			if(_guns.members[i].isLoaded())
 			{
 				//yay, we can fire guns! lets look for a target... 
-				var target : FlxSprite = lookForTarget(_guns.members[i]);
+				var target : FlxSprite = null;
+
+				if(_guns.members[i].prefersCloseTarget())
+				{
+					target = lookForClosestTarget(_guns.members[i]);
+				}
+				else if(_guns.members[i].prefersFarTarget())
+				{
+					trace("far!");
+					target = lookForFarthestTarget(_guns.members[i]);
+				}
 
 				if(target == null)
 				{
@@ -243,7 +303,7 @@ class City extends FlxSprite
 		}
 	}	
 	
-	private function lookForTarget(gun : Gun) : flixel.FlxSprite
+	private function lookForClosestTarget(gun : Gun) : flixel.FlxSprite
 	{
 		//look for closest shot
 		var closestShot : Projectile = null;
@@ -261,7 +321,27 @@ class City extends FlxSprite
 			}
 		);
 
-		return closestShot;
+		return closestShot;		
+	}
+
+	private function lookForFarthestTarget(gun : Gun) : flixel.FlxSprite
+	{
+		//look for closest shot
+		var farthestShot : Projectile = null;
+		var yCoordinateOfFarthestShot : Float  = FlxG.height;
+		_shootManager.getEnemyShots().forEachAlive
+		(		
+			function(shot:Projectile) 
+			{ 
+				if (shot.y < yCoordinateOfFarthestShot)
+				{
+					farthestShot = shot;
+					yCoordinateOfFarthestShot = shot.y;
+				}
+			}
+		);
+
+		return farthestShot;
 	}
 	
 	
@@ -269,6 +349,21 @@ class City extends FlxSprite
 	{
 		_populationText.drawSingleNumber(Std.int(_population), new FlxPoint(FlxG.width - 110, 10));
 		_populationicon.draw();
+
+		_moneyIcon.draw();
+		_moneyNumberDisplay.drawSingleNumber(_money, new FlxPoint(FlxG.width - 110, 40));
+		
+		var val : Float =  _moneyTimer.elapsedTime / GameProperties.GetMoneyTimer();
+		if (val < 0 ) val = 0;
+		
+		_moneyindicator.scale.set(1, val * 3);
+		_moneyindicator.alpha = val * 0.75 + 0.25;
+		_moneyindicator.draw();
+
+		_moneymarker.setPosition(_moneyindicator.x - 2, FlxG.height - 48);
+		_moneymarker.draw();
+		_moneymarker.setPosition(_moneyindicator.x - 2, FlxG.height - 350);
+		_moneymarker.draw();	
 	}
 	
 	private function stampCircle(p:FlxPoint): Void
@@ -311,7 +406,6 @@ class City extends FlxSprite
 	
 	public function ShotImpact(s:Projectile)
 	{
-
 		var decimate = _population  * FlxRandom.floatRanged( 0, 0.01) + 50;
 		
 		checkDead();
@@ -330,5 +424,14 @@ class City extends FlxSprite
 			kill();
 		}
 	}
+
+	public function continueMoneyTimer() : Void
+	{
+		_moneyTimer.active = true;
+	}
 	
+	public function pauseMoneyTimer() : Void
+	{
+		_moneyTimer.active = false;
+	}
 }

@@ -151,8 +151,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		FlxG.overlap(_playerShotList, _enemyList, shotEnemyCollision); 
 		
 		
-		checkGameOver();
-		
+		checkGameOver();		
 	}	
 
 	private function checkTankRefill ( t: Tank) : Void 
@@ -323,7 +322,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	
 	function updateEnemySpawner():Void 
 	{
-		trace (GetSpawnTime() + " " + _enemySpawnTimer  + " " + _maxEnemies + " " + GetEnemyStrength());
+		//trace (GetSpawnTime() + " " + _enemySpawnTimer  + " " + _maxEnemies + " " + GetEnemyStrength());
 		_enemySpawnTimer += FlxG.elapsed;
 		
 		if (_enemySpawnTimer >= GetSpawnTime())
