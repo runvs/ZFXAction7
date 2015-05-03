@@ -20,19 +20,22 @@ class EnemyShip extends FlxSprite
 	private var _guns : flixel.group.FlxTypedGroup<Gun>;
 	private var _shootManager : ShootManager;
 	private var _healthMax : Float;
-
+		
 	private function new(shootManager : ShootManager) 
 	{
 		super();
-		FlxTween.tween(this.offset, { y:10 }, 1, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );
+		
 		_flipFunction = flipRight;
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
 		_shootManager = shootManager;	
+
+		FlxTween.tween(this.offset, { y:4 }, 4, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );
+		
 	}
 	
 	public function flipLeft() : Void	// flip on left side of the screen
 	{
-		if (this.x  <  -100)
+		if (this.x  <  -10)
 		{
 			this.velocity.set( -this.velocity.x, 0);
 			this.scale.set( GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
@@ -46,7 +49,7 @@ class EnemyShip extends FlxSprite
 	}
 	public function flipRight() : Void	// flip on right side of the screen
 	{
-		if (this.x  > FlxG.width + 100)
+		if (this.x  > FlxG.width + 10)
 		{
 			this.velocity.set( -this.velocity.x, 0);
 			this.scale.set( -GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
@@ -61,11 +64,17 @@ class EnemyShip extends FlxSprite
 
 	override public function update():Void 
 	{
+		//trace (x);
 		super.update();
 		_flipFunction();
 		_guns.update();
 		shoot();
 		checkDead();
+	}
+	
+	public function GetShipStrength () : Float
+	{
+		return 1;
 	}
 
 	private function shoot() : Void

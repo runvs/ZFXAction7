@@ -2,6 +2,7 @@ package ;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
@@ -24,6 +25,8 @@ class Player extends FlxSprite
 	
 	private var _ammunitionText : NumberDisplay;
 	
+	private var _flumpsound : FlxSound;
+	
 	public function new(tm: TankManager, sm : ShootManager) 
 	{
 		super();
@@ -41,6 +44,10 @@ class Player extends FlxSprite
 		
 		/// hud objects
 		_ammunitionText = new NumberDisplay(true);
+		
+		// sound
+		_flumpsound = new FlxSound();
+		_flumpsound = FlxG.sound.load(AssetPaths.flump__mp3);
 	}
 	
 	
@@ -106,6 +113,7 @@ class Player extends FlxSprite
 			t.velocity = new FlxPoint(Math.cos(_targetAngle*Math.PI/180) * power, - Math.sin(_targetAngle*Math.PI/180) * power);
 			_tankManager.SpawnTank(t);
 			_ammunition--;
+			_flumpsound.play();
 		}
 	}
 	

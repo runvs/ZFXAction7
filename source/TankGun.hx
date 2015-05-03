@@ -2,6 +2,7 @@ package ;
 
 import flixel.FlxSprite;
 import flixel.FlxG;
+import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColorUtil;
@@ -20,6 +21,8 @@ class TankGun extends Gun
 	private var _accuracy : Float; 	//	1.0 is best
 	private var _angularSpread : Float; // in theory, 0 is best
 	private var _projectileSpeed : Float;
+	
+	
 
 	public function new(owner : FlxSprite, accuracy : Float, angularSpread : Float, reloadTime : Float)
 	{
@@ -34,7 +37,7 @@ class TankGun extends Gun
 
 		_accuracy = accuracy;
 		_angularSpread = angularSpread;
-		_projectileSpeed = 100;
+		_projectileSpeed = 200;
 	}
 	
 	public override function update() : Void 

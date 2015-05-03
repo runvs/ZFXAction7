@@ -2,6 +2,7 @@ package ;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColorUtil;
@@ -31,6 +32,8 @@ class LaserBeam extends Projectile
 	private var _path : flixel.util.FlxPath;
 
 	private var _target : FlxSprite;
+	
+	private var _sound : FlxSound;
 
 	public function new(target : FlxSprite, start : FlxVector, end : FlxVector) 
 	{
@@ -62,6 +65,10 @@ class LaserBeam extends Projectile
 		{
 			this.angle = targetAngle;
 		}
+		
+		_sound = new FlxSound();
+		_sound = FlxG.sound.load(AssetPaths.lasershoot1__mp3, 0.5);
+		_sound.play();
 		
 		FlxTween.tween(this, {alpha: 0}, _fadeOutTime, {type:FlxTween.PINGPONG, ease:FlxEase.sineInOut});
 //FlxTween.tween(this.offset, { x:25, y:25 }, 1, { type:FlxTween.PINGPONG, ease:FlxEase.backInOut } );
@@ -124,7 +131,7 @@ class LaserBeam extends Projectile
 		//_path.update();
 	}
 
-	public function explode() : Void
+	public override function explode() : Void
 	{
 		this.kill();
 		_target.hurt(10);

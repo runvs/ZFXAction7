@@ -47,7 +47,7 @@ class Tank extends FlxSprite
 		_turret = new FlxSprite();
 		_turret.loadGraphic(AssetPaths.tankTurret__png, true, 32, 16);
 		_turret.animation.add("idle", [0], 5, true);
-		_turret.animation.add("shoot", [1, 2, 3, 4, 0], 20, false);
+		_turret.animation.add("shoot", [1, 2, 3, 4, 0], 30, false);
 		_turret.animation.play("idle");
 		_turret.origin.set( 4, 8 );
 		
