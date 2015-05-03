@@ -18,7 +18,8 @@ class City extends FlxSprite
 
 	public var _guns : flixel.group.FlxTypedGroup<Gun>;
 	private var _shootManager : ShootManager;
-	
+	private var _playState : PlayState;
+
 	private var _population : Float;
 	private var _populationText : NumberDisplay;
 
@@ -44,9 +45,11 @@ class City extends FlxSprite
 	private var _laserGunIcon : FlxSprite;
 	private var _laserGunIconText : FlxText;
 
-	public function new(shootManager : ShootManager) 
+	public function new(shootManager : ShootManager, playState : PlayState) 
 	{
 		super();
+
+		_playState = playState;
 
 		this.loadGraphic(AssetPaths.city__png, false, 640, 163);
 		//this.offset.set(0, 163);
@@ -86,9 +89,7 @@ class City extends FlxSprite
 		
 		// HUD
 		_populationText = new NumberDisplay(true);
-		_flakUpdateScreen = new FlakUpdateScreen();
-		_lasergunUpdateScreen = new LaserUpdateScreen();
-		_missileTurretUpgradeScreen = new MissileTurretUpgradeScreen();
+
 		flixel.plugin.MouseEventManager.add(_leftFlakGun, showFlakUpgrades, null, null, null);
 		flixel.plugin.MouseEventManager.add(_rightFlakGun, showFlakUpgrades, null, null, null);
 
@@ -99,22 +100,19 @@ class City extends FlxSprite
 	public function showFlakUpgrades(sprite:FlxSprite)
 	{
 		var spriteAsFlak : FlakGun = cast sprite;
-
-		_flakUpdateScreen.show(spriteAsFlak);
+		_playState.openSubState(new FlakUpdateScreen(spriteAsFlak));
 	}
 
 	public function showLaserUpgrades(sprite:FlxSprite)
 	{
 		var spriteAsLaser : LaserGun = cast sprite;
-
-		_lasergunUpdateScreen.show(spriteAsLaser);
+		_playState.openSubState(new LaserUpdateScreen(spriteAsLaser));
 	}
 
 	public function showMissileUpgrades(sprite:FlxSprite)
 	{
 		var spriteAsMissileLauncher : MissileTurret = cast sprite;
-
-		_missileTurretUpgradeScreen.show(spriteAsMissileLauncher);
+		_playState.openSubState(new MissileTurretUpgradeScreen(spriteAsMissileLauncher));
 	}	
 
 	private function addLaserGun(sprite:FlxSprite):Void
@@ -167,22 +165,12 @@ class City extends FlxSprite
 		_missileLauncherIconText.draw();
 
 		_laserGunIcon.draw();
-		_laserGunIconText.draw();
+		_laserGunIconText.draw();	
 
-		if(_flakUpdateScreen._visible)
+		if(_playState.subState != null)
 		{
-			_flakUpdateScreen.draw();
+			_playState.subState.draw();	
 		}
-
-		if(_missileTurretUpgradeScreen._visible)
-		{
-			_missileTurretUpgradeScreen.draw();
-		}
-
-		if(_lasergunUpdateScreen._visible)
-		{
-			_lasergunUpdateScreen.draw();
-		}	
 	}
 
 	override public function update():Void 
@@ -190,21 +178,6 @@ class City extends FlxSprite
 		super.update();
 		_guns.update();
 		shoot();
-
-		if(_flakUpdateScreen._visible)
-		{
-			_flakUpdateScreen.update();
-		}
-		
-		if(_missileTurretUpgradeScreen._visible)
-		{
-			_missileTurretUpgradeScreen.update();
-		}
-
-		if(_lasergunUpdateScreen._visible)
-		{
-			_lasergunUpdateScreen.update();
-		}
 
 		updateIconTexts();
 	}
@@ -287,10 +260,7 @@ class City extends FlxSprite
 	public function drawHud () : Void 
 	{
 		_populationText.drawSingleNumber(Std.int(_population), new FlxPoint(FlxG.width - 110, 10));
-
 	}
-	
-	
 	
 	private function stampCircle(p:FlxPoint): Void
 	{
