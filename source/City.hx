@@ -337,7 +337,8 @@ class City extends FlxSprite
 		
 		checkDead();
 		stampCircle(new FlxPoint(s.x, s.y));
-		
+		FlxG.camera.flash(FlxColorUtil.makeFromARGB(0.75, 232, 239, 215),0.35);
+		FlxG.camera.shake(0.015, 0.35);
 		_population -= decimate;
 	}
 	

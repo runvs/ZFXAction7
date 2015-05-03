@@ -100,7 +100,7 @@ class Tank extends FlxSprite
 		}
 		
 		_turret.update();
-		_turret.x = x + 4;		// 4 is *the* magic number.
+		_turret.x = x + 4;		// 4 is *the* magic number.	//... and needed, because tank base and tank turret sprites do not have the same width.
 		_turret.y = y;
 	}
 	
