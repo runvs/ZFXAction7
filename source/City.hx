@@ -70,30 +70,30 @@ class City extends FlxSprite
 
 		_flakCannonIcon = new FlxSprite();
 		_flakCannonIcon.loadGraphic(AssetPaths.turretFlakBase__png, false, 16, 16);
-		_flakCannonIcon.scale.set(2, 2);
+		_flakCannonIcon.scale.set(3, 3);
 		_flakCannonIcon.updateHitbox();
-		_flakCannonIcon.x = FlxG.width - 30;
+		_flakCannonIcon.x = FlxG.width - 60;
 		_flakCannonIcon.y = FlxG.height - 0.75 * FlxG.height - 32;
 
-		_flakCannonIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.73 * FlxG.height, -1, "0/2", 16);
+		_flakCannonIconText = new FlxText(FlxG.width - 55, FlxG.height - 0.73 * FlxG.height, -1, "0/2", 16);
 
 		_missileLauncherIcon = new FlxSprite();
-		_missileLauncherIcon.loadGraphic(AssetPaths.turretMissileLauncher__png, false, 16, 16);
-		_missileLauncherIcon.scale.set(2, 2);
-		_missileLauncherIcon.updateHitbox();
-		_missileLauncherIcon.x = FlxG.width - 30;
+		_missileLauncherIcon.loadGraphic(AssetPaths.turretMissileLauncher__png, false, 16, 16, true);
+		_missileLauncherIcon.scale.set(3, 3);
+		_missileLauncherIcon.x = FlxG.width - 60;
 		_missileLauncherIcon.y = FlxG.height - 0.65 * FlxG.height -32;
+		_missileLauncherIcon.updateHitbox();
 
-		_missileLauncherIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.63 * FlxG.height, -1, "0/2", 16);
+		_missileLauncherIconText = new FlxText(FlxG.width - 55, FlxG.height - 0.63 * FlxG.height, -1, "0/2", 16);
 
 		_laserGunIcon = new FlxSprite();
 		_laserGunIcon.loadGraphic(AssetPaths.turretLaser__png, false, 16, 16);
-		_laserGunIcon.scale.set(2, 2);
+		_laserGunIcon.scale.set(3, 3);
 		_laserGunIcon.updateHitbox();
-		_laserGunIcon.x = FlxG.width - 30;
+		_laserGunIcon.x = FlxG.width - 60;
 		_laserGunIcon.y = FlxG.height - 0.55 * FlxG.height -32;
 
-		_laserGunIconText = new FlxText(FlxG.width - 40, FlxG.height - 0.53 * FlxG.height, -1, "0/2", 16);
+		_laserGunIconText = new FlxText(FlxG.width - 55, FlxG.height - 0.53 * FlxG.height, -1, "0/2", 16);
 
 		_guns = new flixel.group.FlxTypedGroup<Gun>();
 		_leftFlakGun = new FlakGun(this, new FlxVector(50, this.height-16), 2, 60, 15, 200, 3);	
@@ -113,11 +113,11 @@ class City extends FlxSprite
 		_populationicon.scale.set(2, 2);
 		_populationText = new NumberDisplay(true);
 
-		flixel.plugin.MouseEventManager.add(_leftFlakGun, showFlakUpgrades, null, null, null);
-		flixel.plugin.MouseEventManager.add(_rightFlakGun, showFlakUpgrades, null, null, null);
+		flixel.plugin.MouseEventManager.add(_leftFlakGun, showFlakUpgrades, true, true, false);
+		flixel.plugin.MouseEventManager.add(_rightFlakGun, showFlakUpgrades, true, true, false);
 
-		flixel.plugin.MouseEventManager.add(_laserGunIcon, addLaserGun, null, null, null);
-		flixel.plugin.MouseEventManager.add(_missileLauncherIcon, addMissileLauncher, null, null, null);
+		flixel.plugin.MouseEventManager.add(_laserGunIcon, addLaserGun, true, true, false);
+		flixel.plugin.MouseEventManager.add(_missileLauncherIcon, addMissileLauncher, true, true, false);
 		
 		// Sound 
 		_hitSound = new FlxSound();
