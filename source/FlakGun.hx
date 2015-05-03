@@ -22,16 +22,24 @@ class FlakGun extends Gun
 	public var _angularSpread : Float;
 
 	public var _projectileSpeed : Float;
+	private var _turret : FlxSprite;
 
 	public function new(owner : FlxSprite, position : FlxVector, numberOfBullets : Int, accuracy : Float, angularSpread : Float, projectileSpeed : Float, reloadTime : Float)
 	{
 		super(owner);
 
-		this.makeGraphic(5, 5, FlxColorUtil.makeFromARGB(1, 100, 150, 100));
-		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
-
 		this.x = owner.x + position.x;
 		this.y = owner.y + position.y;
+		
+		this.loadGraphic(AssetPaths.turretFlakBase__png, false, 16, 16);
+		this.scale.set(2, 2);
+		_turret = new FlxSprite();
+		_turret.loadGraphic(AssetPaths.turretFlakCannon__png, false, 16, 16);
+		_turret.origin.set(8, 9);
+		_turret.scale.set(2, 2);
+		_turret.setPosition ( x, y);
+		
+
 
 		_gunTimer = new flixel.util.FlxTimer(reloadTime, onTimer, 0);
 		_gunIsReady = true;		
@@ -40,6 +48,9 @@ class FlakGun extends Gun
 		_accuracy = accuracy;
 		_angularSpread = angularSpread;
 		_projectileSpeed = projectileSpeed;
+		
+		FlxTween.tween(_turret, { angle:-180 }, 3.5, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );
+		
 	}
 	
 	public override function update() : Void 
@@ -52,11 +63,13 @@ class FlakGun extends Gun
 	public override function draw() : Void 
 	{
 		super.draw();
+		_turret.draw();
 	}
 
 	public override function shoot(targetSprite : FlxSprite) : flixel.group.FlxTypedGroup<Projectile>
 	{
 		_gunIsReady = false;
+		
 		var projectiles : flixel.group.FlxTypedGroup<Projectile> = new flixel.group.FlxTypedGroup<Projectile>();
 
 		var spawnVector : FlxVector = new FlxVector(this.x, this.y);

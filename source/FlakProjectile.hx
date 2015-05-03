@@ -31,7 +31,7 @@ class FlakProjectile extends Projectile
 	public function new(path : flixel.util.FlxPath) 
 	{
 		super();
-		makeGraphic(4, 4, FlxColorUtil.makeFromARGB(1, 150, 150, 0));
+		makeGraphic(2, 2, FlxColorUtil.makeFromARGB(1, 34, 32, 52));
 		_path = path;
 		Damage = 10;
 		_exploded = false;

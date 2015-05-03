@@ -28,8 +28,8 @@ class MissileTurret extends Gun
 	{
 		super(owner);
 
-		this.makeGraphic(10, 2, FlxColorUtil.makeFromARGB(1, 100, 100, 150));
-		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
+		this.loadGraphic(AssetPaths.turretMissileLauncher__png, false, 16, 16);
+		this.scale.set(2, 2);
 
 		this.x = owner.x + position.x;
 		this.y = owner.y + position.y;

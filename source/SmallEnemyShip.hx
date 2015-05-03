@@ -31,7 +31,10 @@ class SmallEnemyShip extends EnemyShip
 		var e : EnemyShip = new SmallEnemyShip(shootManager);
 		e.setPosition(pos.x, pos.y);
 		e.velocity.set(velX * dir, velY * dir);
-		
+		if (dir <= 0)
+		{
+			e.scale.set( -GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
+		}
 		return e;
 	}	
 }

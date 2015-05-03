@@ -7,6 +7,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
+import flixel.util.FlxTimer;
 import flixel.util.FlxVector;
 /**
  * ...
@@ -25,8 +26,11 @@ class LaserGun extends Gun
 	{
 		super(owner);
 
-		this.makeGraphic(5, 5, FlxColorUtil.makeFromARGB(1, 255, 0, 0));
-		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
+		this.loadGraphic(AssetPaths.turretLaser__png, true, 16, 16);
+		this.scale.set(2, 2);
+		this.animation.add("idle", [0]);
+		this.animation.add("shoot", [1, 2, 3, 4, 5, 6, 7,0], 15, false );
+		this.animation.play("idle");
 		
 		this.x = owner.x + position.x;
 		this.y = owner.y + position.y;
@@ -54,6 +58,8 @@ class LaserGun extends Gun
 	public override function shoot(targetSprite : FlxSprite) : flixel.group.FlxTypedGroup<Projectile>
 	{
 		_gunIsReady = false;
+		this.animation.play("shoot");
+
 		var projectiles : flixel.group.FlxTypedGroup<Projectile> = new flixel.group.FlxTypedGroup<Projectile>();
 
 		var spawnVector : FlxVector = new FlxVector(this.x + this.width/2, this.y - this.height/2);
