@@ -41,6 +41,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	private var _enemySpawnTimer : Float;
 	private var _maxEnemies : Float;
 	
+	
+	
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -63,6 +65,8 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		
 		_maxEnemies = 1;
 		_enemySpawnTimer = 0;
+		
+		var t : FlxTimer = new FlxTimer(15, function (t:FlxTimer) { increaseDifficulty(); } ); 
 		
 		_enemyList  = new FlxTypedGroup<EnemyShip>();
 		spawnEnemyShip();
@@ -89,6 +93,11 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		super.create();
 	}
 	
+	
+	private function increaseDifficulty() : Void 
+	{
+		_maxEnemies++;
+	}
 	
 	
 	/**
@@ -299,7 +308,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		
 		var p : FlxPoint = new FlxPoint(FlxRandom.floatRanged(0, FlxG.width), FlxRandom.floatRanged(0, FlxG.height / 2));
 		var v : FlxPoint = new FlxPoint(FlxRandom.floatRanged( -20, 20), 0);
-		trace (v);
+		//trace (v);
 		var r : Int = FlxRandom.intRanged(0, 2);
 		//if (r == 0)
 		{
