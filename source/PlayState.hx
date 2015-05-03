@@ -51,13 +51,11 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 	{
 		_background = new FlxSprite();
 		_background = _background.loadGraphic(AssetPaths.Background__png, false, 640, 1000);
-		//_background.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
+	
 		_background.origin.set();
 		_background.setPosition(0, 0);
 		
-		//var bmd : BitmapData = _background.getFlxFrameBitmapData();
-		//bmd.applyFilter(bmd, new flash.geom.Rectangle(0, 0, 100, 100),  new flash.geom.Point(100, 100), new flash.filters.BlurFilter(20,20,9000));
-		//_background.pixels = bmd;
+		
 		_city = new City(this, this);
 		_player = new Player(this, this);
 		
@@ -70,9 +68,6 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		
 		_enemyList  = new FlxTypedGroup<EnemyShip>();
 		spawnEnemyShip();
-		//_enemyList.add(SmallEnemyShip.spawn(this, new FlxVector(320, 700), 40));
-		//_enemyList.add(MediumEnemyShip.spawn(this, new FlxVector(50, 10), 50));
-		//_enemyList.add(LargeEnemyShip.spawn(this, new FlxVector(20, 180), 50));
 		
 		_tankList  = new FlxTypedGroup<Tank>();
 
@@ -270,7 +265,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		function(e:EnemyShip) 
 		{ 
 				var dist : FlxVector = new FlxVector(e.x - t.x, e.y - t.y);
-				if (dist.length < 100)
+				if (dist.length < e.AttractionFieldStrength())
 				{
 					
 					t.Bind(e);
@@ -294,6 +289,7 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		}
 	}
 	
+	
 	function checkGameOver():Void 
 	{
 		if (!_city.alive)
@@ -303,28 +299,23 @@ class PlayState extends FlxState implements TankManager implements ShootManager
 		}
 	}
 	
+	
 	function spawnEnemyShip():Void 
 	{
-		
 		var p : FlxPoint = new FlxPoint(FlxRandom.floatRanged(0, FlxG.width), FlxRandom.floatRanged(0, FlxG.height / 2));
 		var v : FlxPoint = new FlxPoint(FlxRandom.floatRanged( -20, 20), 0);
 		//trace (v);
-		var r : Int = FlxRandom.intRanged(0, 2);
-		//if (r == 0)
+		var r : Int = FlxRandom.intRanged(0,1);
+		if (r == 0)
 		{
-			
-			_enemyList.add(SmallEnemyShip.spawn(this, p, v.x, v.y, 1));
+			_enemyList.add(LargeEnemyShip.spawn(this, p, v.x, v.y, 1));
+			//_enemyList.add(SmallEnemyShip.spawn(this, p, v.x, v.y, 1));
 			//_enemyl
 		}
-		//else if (r == 1)
-		//{
-			//e = new MediumEnemyShip(this);
-		//}
-		//else if (r == 2)
-		//{
-			//e = new LargeEnemyShip(this);
-		//}
-		
+		else
+		{
+			_enemyList.add(LargeEnemyShip.spawn(this, p, v.x, v.y, 1));
+		}
 	}
 	
 }

@@ -154,7 +154,7 @@ class Tank extends FlxSprite
 					_rotationVelocity = angularVelocity;
 					FlxTween.tween(this, { _rotationVelocity:45 }, 2.5, { ease:FlxEase.sineInOut});
 				}
-				FlxTween.tween(this , {_distance:100 }, 2.5,{ ease:FlxEase.sineInOut});
+				FlxTween.tween(this , {_distance:e.AttractionFieldStrength() }, 2.5,{ ease:FlxEase.sineInOut});
 			}
 			else
 			{

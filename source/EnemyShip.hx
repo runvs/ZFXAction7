@@ -72,6 +72,11 @@ class EnemyShip extends FlxSprite
 		checkDead();
 	}
 	
+	public function AttractionFieldStrength() : Float 
+	{
+		return 100;
+	}
+	
 	public function GetShipStrength () : Float
 	{
 		return 1;

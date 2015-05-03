@@ -18,12 +18,12 @@ class SmallEnemyShip extends EnemyShip
 	private function new(shootManager : ShootManager) 
 	{
 		super(shootManager);
-		this.makeGraphic(20, 20, FlxColorUtil.makeFromARGB(1, 200, 20, 20));
-		this.origin.set();
+		this.loadGraphic(AssetPaths.smallEnemy__png, false, 32, 16);
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
 		this.updateHitbox();
+		this.origin.set(this.width/2, this.height/2);
 		_guns.add(new SmallSpaceShipGun(this));
-		health = _healthMax = GameProperties.GetSmallEnemyShipHealth();
+		health = _healthMax = 100;
 	}
 	
 	public static function spawn (shootManager : ShootManager, pos: FlxPoint, velX  : Float = 5, velY  : Float = 0 , dir   :Int = 1 ) : EnemyShip

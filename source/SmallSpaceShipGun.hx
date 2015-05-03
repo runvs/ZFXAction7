@@ -17,13 +17,13 @@ class SmallSpaceShipGun extends Gun
 	private var _gunTimer : flixel.util.FlxTimer;
 	private var _gunIsReady : Bool;
 
-	public function new(owner : FlxSprite) 
+	public function new(owner : FlxSprite, time:Float = 5) 
 	{
 		super(owner);
 		this.makeGraphic(5, 5, FlxColorUtil.makeFromARGB(1, 255, 0, 0));
 		this.origin.set();
 		this.scale.set(GameProperties.GetScaleFactor(), GameProperties.GetScaleFactor());
-		_gunTimer = new flixel.util.FlxTimer(5, onTimer, 0);
+		_gunTimer = new flixel.util.FlxTimer(time, onTimer, 0);
 		_gunIsReady = true;
 		//FlxTween.tween(this.offset, { y:10 }, 1, { type:FlxTween.PINGPONG, ease:FlxEase.sineInOut } );		
 	}
